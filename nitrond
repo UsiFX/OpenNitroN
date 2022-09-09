@@ -342,25 +342,38 @@ magicn()
 
 updaten()
 {
-  printn -n "checking connectivity..."
-  echo "[$(date +%I:%M:%S)] $0: ${arg#*}: pinging 8.8.8.8 ..." >> $NITRON_LOG_DIR/nitron.log
-  if [[ $(ping -c1 "8.8.8.8" > /dev/null && echo $?) == '0' ]]
-  then
-    echo "[$(date +%I:%M:%S)] $0: ${arg#*}: failed, returned to $?" >> $NITRON_LOG_DIR/nitron.log
-    return $?
-  else
-    printn -i "looking for update..."
-    wget -O "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
-    if diff "$0" "/cache/nitrond_src_cache"
-    then
-      printn -i "updating..."
-      cat "/cache/nitrond_src_cache" > $0
-      printn -n "updated successfully."
-      return $?
-    else
-      printn -n "up to date."
-      return $?
-    fi
+	printn -n "checking connectivity..."
+	if [[ $(getprop ro.nitron.forcecheckupdate) == "no" ]]
+	then
+		printn -e "aborted from system variable"
+		echo "[$(date +%I:%M:%S)] $0: ${arg#*}: ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)" >> $NITRON_LOG_DIR/nitron.log
+		return 1
+	elif [[ ${NITRON_FORCECHECK_UPDATE} == "false" ]]
+	then
+		printn -e "aborted from system variable"
+		echo "[$(date +%I:%M:%S)] $0: ${arg#*}: NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}" >> $NITRON_LOG_DIR/nitron.log
+		return 1
+	else
+		echo "[$(date +%I:%M:%S)] $0: ${arg#*}: pinging 8.8.8.8 ..." >> $NITRON_LOG_DIR/nitron.log
+		if [[ $(ping -c1 "8.8.8.8" > /dev/null && echo $?) == '0' ]]
+  		then
+    		echo "[$(date +%I:%M:%S)] $0: ${arg#*}: failed, returned to $?" >> $NITRON_LOG_DIR/nitron.log
+    		return $?
+  		else
+    		printn -i "looking for update..."
+    		wget -O "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
+    		if diff "$0" "/cache/nitrond_src_cache"
+    		then
+      			printn -i "updating..."
+      			cat "/cache/nitrond_src_cache" > $0
+      			printn -n "updated successfully."
+      			return $?
+    		else
+      			printn -n "up to date."
+      			return $?
+    		fi
+  		fi
+	fi
 }
 
 
