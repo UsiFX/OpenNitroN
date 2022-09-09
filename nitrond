@@ -353,9 +353,9 @@ updaten()
       printn -i "updating..."
       cat "/cache/nitrond_src_cache" > $0
       printn -n "updated successfully."
-      exit 0
+      return $?
     else
       printn -n "up to date."
-      return 0
+      return $?
     fi
 }
