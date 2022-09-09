@@ -42,3 +42,26 @@ printn()
     esac
   done
 }
+
+writen()
+{
+  if [[ ! -f $1 ]]
+  then
+    # Return in non existence
+    echo "[$(date +%I:%M:%S)] $0: $1: not found, skipping..." >> $NITRON_LOG_DIR/nitron.log
+    return 1
+  fi
+
+  # Gain access to write files
+  chmod +w "$1" 2>/dev/null
+
+  # Write the new value, Return in error
+  if ! echo "$2" > "$1" 2>/dev/null
+  then
+    echo "[$(date +%I:%M:%S)] $0: $1: changing node returned with $?" >> $NITRON_LOG_DIR/nitron.log
+    return $?
+  else
+    echo "[$(date +%I:%M:%S)] $0: $1: changed node[$2]: returned with $?" >> $NITRON_LOG_DIR/nitron.log
+    return $?
+  fi
+}
