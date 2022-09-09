@@ -475,6 +475,16 @@ else
 				echo -e "nitrond ${NIRON_VERSION}"
 			fi
 		;;
+		"-c"|"--console-mode")
+			if ! hash dialog 2>/dev/null
+			then
+				printn -l "dialog not found, switch: console_legacy()"
+				console_legacy
+			else
+				console_dialog
+				printn -l "console_dialog(): started"
+			fi
+		;;
 		"-h"|"--help") __nitron_help ;;
 		"-u"|"--update") updaten ;;
 		*) printn -e "Unknown Option  $@"; __nitron_help ;;
