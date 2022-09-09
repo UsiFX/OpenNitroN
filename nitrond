@@ -22,6 +22,7 @@ CYAN='\e[1;36m'
 RED='\e[1;31m'
 WHITE='\e[1;37m'
 YELLOW='\e[01;33m'
+STOCK='\e[1;0m'
 
 NITRON_LOG_DIR='/cache'
 PROMPT_COMMAND='sync'
@@ -35,10 +36,10 @@ printn()
 {
   while getopts ":n:e:w:i:" printn_opts; do
     case "${printn_opts}" in
-      n) printf "[*] $2" ;;
-      e) printf "[×] $2"; return 1 ;;
-      w) printf "[!] $2" ;;
-      i) printf "[i] $2" ;;
+      n) printf "[${BLUE}*${STOCK}] $2\n" ;;
+      e) printf "[${RED}×${STOCK}] $2\n"; return 1 ;;
+      w) printf "[${YELLOW}!${STOCK}] $2\n" ;;
+      i) printf "[${CYAN}i${STOCK}] $2 \n" ;;
     esac
   done
 }
