@@ -404,3 +404,73 @@ else
 		export NITRON_MODE='default'
 	fi
 fi
+
+__nitron_help()
+{
+cat <<EOF
+Usage: nitron [-sg] [-sr] [-sy] [-h] [-v]
+
+Options:
+  -sg, --set-green ~ apply Battery mode
+  -sr, --set-red ~ apply Gaming mode
+  -sy, --set-yellow ~ apply Balanced mode
+  -sdm, --show-default-mode ~ prints current tweaking mode
+  -u, --update ~ force update to latest
+  -h, --help ~ shows this Help menu
+  -v, --version ~ shows tool version
+EOF
+}
+
+if [[ $# -eq "0" ]] && tty -s
+then
+	__nitron_help
+else
+	case $@ in
+		"-sg"|"--set-green")
+			magicn -g
+			if [[ $(grep -nr "androidboot" /proc/cmdline) ]]
+			then
+				printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+			else
+				printn -n "$0: current mode set to: ${NITRON_MODE}"
+			fi
+		;;
+		"-sr"|"--set-red")
+			magicn -r
+			if [[ $(grep -nr "androidboot" /proc/cmdline) ]]
+			then
+				printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+			else
+				printn -n "$0: current mode set to: ${NITRON_MODE}"
+			fi
+		;;
+		"-sy"|"--set-yellow")
+			magicn -y
+			if [[ $(grep -nr "androidboot" /proc/cmdline) ]]
+			then
+				printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+			else
+				printn -n "$0: current mode set to: ${NITRON_MODE}"
+			fi
+		;;
+		"-sdm"|"--show-default-mode") 
+			if [[ $(grep -nr "androidboot" /proc/cmdline) ]]
+			then
+				echo -e "$0: mode: $(getprop ro.nitron.mode)"
+			else
+				echo -e "$0: mode: ${NITRON_MODE}"
+			fi
+		;;
+		"-v"|"--version")
+			if [[ $(grep -nr "androidboot" /proc/cmdline) ]]
+			then
+				echo -e "nitrond $(getprop ro.nitron.version)"
+			else
+				echo -e "nitrond ${NIRON_VERSION}"
+			fi
+		;;
+		"-h"|"--help") __nitron_help ;;
+		"-u"|"--update") updaten ;;
+		*) printn -e "Unknown Option  $@"; __nitron_help ;;
+	esac
+fi
