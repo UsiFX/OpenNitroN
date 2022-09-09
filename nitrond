@@ -392,21 +392,22 @@ fi
 
 if [[ $(grep -nr "androidboot" /proc/cmdline) ]]
 then
-	printn -l "working in android platform, using resetprop algorithm..."
+    echo "[$(date +%I:%M:%S)] $0: working in android platform, using resetprop algorithm..." >> $NITRON_LOG_DIR/nitron.log
 	resetprop ro.nitron.forcecheckupdate no
 	resetprop ro.nitron.version 0.7.1
 	if [[ ! $(getprop ro.nitron.version) ]]
 	then
-		printn -l "we are working on first use, Supplying initial mode..."
+
+    	echo "[$(date +%I:%M:%S)] $0: we are working on first use, Supplying initial mode..." >> $NITRON_LOG_DIR/nitron.log
 		resetprop ro.nitron.mode default
 	fi
 else
-	printn -l "working in Unknown Linux Platform, using export algorithm..."
+    echo "[$(date +%I:%M:%S)] $0: working in Unknown Linux platform, using export algorithm..." >> $NITRON_LOG_DIR/nitron.log
 	export NITRON_FORCECHECK_UPDATE='false'
 	export NITRON_VERSION='0.7.1'
 	if [[ ! -e "$NITRON_MODE" ]]
 	then
-		printn -l "we are working on first use, Supplying initial mode..."
+		echo "[$(date +%I:%M:%S)] $0: we are working on first use, Supplying initial mode..." >> $NITRON_LOG_DIR/nitron.log
 		export NITRON_MODE='default'
 	fi
 fi
@@ -478,11 +479,11 @@ else
 		"-c"|"--console-mode")
 			if ! hash dialog 2>/dev/null
 			then
-				printn -l "dialog not found, switch: console_legacy()"
+				echo "[$(date +%I:%M:%S)] $0: dialog not found, switch: console_legacy()" >> $NITRON_LOG_DIR/nitron.log
 				console_legacy
 			else
 				console_dialog
-				printn -l "console_dialog(): started"
+				echo "[$(date +%I:%M:%S)] $0: console_dialog(): started" >> $NITRON_LOG_DIR/nitron.log
 			fi
 		;;
 		"-h"|"--help") __nitron_help ;;
