@@ -27,7 +27,6 @@ STOCK='\e[1;0m'
 NITRON_LOG_DIR='/cache'
 PROMPT_COMMAND='sync'
 
-
 ### Debugging
 set -x
 
@@ -364,6 +363,15 @@ updaten()
     fi
 }
 
+
+### we need root of, course...
+if [[ "$(id -u)" -ne 0 ]]
+then
+	printn -e "Please run with Super User."
+	return 1
+else
+	continue
+fi
 
 if [[ $(cat /proc/cmdline | grep androidboot) ]]
 then
