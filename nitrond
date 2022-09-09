@@ -336,3 +336,26 @@ magicn()
 			*) printn -e "Unknown Option  $@"; __magicn_help ;;
 	        esac
 }
+
+updaten()
+{
+  printn -n "checking connectivity..."
+  echo "[$(date +%I:%M:%S)] $0: ${arg#*}: pinging 8.8.8.8 ..." >> $NITRON_LOG_DIR/nitron.log
+  if [[ $(ping -c1 "8.8.8.8" > /dev/null && echo $?) == '0' ]]
+  then
+    echo "[$(date +%I:%M:%S)] $0: ${arg#*}: failed, returned to $?" >> $NITRON_LOG_DIR/nitron.log
+    return $?
+  else
+    printn -i "looking for update..."
+    wget -O "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
+    if diff "$0" "/cache/nitrond_src_cache"
+    then
+      printn "updating..."
+      cat "/cache/nitrond_src_cache" > $0
+      printn "updated successfully."
+      exit 0
+    else
+      printn "up to date."
+      return 0
+    fi
+}
