@@ -27,6 +27,7 @@ STOCK='\e[1;0m'
 NITRON_LOG_DIR='/cache'
 PROMPT_COMMAND='sync'
 
+
 ### Debugging
 set -x
 
@@ -360,3 +361,25 @@ updaten()
       return $?
     fi
 }
+
+
+if [[ $(cat /proc/cmdline | grep androidboot) ]]
+then
+	printn -l "working in android platform, using resetprop algorithm..."
+	resetprop ro.nitron.forcecheckupdate no
+	resetprop ro.nitron.version 0.7.1
+	if ! $(getprop ro.nitron.version)
+	then
+		printn -l "we are working on first use, Supplying initial mode..."
+		resetprop ro.nitron.mode default
+	fi
+else
+	printn -l "working in Unknown Linux Platform, using export algorithm..."
+	export NITRON_FORCECHECK_UPDATE='false'
+	export NITRON_VERSION='0.7.1'
+	if [[ ! -e "$NITRON_MODE" ]]
+	then
+		printn -l "we are working on first use, Supplying initial mode..."
+		export NITRON_MODE='default'
+	fi
+fi
