@@ -350,7 +350,7 @@ updaten()
     wget -O "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
     if diff "$0" "/cache/nitrond_src_cache"
     then
-      printn "updating..."
+      printn -i "updating..."
       cat "/cache/nitrond_src_cache" > $0
       printn -n "updated successfully."
       exit 0
