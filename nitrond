@@ -28,3 +28,17 @@ PROMPT_COMMAND='sync'
 
 ### Debugging
 set -x
+
+
+### Funcs
+printn()
+{
+  while getopts ":n:e:w:i:" printn_opts; do
+    case "${printn_opts}" in
+      n) printf "[*] $2" ;;
+      e) printf "[×] $2"; return 1 ;;
+      w) printf "[!] $2" ;;
+      i) printf "[i] $2" ;;
+    esac
+  done
+}
