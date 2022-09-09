@@ -364,14 +364,14 @@ updaten()
 			wget -O "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
 			if diff "$0" "/cache/nitrond_src_cache"
 			then
-      			printn -i "updating..."
-      			cat "/cache/nitrond_src_cache" > $0
-      			printn -n "updated successfully."
-      			return $?
-    		else
-      			printn -n "up to date."
-      			return $?
-    		fi
+      				printn -i "updating..."
+      				cat "/cache/nitrond_src_cache" > $0
+      				printn -n "updated successfully."
+      				return $?
+    			else
+      				printn -n "up to date."
+      				return $?
+    			fi
 		fi
 	fi
 }
