@@ -39,3 +39,77 @@ print_banner()
     echo -e "██║░╚███║██║░░░██║░░░██║░░██║╚█████╔╝██║░╚███║"
     echo -e "╚═╝░░╚══╝╚═╝░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░╚═╝░░╚══╝"
 }
+
+console_legacy()
+{
+    clear
+    print_banner
+    COLUMNS=45
+    OPTIONS=("Switch Mode" "Show device state" "Update" "Show help menu" "Exit")
+    PS3="Choose one of the following Main options: "
+    select CHOICE in "${OPTIONS[@]}"
+    do
+        num=$REPLY
+        case $num in
+            1)
+                while :
+                do
+                    COLUMNS=45
+                    MODE_OPTIONS=("Gaming" "Balance" "Battery" "Back to main menu" "Exit")
+                    PS3="Choose one of the following Mode options: "
+                    select MODE_CHOICE in "${MODE_OPTIONS[@]}"
+                    do
+                        mode_num=$REPLY
+                        case $mode_num in
+                            1) 
+                                magicn -r
+                                printn -i "Process complete!"
+                                break
+                            ;;
+                            2)
+                                magicn -y
+                                printn -i "Process complete!"
+                                break
+                            ;;
+                            3)
+                                magicn -g
+                                printn -i "Process complete!" 
+                                break
+                            ;;
+                            4)
+                                break 2
+                            ;;
+                            5)
+                                exit 0
+                            ;;
+                            *)
+                                printn -e "[$mode_num] unknown option"
+                                sleep 2
+                                break
+                            ;;
+                        esac
+                    done
+                done
+            ;;
+            2)
+                printn -e "wip"
+                break 2
+            ;;
+            3)
+                updaten
+                break 2
+            ;;
+            4)
+                __nitron_help
+            ;;
+            5)
+                break 2
+            ;;
+            *)
+                printn -e "[$num] unknown option"
+                sleep 2
+                break
+            ;;
+        esac
+    done
+}
