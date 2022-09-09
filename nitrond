@@ -389,7 +389,7 @@ then
 	printn -l "working in android platform, using resetprop algorithm..."
 	resetprop ro.nitron.forcecheckupdate no
 	resetprop ro.nitron.version 0.7.1
-	if ! $(getprop ro.nitron.version)
+	if [[ ! $(getprop ro.nitron.version) ]]
 	then
 		printn -l "we are working on first use, Supplying initial mode..."
 		resetprop ro.nitron.mode default
