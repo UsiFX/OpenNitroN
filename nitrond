@@ -11,3 +11,20 @@
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
+
+### Local Variables
+
+# \e colors
+BLUE='\e[1;34m'
+GREEN='\e[1;32m'
+PURPLE='\e[1;35m'
+CYAN='\e[1;36m'
+RED='\e[1;31m'
+WHITE='\e[1;37m'
+YELLOW='\e[01;33m'
+
+NITRON_LOG_DIR='/cache'
+PROMPT_COMMAND='sync'
+
+### Debugging
+set -x
