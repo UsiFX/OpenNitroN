@@ -31,7 +31,13 @@ PROMPT_COMMAND='sync'
 set -x
 
 ### include headers
-source $(pwd)/nitron_headers.sh
+if [[ ! $(pwd)/nitron_headers.sh ]]
+then
+	echo "missing header, $(pwd)/nitron_headers.sh"
+	exit 1
+else
+	source $(pwd)/nitron_headers.sh
+fi
 
 ### Funcs
 printn()
