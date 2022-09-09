@@ -31,6 +31,8 @@ PROMPT_COMMAND='sync'
 ### Debugging
 set -x
 
+### include headers
+source $(pwd)/nitron_headers.sh
 
 ### Funcs
 printn()
