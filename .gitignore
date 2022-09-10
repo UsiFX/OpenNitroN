@@ -1,0 +1,23 @@
+#
+# NOTE! Please use 'git ls-files -i --exclude-standard'
+# command after changing this file, to see if there are
+# any tracked files which get ignored after the change.
+#
+# Normal rules (sorted alphabetically)
+#
+
+#
+# Debug-level files
+#
+*.debug
+console*.*
+
+#
+# Debug-level directories
+#
+/debug
+
+#
+# git files that we don't want to ignore even if they are dot-files
+#
+!.gitignore
