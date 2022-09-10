@@ -413,6 +413,7 @@ Options:
   -u, --update ~ force update to latest
   -h, --help ~ shows this Help menu
   -v, --version ~ shows tool version
+  -d, --debug ~ run any command under debug flag
 "
 }
 
