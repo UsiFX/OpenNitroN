@@ -364,7 +364,7 @@ updaten() {
 		return $?
 	} || {
 		printn -i "looking for update..."
-		wget -O "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
+		curl -o "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
 		[[ "$(diff "$0" "/cache/nitrond_src_cache")" ]] && {
 			printn -i "updating..."
 			cat "/cache/nitrond_src_cache" >$0
