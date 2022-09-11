@@ -37,8 +37,7 @@ PROMPT_COMMAND='sync'
 } || source $(pwd)/nitron_headers.sh
 
 printn() {
-	while getopts ":n:e:w:i:" printn_opts; do
-		case "${printn_opts}" in
+	case "${printn_opts}" in
 			n) printf "[${BLUE}*${STOCK}] $2\n" ;;
 			e)
 				printf "[${RED}×${STOCK}] $2\n"
@@ -47,7 +46,6 @@ printn() {
 			w) printf "[${YELLOW}!${STOCK}] $2\n" ;;
 			i) printf "[${CYAN}i${STOCK}] $2 \n" ;;
 		esac
-	done
 }
 
 writen() {
