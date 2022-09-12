@@ -378,11 +378,11 @@ updaten() {
 
 [[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && {
 	echo "[$(date +%I:%M:%S)] $0: working in android platform, using resetprop algorithm..." >>$NITRON_LOG_DIR/nitron.log
-	resetprop ro.nitron.version 0.7.1
+	resetprop ro.nitron.version 0.7.2
 } || {
 	echo "[$(date +%I:%M:%S)] $0: working in Unknown Linux platform, using export algorithm..." >>$NITRON_LOG_DIR/nitron.log
 	export NITRON_FORCECHECK_UPDATE
-	export NITRON_VERSION='0.7.1'
+	export NITRON_VERSION='0.7.2'
 }
 [[ ! "$(getprop ro.nitron.version)" ]] && {
 	echo "[$(date +%I:%M:%S)] $0: we are working on first use, Supplying initial mode..." >>$NITRON_LOG_DIR/nitron.log
