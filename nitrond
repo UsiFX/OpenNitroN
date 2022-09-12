@@ -432,7 +432,7 @@ Options:
 			[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && echo -e "nitrond $(getprop ro.nitron.version)" || echo -e "nitrond $NITRON_VERSION"
 			;;
 		"-c" | "--console-mode")
-			! hash dialog 2>/dev/null && {
+			[[ ! "$(hash dialog 2>/dev/null)" ]] && {
 				echo "[$(date +%I:%M:%S)] $0: dialog not found, switch: console_legacy()" >>$NITRON_LOG_DIR/nitron.log
 				console_legacy
 			} || {
