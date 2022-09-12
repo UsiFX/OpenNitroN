@@ -37,17 +37,17 @@ PROMPT_COMMAND='sync'
 } || source $(pwd)/nitron_headers.sh
 
 printn() {
-	[[ "$1" == "n" ]] && printf "[${BLUE}*${STOCK}] $2\n" ;;
-	
-	[[ "$1" == "e" ]] && {
+	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n" ;;
+
+	[[ "$1" == "-e" ]] && {
 	printf "[${RED}×${STOCK}] $2\n"
 	return 1
 	}
-	
-	[[ "$1" == "w" ]] && printf "[${YELLOW}!${STOCK}] $2\n"
-	
-	[[ "$1" == "i" ]] && printf "[${CYAN}i${STOCK}] $2 \n" ;;
-}	
+
+	[[ "$1" == "-w" ]] && printf "[${YELLOW}!${STOCK}] $2\n"
+
+	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n" ;;
+}
 
 writen() {
 	[[ ! -f "$1" ]] && {
