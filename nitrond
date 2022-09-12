@@ -360,7 +360,7 @@ updaten() {
 	} || echo "[$(date +%I:%M:%S)] $0: ${arg#*}: pinging 8.8.8.8 ..." >>$NITRON_LOG_DIR/nitron.log
 	[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" == "0" ]] || echo "[$(date +%I:%M:%S)] $0: ${arg#*}: failed" >>$NITRON_LOG_DIR/nitron.log && {
 		printn -i "looking for update..."
-		curl -o "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
+		curl -o "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
 		cp "$0" "/cache/nitrond_current"
 		[[ "$(diff "/cache/nitrond_current" "/cache/nitrond_src_cache")" ]] && {
 			printn -i "updating..."
