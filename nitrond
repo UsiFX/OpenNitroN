@@ -62,7 +62,7 @@ writen() {
 
 	# Write new value, bail out if it fail
 	! echo "$2" >"$1" 2>/dev/null && {
-		echo "[$(date +%I:%M:%S)] $0: $1: Failed to change node" >>"$NITRON_LOG_DIR"/nitron.log
+		echo "[$(date +%I:%M:%S)] $0: $1: failed to change node" >>"$NITRON_LOG_DIR"/nitron.log
 		return 1
 	} || {
 		echo "[$(date +%I:%M:%S)] $0: $1: changed node[$2]" >>"$NITRON_LOG_DIR"/nitron.log
@@ -352,14 +352,14 @@ updaten() {
 	printn -n "checking connectivity..."
 	[[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]] && {
 		printn -e "aborted from system variable"
-		echo "[$(date +%I:%M:%S)] $0: ${arg#*}: ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)" >>$NITRON_LOG_DIR/nitron.log
+		printn -l " ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
 		return 1
 	}
 	[[ "$NITRON_FORCECHECK_UPDATE" == "false" ]] && {
 		printn -e "aborted from system variable"
-		echo "[$(date +%I:%M:%S)] $0: ${arg#*}: NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}" >>$NITRON_LOG_DIR/nitron.log
+		printn -l " NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
 		return 1
-	} || echo "[$(date +%I:%M:%S)] $0: ${arg#*}: pinging 8.8.8.8 ..." >>$NITRON_LOG_DIR/nitron.log
+	} || printn -l "pinging 8.8.8.8 ..."
 	[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" == "0" ]] || echo "[$(date +%I:%M:%S)] $0: ${arg#*}: failed" >>$NITRON_LOG_DIR/nitron.log && {
 		printn -i "looking for update..."
 		curl -o "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
@@ -379,19 +379,19 @@ updaten() {
 }
 
 [[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && {
-	echo "[$(date +%I:%M:%S)] $0: working in android platform, using resetprop algorithm..." >>$NITRON_LOG_DIR/nitron.log
+	printn -l "working in android platform, using resetprop algorithm..."
 	resetprop ro.nitron.version 0.7.2
 } || {
-	echo "[$(date +%I:%M:%S)] $0: working in Unknown Linux platform, using export algorithm..." >>$NITRON_LOG_DIR/nitron.log
+	printn -l "working in Unknown Linux platform, using export algorithm..."
 	export NITRON_FORCECHECK_UPDATE
 	export NITRON_VERSION='0.7.2'
 	[[ ! -e "$NITRON_MODE" ]] && {
-		echo "[$(date +%I:%M:%S)] $0: we are working on first use, Supplying initial mode..." >>$NITRON_LOG_DIR/nitron.log
+		printn -l "we are working on first use, Supplying initial mode..."
 		export NITRON_MODE='default'
 	}
 }
 [[ ! "$(resetprop ro.nitron.version)" ]] && {
-	echo "[$(date +%I:%M:%S)] $0: we are working on first use, Supplying initial mode..." >>$NITRON_LOG_DIR/nitron.log
+	printn -l "we are working on first use, Supplying initial mode..."
 	resetprop ro.nitron.mode default
 }
 
@@ -436,11 +436,11 @@ Options:
 			;;
 		"-c" | "--console-mode")
 			[[ ! "$(hash dialog 2>/dev/null)" ]] && {
-				echo "[$(date +%I:%M:%S)] $0: dialog not found, switch: console_legacy()" >>$NITRON_LOG_DIR/nitron.log
+				printn -l "dialog not found, switch: console_legacy()"
 				console_legacy
 			} || {
 				console_dialog
-				echo "[$(date +%I:%M:%S)] $0: console_dialog(): started" >>$NITRON_LOG_DIR/nitron.log
+				printn -l "console_dialog(): started"
 			}
 			;;
 		"-h" | "--help") __nitron_help ;;
