@@ -338,7 +338,7 @@ magicn() {
 			;;
 		"-r" | "--red")
 			printn -l "--- started"
-			set_battery_gaming
+			set_gaming_mode
 			printn -l "--- finished"
 			return $?
 			;;
