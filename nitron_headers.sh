@@ -4,6 +4,7 @@
 #
 
 console_dialog() {
+	PR_PREFIX="console_dialog():"
 	HEIGHT=16
 	WIDTH=40
 	CHOICE_HEIGHT=30
@@ -43,6 +44,7 @@ print_banner() {
 console_legacy() {
 	clear
 	print_banner
+	PR_PREFIX="console_legacy():"
 	COLUMNS=45
 	OPTIONS=("Switch Mode" "Show device state" "Update" "Show help menu" "Exit")
 	PS3="Choose one of the following Main options: "

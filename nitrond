@@ -449,7 +449,7 @@ Options:
 				console_legacy
 			} || {
 				console_dialog
-				printn -l "console_dialog(): started"
+				printn -l "--- started"
 			}
 			;;
 		"-h" | "--help") __nitron_help ;;
