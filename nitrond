@@ -47,6 +47,8 @@ printn() {
 	[[ "$1" == "-w" ]] && printf "[${YELLOW}!${STOCK}] $2\n"
 
 	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n"
+
+	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] $0: $2" >>"$NITRON_LOG_DIR"/nitron.log
 }
 
 writen() {
