@@ -383,13 +383,14 @@ updaten() {
 	echo "[$(date +%I:%M:%S)] $0: working in Unknown Linux platform, using export algorithm..." >>$NITRON_LOG_DIR/nitron.log
 	export NITRON_FORCECHECK_UPDATE
 	export NITRON_VERSION='0.7.2'
+	[[ ! -e "$NITRON_MODE" ]] && {
+		echo "[$(date +%I:%M:%S)] $0: we are working on first use, Supplying initial mode..." >>$NITRON_LOG_DIR/nitron.log
+		export NITRON_MODE='default'
+	}
 }
-[[ ! "$(getprop ro.nitron.version)" ]] && {
+[[ ! "$(resetprop ro.nitron.version)" ]] && {
 	echo "[$(date +%I:%M:%S)] $0: we are working on first use, Supplying initial mode..." >>$NITRON_LOG_DIR/nitron.log
 	resetprop ro.nitron.mode default
-} || [[ ! -e "$NITRON_MODE" ]] && {
-	echo "[$(date +%I:%M:%S)] $0: we are working on first use, Supplying initial mode..." >>$NITRON_LOG_DIR/nitron.log
-	export NITRON_MODE='default'
 }
 
 __nitron_help() {
