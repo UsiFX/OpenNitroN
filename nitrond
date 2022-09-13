@@ -31,7 +31,7 @@ PROMPT_COMMAND='sync'
 [[ "$1" == "--debug" ]] || [[ "$1" == "-d" ]] && set -x
 
 # Include headers
-[[ ! $(pwd)/nitron_headers.sh ]] && {
+[[ ! -f $(pwd)/nitron_headers.sh ]] && {
 	echo "missing header, $(pwd)/nitron_headers.sh"
 	exit 1
 } || source $(pwd)/nitron_headers.sh
