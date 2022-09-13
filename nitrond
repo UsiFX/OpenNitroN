@@ -24,6 +24,7 @@ WHITE='\e[1;37m'
 YELLOW='\e[01;33m'
 STOCK='\e[1;0m'
 
+PR_PREFIX="nitron_broadcast():"
 NITRON_LOG_DIR='/cache'
 PROMPT_COMMAND='sync'
 
@@ -48,7 +49,7 @@ printn() {
 
 	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n"
 
-	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] $0: $2" >>"$NITRON_LOG_DIR"/nitron.log
+	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] $0: $PR_PREFIX $2" >>"$NITRON_LOG_DIR"/nitron.log
 }
 
 writen() {
@@ -83,6 +84,7 @@ Options:
 }
 
 magicn() {
+	PR_PREFIX="magicn():"
 	set_gaming_mode() {
 		resetprop ro.nitron.mode red
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
@@ -329,15 +331,21 @@ magicn() {
 
 	case $* in
 		"-g" | "--green")
+			printn -l "--- started"
 			set_battery_mode
+			printn -l "--- finished"
 			return $?
 			;;
 		"-r" | "--red")
-			set_gaming_mode
+			printn -l "--- started"
+			set_battery_gaming
+			printn -l "--- finished"
 			return $?
 			;;
 		"-y" | "--yellow")
+			printn -l "--- started"
 			set_balance_mode
+			printn -l "--- finished"
 			return $?
 			;;
 		"-h" | "--help") __magicn_help ;;
@@ -349,15 +357,16 @@ magicn() {
 }
 
 updaten() {
+	PR_PREFIX="updaten():"
 	printn -n "checking connectivity..."
 	[[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]] && {
 		printn -e "aborted from system variable"
-		printn -l " ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
+		printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
 		return 1
 	}
 	[[ "$NITRON_FORCECHECK_UPDATE" == "false" ]] && {
 		printn -e "aborted from system variable"
-		printn -l " NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
+		printn -l "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
 		return 1
 	} || printn -l "pinging 8.8.8.8 ..."
 	[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" == "0" ]] || echo "[$(date +%I:%M:%S)] $0: ${arg#*}: failed" >>$NITRON_LOG_DIR/nitron.log && {
