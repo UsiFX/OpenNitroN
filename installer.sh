@@ -9,12 +9,12 @@ set -x
 # Ensures proper use
 if ! [[ $(uname -s) =~ ^(Linux|GNU*)$ ]]; then
   echo "ERROR: run NitronD Installer on Linux" >&2
+  if [[ $(whoami) == root ]]; then
+    echo "ERROR: do not run NitronD Installer as root" >&2
+  fi
   exit 1
 elif ! [[ -t 0 ]]; then
   echo "ERROR: run NitronD Installer from a terminal" >&2
-  exit 1
-elif [[ $(whoami) == root ]]; then
-  echo "ERROR: do not run NitronD Installer as root" >&2
   exit 1
 elif [[ ${BASH_SOURCE[0]} != "$0" ]]; then
   echo "ERROR: NitronD Installer cannot be sourced" >&2
@@ -35,16 +35,28 @@ required_deps=(git)
 
 case $1 in
 	install)
-		echo "downloading nitrond..."
-		git clone "$repo" "$target"
-		echo "installing nitrond..."
-		chmod 755 "${target}"
-		chmod +x "${target}/nitrond"
-		chmod +x "${target}/nitron_headers.sh"
-		sudo cp -f "${target}/nitrond" "${bin}/nitrond"
-		sudo cp -f "${target}/nitron_headers.sh" "${etc}/nitron_headers.sh"
-		sudo chmod 755 "${bin}/nitrond"
-		sudo chmod 755 "${etc}/nitron_headers.sh"
+		[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && {
+			[[ "$(id -u)" -ne "0" ]] && {
+				echo "downloading nitrond files..."
+				curl -o "/system/bin/nitrond" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
+				curl -o "/system/etc/nitron_headers.sh" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers.sh"
+				chmod +x "/system/bin/nitrond"
+				chmod +x "/system/etc/nitron_headers.sh"
+				chmod 755 "/system/bin/nitrond"
+				chmod 755 "/system/etc/nitron_headers.sh"
+			} || { echo "please run with SU."; exit 1 ;}
+		} || {
+			echo "downloading nitrond..."
+			git clone "$repo" "$target"
+			echo "installing nitrond..."
+			chmod 755 "${target}"
+			chmod +x "${target}/nitrond"
+			chmod +x "${target}/nitron_headers.sh"
+			sudo cp -f "${target}/nitrond" "${bin}/nitrond"
+			sudo cp -f "${target}/nitron_headers.sh" "${etc}/nitron_headers.sh"
+			sudo chmod 755 "${bin}/nitrond"
+			sudo chmod 755 "${etc}/nitron_headers.sh"
+		}
 	;;
 	*)	echo "test." ;;
 esac
