@@ -27,15 +27,16 @@ STOCK='\e[1;0m'
 PR_PREFIX="nitron_broadcast():"
 NITRON_LOG_DIR='/cache'
 PROMPT_COMMAND='sync'
+HEADER_SOURCE="${PREFIX/\/usr}/usr/etc"
 
 # Debugging
 [[ "$1" == "--debug" ]] || [[ "$1" == "-d" ]] && set -x
 
 # Include headers
-[[ ! -f $(pwd)/nitron_headers.sh ]] && {
-	echo "missing header, $(pwd)/nitron_headers.sh"
+[[ ! -f $HEADER_SOURCE/nitron_headers.sh ]] && {
+	echo "missing header, $HEADER_SOURCE/nitron_headers.sh"
 	exit 1
-} || source $(pwd)/nitron_headers.sh
+} || source $HEADER_SOURCE/nitron_headers.sh
 
 printn() {
 	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
