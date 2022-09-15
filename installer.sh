@@ -22,8 +22,13 @@ bin="${PREFIX/\/usr}/usr/bin"
 etc="${PREFIX/\/usr}/usr/etc"
 required_deps=(git)
 
-if [[ "$(which getprop)" ]] && [[ "$(id -u)" -ne "0" ]]; then
-	echo "being used in Android SU session..."
+if [[ "$(grep -nr "androidboot" /proc/cmdline)" ]]; then
+	if [[ "$(id -u)" -ne "0" ]]; then
+		echo "please run as SU"
+		exit 1
+	else
+		echo "being used in Android SU session..."
+	fi
 else
 	[[ ! "$(which ${required_deps[@]} 2>/dev/null)" ]] && {
 	        echo "please download following packages, (${required_deps[@]})"
