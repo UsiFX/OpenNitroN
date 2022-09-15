@@ -25,7 +25,7 @@ fi
 repo="https://github.com/UsiFX/OpenNitroN.git"
 target="${HOME}/OpenNitroN-temp"
 bin="${PREFIX/\/usr}/usr/bin"
-
+etc="${PREFIX/\/usr}/usr/etc"
 required_deps=(git)
 
 [[ ! "$(which ${required_deps[@]} 2>/dev/null)" ]] && {
