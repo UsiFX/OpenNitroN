@@ -22,14 +22,7 @@ bin="${PREFIX/\/usr}/usr/bin"
 etc="${PREFIX/\/usr}/usr/etc"
 required_deps=(git)
 
-if [[ "$(grep -nr "androidboot" /proc/cmdline)" ]]; then
-	if [[ "$(id -u)" -ne "0" ]]; then
-		echo "please run as SU"
-		exit 1
-	else
-		echo "being used in Android SU session..."
-	fi
-else
+if [[ ! "$(grep -nr "androidboot" /proc/cmdline)" ]]; then
 	[[ ! "$(which ${required_deps[@]} 2>/dev/null)" ]] && {
 	        echo "please download following packages, (${required_deps[@]})"
 		exit 1
@@ -38,6 +31,18 @@ fi
 
 case $1 in
 	install)
+		echo "downloading nitrond..."
+		git clone "$repo" "$target"
+		echo "installing nitrond..."
+		chmod 755 "${target}"
+		chmod +x "${target}/nitrond"
+		chmod +x "${target}/nitron_headers.sh"
+		sudo cp -f "${target}/nitrond" "${bin}/nitrond"
+		sudo cp -f "${target}/nitron_headers.sh" "${etc}/nitron_headers.sh"
+		sudo chmod 755 "${bin}/nitrond"
+		sudo chmod 755 "${etc}/nitron_headers.sh"
+	;;
+	install-android)
 		[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && {
 			[[ "$(id -u)" -ne "0" ]] && {
 				echo "downloading nitrond files..."
@@ -48,18 +53,7 @@ case $1 in
 				chmod 755 "/system/bin/nitrond"
 				chmod 755 "/system/etc/nitron_headers.sh"
 			} || { echo "please run with SU."; exit 1 ;}
-		} || {
-			echo "downloading nitrond..."
-			git clone "$repo" "$target"
-			echo "installing nitrond..."
-			chmod 755 "${target}"
-			chmod +x "${target}/nitrond"
-			chmod +x "${target}/nitron_headers.sh"
-			sudo cp -f "${target}/nitrond" "${bin}/nitrond"
-			sudo cp -f "${target}/nitron_headers.sh" "${etc}/nitron_headers.sh"
-			sudo chmod 755 "${bin}/nitrond"
-			sudo chmod 755 "${etc}/nitron_headers.sh"
-		}
+		} || { echo "this is not android environment..."; exit 1;}
 	;;
 	*)	echo "test." ;;
 esac
