@@ -4,6 +4,8 @@
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
+set -x
+
 # Ensures proper use
 if ! [[ $(uname -s) =~ ^(Linux|GNU*)$ ]]; then
   echo "ERROR: run NitronD Installer on Linux" >&2
@@ -23,3 +25,10 @@ fi
 repo="https://github.com/UsiFX/OpenNitroN.git"
 target="${HOME}/OpenNitroN-temp"
 bin="${PREFIX/\/usr}/usr/bin"
+
+required_deps=(git)
+
+[[ ! "$(which ${required_deps[@]} 2>/dev/null)" ]] && {
+        echo "please download following packages, (${required_deps[@]})"
+	exit 1
+}
