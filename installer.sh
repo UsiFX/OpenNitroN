@@ -18,3 +18,8 @@ elif [[ ${BASH_SOURCE[0]} != "$0" ]]; then
   echo "ERROR: NitronD Installer cannot be sourced" >&2
   return 1
 fi
+
+# Required variables
+repo="https://github.com/UsiFX/OpenNitroN.git"
+target="${HOME}/OpenNitroN-temp"
+bin="${PREFIX/\/usr}/usr/bin"
