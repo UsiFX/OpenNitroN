@@ -22,10 +22,14 @@ bin="${PREFIX/\/usr}/usr/bin"
 etc="${PREFIX/\/usr}/usr/etc"
 required_deps=(git)
 
-[[ ! "$(which ${required_deps[@]} 2>/dev/null)" ]] && {
-        echo "please download following packages, (${required_deps[@]})"
-	exit 1
-}
+if [[ "$(which getprop)" ]] && [[ "$(id -u)" -ne "0" ]]; then
+	echo "being used in Android SU session..."
+else
+	[[ ! "$(which ${required_deps[@]} 2>/dev/null)" ]] && {
+	        echo "please download following packages, (${required_deps[@]})"
+		exit 1
+	}
+fi
 
 case $1 in
 	install)
