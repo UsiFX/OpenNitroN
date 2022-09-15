@@ -7,7 +7,7 @@
 set -x
 
 # Ensures proper use
-if ! [[ $(uname -s) =~ ^(Linux|GNU*)$ ]]; then
+if ! [[ $(uname -s) == "Linux" ]]; then
   echo "ERROR: run NitronD Installer on Linux" >&2
   if [[ $(whoami) == root ]]; then
     echo "ERROR: do not run NitronD Installer as root" >&2
