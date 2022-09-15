@@ -13,12 +13,6 @@ if ! [[ $(uname -s) == "Linux" ]]; then
     echo "ERROR: do not run NitronD Installer as root" >&2
   fi
   exit 1
-elif ! [[ -t 0 ]]; then
-  echo "ERROR: run NitronD Installer from a terminal" >&2
-  exit 1
-elif [[ ${BASH_SOURCE[0]} != "$0" ]]; then
-  echo "ERROR: NitronD Installer cannot be sourced" >&2
-  return 1
 fi
 
 # Required variables
