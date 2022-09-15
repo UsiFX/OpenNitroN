@@ -40,8 +40,11 @@ case $1 in
 		echo "installing nitrond..."
 		chmod 755 "${target}"
 		chmod +x "${target}/nitrond"
+		chmod +x "${target}/nitron_headers.sh"
 		sudo cp -f "${target}/nitrond" "${bin}/nitrond"
+		sudo cp -f "${target}/nitron_headers.sh" "${etc}/nitron_headers.sh"
 		sudo chmod 755 "${bin}/nitrond"
+		sudo chmod 755 "${etc}/nitron_headers.sh"
 	;;
 	*)	echo "test." ;;
 esac
