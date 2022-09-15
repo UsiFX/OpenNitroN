@@ -44,7 +44,7 @@ case $1 in
 	;;
 	install-android)
 		[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && {
-			[[ "$(id -u)" -ne "0" ]] && {
+			[[ "$(id -u)" == "0" ]] && {
 				echo "downloading nitrond files..."
 				curl -o "/system/bin/nitrond" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
 				curl -o "/system/etc/nitron_headers.sh" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers.sh"
