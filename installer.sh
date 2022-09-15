@@ -32,3 +32,16 @@ required_deps=(git)
         echo "please download following packages, (${required_deps[@]})"
 	exit 1
 }
+
+case $1 in
+	install)
+		echo "downloading nitrond..."
+		git clone "$repo" "$target"
+		echo "installing nitrond..."
+		chmod 755 "${target}"
+		chmod +x "${target}/nitrond"
+		sudo cp -f "${target}/nitrond" "${bin}/nitrond"
+		sudo chmod 755 "${bin}/nitrond"
+	;;
+	*)	echo "test." ;;
+esac
