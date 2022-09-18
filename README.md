@@ -84,4 +84,5 @@ of this license document, but changing it is not allowed.
 ### Buy me a Coffee?
 
 PAYPAL: `xprjkts@gmail.com`
+
 KO-FI: `https://ko-fi.com/xprjkt`
