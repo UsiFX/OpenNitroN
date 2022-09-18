@@ -8,10 +8,6 @@
   <img src="https://api.codiga.io/project/34591/status/svg" alt="Codequality">
 </a>
 
-<a href="https://www.codefactor.io/repository/github/UsiFX/OpenNitroN">
-  <img src="https://www.codefactor.io/repository/github/UsiFX/OpenNitroN/badge" alt="Codefactor">
-</a>
-
 <a href="https://github.com/UsiFX/OpenNitroN/fork">
   <img src="https://img.shields.io/github/forks/UsiFX/OpenNitroN.svg?logo=github" alt="Forks">
 </a>
@@ -25,7 +21,7 @@
 
 - [Overview](#overview)
 - [Requirements](#requirements)
-- [Installation](#installataion)
+- [Installation](#installation)
 - [Options](#options)
 - [Reporting Issues](#reporting-issues)
 - [License](#license)
