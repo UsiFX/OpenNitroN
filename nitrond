@@ -420,6 +420,7 @@ Options:
   -h, --help ~ shows this Help menu
   -v, --version ~ shows tool version
   -d, --debug ~ run any command under debug flag
+  -L, --License ~ shows Tool License
 "
 }
 
@@ -455,6 +456,19 @@ Options:
 				printn -l "--- started"
 			}
 			;;
+		"-L" | "--License") echo "
+#
+# nitronD v1.7 (An Extensive Kernel tweaker)
+# Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
+#
+#			GNU GENERAL PUBLIC LICENSE
+#			 Version 3, 29 June 2007
+#
+# Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
+# Everyone is permitted to copy and distribute verbatim copies
+# of this license document, but changing it is not allowed.
+#"
+		;;
 		"-h" | "--help") __nitron_help ;;
 		"-u" | "--update") updaten ;;
 		*)
