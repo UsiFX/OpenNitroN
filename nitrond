@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034
 #
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
@@ -25,25 +26,24 @@ YELLOW='\e[01;33m'
 STOCK='\e[1;0m'
 
 PR_PREFIX="nitron_broadcast():"
-[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && NITRON_LOG_DIR='/cache' || NITRON_LOG_DIR='/tmp'
+grep -q "androidboot" /proc/cmdline && NITRON_LOG_DIR='/cache' || NITRON_LOG_DIR='/tmp'
 PROMPT_COMMAND='sync'
 HEADER_SOURCE="${PREFIX/\/usr}/usr/etc"
 
-# Debugging
-[[ "$1" == "--debug" ]] || [[ "$1" == "-d" ]] && set -x
-
 # Include headers
-[[ ! -f $HEADER_SOURCE/nitron_headers.sh ]] && {
+if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]]; then
 	echo "missing header, $HEADER_SOURCE/nitron_headers.sh"
 	exit 1
-} || source $HEADER_SOURCE/nitron_headers.sh
+else
+	source "$HEADER_SOURCE"/nitron_headers.sh
+fi
 
 printn() {
 	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
 
 	[[ "$1" == "-e" ]] && {
-	printf "[${RED}×${STOCK}] $2\n"
-	return 1
+		printf "[${RED}×${STOCK}] $2\n"
+		exit 1
 	}
 
 	[[ "$1" == "-w" ]] && printf "[${YELLOW}!${STOCK}] $2\n"
@@ -55,7 +55,7 @@ printn() {
 
 writen() {
 	[[ ! -f "$1" ]] && {
-		echo "[$(date +%I:%M:%S)] $0: $1: not found, skipping..." >>"$NITRON_LOG_DIR"/nitron.log
+		echo "[$(date +%I:%M:%S)] $0: $1: not found, skipping..." >> "$NITRON_LOG_DIR"/nitron.log
 		return 1
 	}
 
@@ -63,13 +63,13 @@ writen() {
 	chmod +w "$1" 2>/dev/null
 
 	# Write new value, bail out if it fail
-	! echo "$2" >"$1" 2>/dev/null && {
-		echo "[$(date +%I:%M:%S)] $0: $1: failed to change node" >>"$NITRON_LOG_DIR"/nitron.log
+	if ! echo "$2" > "$1" 2>/dev/null; then
+		echo "[$(date +%I:%M:%S)] $0: $1: failed to change node" >> "$NITRON_LOG_DIR"/nitron.log
 		return 1
-	} || {
-		echo "[$(date +%I:%M:%S)] $0: $1: changed node[$2]" >>"$NITRON_LOG_DIR"/nitron.log
+	else
+		echo "[$(date +%I:%M:%S)] $0: $1: changed node[$2]" >> "$NITRON_LOG_DIR"/nitron.log
 		return 0
-	}
+	fi
 }
 
 __magicn_help() {
@@ -360,27 +360,28 @@ magicn() {
 updaten() {
 	PR_PREFIX="updaten():"
 	printn -n "checking connectivity..."
-	[[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]] && {
+	if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
 		printn -e "aborted from system variable"
 		printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
 		return 1
-	}
-	[[ "$NITRON_FORCECHECK_UPDATE" == "false" ]] && {
+	elif [[ "$NITRON_FORCECHECK_UPDATE" == "false" ]]; then
 		printn -e "aborted from system variable"
 		printn -l "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
 		return 1
-	} || printn -l "pinging 8.8.8.8 ..."
-	[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" == "0" ]] || echo "[$(date +%I:%M:%S)] $0: ${arg#*}: failed" >>$NITRON_LOG_DIR/nitron.log && {
-		printn -l "returned with $?"
-		printn -i "looking for update..."
-		curl -o "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
-		cp "$0" "/cache/nitrond_current"
-		[[ "$(diff "/cache/nitrond_current" "/cache/nitrond_src_cache")" ]] && {
-			printn -i "updating..."
-			cat "/cache/nitrond_src_cache" >$0
-			printn -n "updated successfully."
-		} || printn -n "up to date."
-	}
+	else
+		printn -l "pinging 8.8.8.8 ..."
+		[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" == "0" ]] || printn -l "failed" && {
+			printn -l "returned with $?"
+			printn -i "looking for update..."
+			curl -o "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
+			cp "$0" "/cache/nitrond_current"
+			if [[ "$(diff "/cache/nitrond_current" "/cache/nitrond_src_cache")" ]]; then
+				printn -i "updating..."
+				cat "/cache/nitrond_src_cache" > $0
+				printn -n "updated successfully."
+			fi
+		} || printn -i "up to date."
+	fi
 }
 
 # Bail out if we aren't running as SU
@@ -401,7 +402,7 @@ updaten() {
 		export NITRON_MODE='default'
 	}
 }
-[[ ! "$(resetprop ro.nitron.version)" ]] && {
+[[ ! "$(resetprop ro.nitron.mode)" ]] && {
 	printn -l "we are working on first use, Supplying initial mode..."
 	resetprop ro.nitron.mode default
 }
@@ -428,35 +429,37 @@ Options:
 	tty -s
 	__nitron_help
 } || {
-	case $@ in
-		"-sg" | "--set-green")
-			magicn -g
-			[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
-			;;
-		"-sr" | "--set-red")
-			magicn -r
-			[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
-			;;
-		"-sy" | "--set-yellow")
-			magicn -y
-			[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
-			;;
-		"-sdm" | "--show-default-mode")
-			[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && echo -e "$0: mode: $(getprop ro.nitron.mode)" || echo -e "$0: mode: $NITRON_MODE"
-			;;
-		"-v" | "--version")
-			[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && echo -e "nitrond $(getprop ro.nitron.version)" || echo -e "nitrond $NITRON_VERSION"
-			;;
-		"-c" | "--console-mode")
-			[[ ! "$(hash dialog 2>/dev/null)" ]] && {
-				printn -l "dialog not found, switch: console_legacy()"
-				console_legacy
-			} || {
-				console_dialog
-				printn -l "--- started"
-			}
-			;;
-		"-L" | "--License") echo "
+	for arg in $*
+	do
+		case "${arg}" in
+			"-sg" | "--set-green")
+				magicn -g
+				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
+				;;
+			"-sr" | "--set-red")
+				magicn -r
+				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
+				;;
+			"-sy" | "--set-yellow")
+				magicn -y
+				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
+				;;
+			"-sdm" | "--show-default-mode")
+				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && echo -e "$0: mode: $(getprop ro.nitron.mode)" || echo -e "$0: mode: $NITRON_MODE"
+				;;
+			"-v" | "--version")
+				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && echo -e "nitrond $(getprop ro.nitron.version)" || echo -e "nitrond $NITRON_VERSION"
+				;;
+			"-c" | "--console-mode")
+				[[ ! "$(hash dialog 2>/dev/null)" ]] && {
+					printn -l "dialog not found, switch: console_legacy()"
+					console_legacy
+				} || {
+					console_dialog
+					printn -l "--- started"
+				}
+				;;
+			"-L" | "--License") echo "
 #
 # nitronD v1.7 (An Extensive Kernel tweaker)
 # Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
@@ -468,12 +471,14 @@ Options:
 # Everyone is permitted to copy and distribute verbatim copies
 # of this license document, but changing it is not allowed.
 #"
-		;;
-		"-h" | "--help") __nitron_help ;;
-		"-u" | "--update") updaten ;;
-		*)
-			printn -e "Unknown Option  $@"
-			__nitron_help
 			;;
-	esac
+			"-h" | "--help") __nitron_help ;;
+			"-u" | "--update") updaten ;;
+			"-d" | "--debug")
+				set -x
+				printn -i "operation success."
+			;;
+			*) printn -e "unknown option $*, check 'nitrond --help'." ;;
+		esac
+	done
 }
