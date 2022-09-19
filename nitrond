@@ -484,7 +484,7 @@ Options:
 			"-u" | "--update") updaten ;;
 			"-d" | "--debug")
 				set -x
-				printn -i "operation success."
+				printn -w "execution under debug, please provide arguments to debug"
 			;;
 			*) printn -e "unknown option $*, check 'nitrond --help'." ;;
 		esac
