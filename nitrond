@@ -373,11 +373,11 @@ updaten() {
 		[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" == "0" ]] || printn -l "failed" && {
 			printn -l "returned with $?"
 			printn -i "looking for update..."
-			curl -o "/cache/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
-			cp "$0" "/cache/nitrond_current"
-			if [[ "$(diff "/cache/nitrond_current" "/cache/nitrond_src_cache")" ]]; then
+			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
+			cp "$0" "$NITRON_LOG_DIR/nitrond_current"
+			if [[ "$(diff "$NITRON_LOG_DIR/nitrond_current" "$NITRON_LOG_DIR/nitrond_src_cache")" ]]; then
 				printn -i "updating..."
-				cat "/cache/nitrond_src_cache" > $0
+				cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
 				printn -n "updated successfully."
 			fi
 		} || printn -i "up to date."
