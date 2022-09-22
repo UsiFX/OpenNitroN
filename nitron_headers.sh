@@ -97,7 +97,8 @@ console_legacy() {
 					done
 					;;
 				2)
-					printn -e "wip"
+					printn -w "wip"
+					sleep 2
 					break
 					;;
 				3)
@@ -111,7 +112,7 @@ console_legacy() {
 					break 2
 					;;
 				*)
-					printn -e "[$num] unknown option"
+					printn -w "[$num] unknown option"
 					sleep 2
 					break
 					;;
