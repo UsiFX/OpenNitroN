@@ -47,7 +47,7 @@ console_legacy() {
 	do
 	clear
 	print_banner
-	COLUMNS=45
+	COLUMNS=150
 	OPTIONS=("Switch Mode" "Show device state" "Update" "Show help menu" "Exit")
 	PS3="Choose one of the following Main options: "
 		select CHOICE in "${OPTIONS[@]}"; do
@@ -57,7 +57,7 @@ console_legacy() {
 					while :; do
 						clear
 						print_banner
-						COLUMNS=45
+						COLUMNS=150
 						MODE_OPTIONS=("Gaming" "Balance" "Battery" "Back to main menu" "Exit")
 						PS3="Choose one of the following Mode options: "
 						select MODE_CHOICE in "${MODE_OPTIONS[@]}"; do
