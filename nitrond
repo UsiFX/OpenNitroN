@@ -1,5 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2034
+# shellcheck disable=SC2059
 #
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
@@ -398,10 +399,14 @@ updaten() {
 	exit 1
 }
 
-grep -q "androidboot" /proc/cmdline && {
+if grep -q "androidboot" /proc/cmdline; then
 	printn -l "working in android platform, using resetprop algorithm..."
 	resetprop ro.nitron.version 0.7.3
-} || {
+	[[ ! "$(resetprop ro.nitron.mode)" ]] && {
+		printn -l "we are working on first use, Supplying initial mode..."
+		resetprop ro.nitron.mode default
+	}
+else
 	printn -l "working in Unknown Linux platform, using export algorithm..."
 	export NITRON_FORCECHECK_UPDATE
 	export NITRON_VERSION='0.7.3'
@@ -409,11 +414,7 @@ grep -q "androidboot" /proc/cmdline && {
 		printn -l "we are working on first use, Supplying initial mode..."
 		export NITRON_MODE='default'
 	}
-}
-[[ ! "$(resetprop ro.nitron.mode)" ]] && {
-	printn -l "we are working on first use, Supplying initial mode..."
-	resetprop ro.nitron.mode default
-}
+fi
 
 __nitron_help() {
 	echo "
@@ -433,39 +434,59 @@ Options:
 "
 }
 
-[[ $# -eq "0" ]] && {
+if [[ $# -eq "0" ]]; then
 	tty -s
 	__nitron_help
-} || {
+else
 	for arg in "$@"
 	do
 		case "${arg}" in
 			"-sg" | "--set-green")
 				magicn -g
-				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
+				if grep -q "androidboot" /proc/cmdline; then
+					printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+				else
+					printn -n "$0: current mode set to: $NITRON_MODE"
+				fi
 				;;
 			"-sr" | "--set-red")
 				magicn -r
-				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
+				if grep -q "androidboot" /proc/cmdline; then
+					printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+				else
+					printn -n "$0: current mode set to: $NITRON_MODE"
+				fi
 				;;
 			"-sy" | "--set-yellow")
 				magicn -y
-				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && printn -n "$0: current mode set to: $(getprop ro.nitron.mode)" || printn -n "$0: current mode set to: $NITRON_MODE"
+				if grep -q "androidboot" /proc/cmdline; then
+					printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+				else
+					printn -n "$0: current mode set to: $NITRON_MODE"
+				fi
 				;;
 			"-sdm" | "--show-default-mode")
-				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && echo -e "$0: mode: $(getprop ro.nitron.mode)" || echo -e "$0: mode: $NITRON_MODE"
+				if grep -q "androidboot" /proc/cmdline; then
+					echo -e "$0: mode: $(getprop ro.nitron.mode)"
+				else
+					echo -e "$0: mode: $NITRON_MODE"
+				fi
 				;;
 			"-v" | "--version")
-				[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && echo -e "nitrond $(getprop ro.nitron.version)" || echo -e "nitrond $NITRON_VERSION"
+				if grep -q "androidboot" /proc/cmdline; then
+					echo -e "nitrond $(getprop ro.nitron.version)"
+				else
+					echo -e "nitrond $NITRON_VERSION"
+				fi
 				;;
 			"-c" | "--console-mode")
-				[[ ! "$(hash dialog 2>/dev/null)" ]] && {
+				if [[ ! "$(hash dialog 2>/dev/null)" ]]; then
 					printn -l "dialog not found, switch: console_legacy()"
 					console_legacy
-				} || {
+				else
 					console_dialog
 					printn -l "--- started"
-				}
+				fi
 				;;
 			"-L" | "--License") echo "
 #
@@ -489,4 +510,4 @@ Options:
 			*) printn -e "unknown option $*, check 'nitrond --help'." ;;
 		esac
 	done
-}
+fi
