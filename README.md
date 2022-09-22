@@ -1,3 +1,5 @@
+![OpenNitroN](https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/etc/banners/frame_17.png)
+
 # The NitroN: Open Edition
 
 <a href="https://app.codiga.io/hub/project/34591/OpenNitroN/dashboard">
