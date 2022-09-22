@@ -66,16 +66,19 @@ console_legacy() {
 								1)
 									magicn -r
 									printn -i "Process complete!"
+									sleep 2
 									break
 									;;
 								2)
 									magicn -y
 									printn -i "Process complete!"
+									sleep 2
 									break
 									;;
 								3)
 									magicn -g
 									printn -i "Process complete!"
+									sleep 2
 									break
 									;;
 								4)
