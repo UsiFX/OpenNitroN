@@ -380,7 +380,7 @@ updaten() {
 			printn -l "returned with $?"
 			printn -i "looking for update..."
 			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
-			[[ "$($0 -v)" != "$($NITRON_LOG_DIR/nitrond_src_cache -v)" ]] && printn -i "version bump detection, $($0 -v) -> $($NITRON_LOG_DIR/nitrond_src_cache -v)"
+			[[ "$(which sh) $($0 -v)" != "$(which sh) $($NITRON_LOG_DIR/nitrond_src_cache -v)" ]] && printn -i "version bump detection, $($0 -v) -> $($NITRON_LOG_DIR/nitrond_src_cache -v)"
 			printn -w "backing up..."
 			cp "$0" "$NITRON_LOG_DIR/nitrond_current"
 			if [[ "$(diff "$NITRON_LOG_DIR/nitrond_current" "$NITRON_LOG_DIR/nitrond_src_cache")" ]]; then
