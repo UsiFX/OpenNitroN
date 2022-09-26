@@ -385,7 +385,7 @@ updaten() {
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 			printn -w "backing up..."
 			cp "$0" "$NITRON_LOG_DIR/nitrond_current"
-			cp "$HEADER_SOURCE/nitron_headers.sh" "nitronh_current"
+			cp "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current"
 			if [[ "$(diff "$NITRON_LOG_DIR/nitrond_current" "$NITRON_LOG_DIR/nitrond_src_cache")" ]]; then
 				printn -i "updating..."
 				cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
