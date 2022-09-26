@@ -371,7 +371,7 @@ updaten() {
 		return 1
 	else
 		printn -l "pinging 8.8.8.8 ..."
-		[[ "$(ping -c1 "8.8.8.8" 2>&1 && echo $?)" == "0" ]] && {
+		[[ "$(ping -c1 "8.8.8.8" 2>&1 && echo $?)" != "0" ]] && {
 			printn -w "network unreachable"
 			printn -l "failed"
 			printn -l "returned with $?"
