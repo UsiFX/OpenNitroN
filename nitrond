@@ -383,7 +383,6 @@ updaten() {
 			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
 			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers" 2>/dev/null
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
-			[[ "$(which sh) $($(dirname -- "$(readlink -f -- "$0")")/$0 -v)" != "$(which sh) $($NITRON_LOG_DIR/nitrond_src_cache -v)" ]] && printn -i "version bump detection, $($0 -v) -> $($NITRON_LOG_DIR/nitrond_src_cache -v)"
 			printn -w "backing up..."
 			cp "$0" "$NITRON_LOG_DIR/nitrond_current"
 			cp "$HEADER_SOURCE/nitron_headers.sh" "nitronh_current"
