@@ -1,6 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC2034
 # shellcheck disable=SC2059
+# shellcheck disable=SC1091
+# shellcheck disable=SC2015
 #
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
@@ -30,7 +32,7 @@ PR_PREFIX="nitron_broadcast():"
 grep -q "androidboot" /proc/cmdline && NITRON_LOG_DIR='/cache' || NITRON_LOG_DIR='/tmp'
 PROMPT_COMMAND='sync'
 HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
-DAEMON_SOURCE=$(dirname $0)
+DAEMON_SOURCE=$(dirname "$0")
 
 # Include headers
 if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]]; then
