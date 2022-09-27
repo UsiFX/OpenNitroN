@@ -40,27 +40,39 @@ an argument-based script and a menu-based script for Android and/or Linux platfo
 - SuperUser permissions
 
 ## Installation
-The installer (`installer.sh`) simply clones this repository
-in your current Directory (`$PWD`) and creates copy of the executable
-in `/usr/bin` or `/system/bin` for Android Platforms.
 
-The installer still under development (buggy).
+**for linux:**
+The installer (`installer.sh`) simply clones this repository
+in your home's Directory (`/home`) and creates copy of the executables
+in `/usr/bin` for the daemon itself, and/or `/usr/include` for the header file
+by simply run:
+`curl -sS https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh`
+
+it should output you the following:
+``` bash
+$ curl -sS https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh
+usage: installer.sh [install] [uninstall]
+```
+use the script according to your opinion.
+
+**for android:**
+the installation module for android is still under development.
 
 ## Options
 ```
 Usage: nitrond [OPTION] (e.g. nitrond --update)
 
 Options:
-  -sg, --set-green 		~ apply Battery mode
-  -sr, --set-red 		~ apply Gaming mode
-  -sy, --set-yellow 		~ apply Balanced mode
-  -sdm, --show-default-mode 	~ prints current tweaking mode
-  -c, --console-mode 		~ enter User-Friendly user selections
-  -u, --update 			~ force update to latest
-  -h, --help 			~ shows this Help menu
-  -v, --version 		~ shows tool version
-  -d, --debug 			~ run any command under debug flag
-  -L, --License 		~ shows Tool License
+-sg, --set-green              ~ apply Battery mode
+-sr, --set-red                ~ apply Gaming mode
+-sy, --set-yellow             ~ apply Balanced mode
+-sdm, --show-default-mode     ~ prints current tweaking mode
+-c, --console-mode            ~ enter User-Friendly user selections
+-u, --update                  ~ force update to latest
+-h, --help                    ~ shows this Help menu
+-v, --version                 ~ shows tool version
+-d, --debug    [DEV-ONLY]     ~ run any command under debug flag
+-L, --License                 ~ shows Tool License
 ```
 
 ## Reporting Issues
