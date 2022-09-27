@@ -8,16 +8,16 @@
 #
 
 cleanup() {
-	rm -rf "$MODPATH/common" 2>/dev/null
-	rm -rf "$MODPATH/LICENSE" 2>/dev/null
-	rm -rf "$MODPATH/README.md" 2>/dev/null
+	rm -rf "$MODPATH/common"
+	rm -rf "$MODPATH/LICENSE"
+	rm -rf "$MODPATH/README.md"
 }
 
 abort() {
 	ui_print "$1"
 	cleanup
- 	rm -rf $MODPATH 2>/dev/null
- 	rm -rf $TMPDIR 2>/dev/null
+ 	rm -rf $MODPATH
+ 	rm -rf $TMPDIR
 	exit 1
 }
 
@@ -143,7 +143,7 @@ if ! $BOOTMODE; then
   [ -s $INFO ] && install_script $MODPATH/uninstall.sh || rm -f $INFO $MODPATH/uninstall.sh
   recovery_cleanup
   cleanup
-  rm -rf $NVBASE/modules_update/$MODID $TMPDIR 2>/dev/null
+  rm -rf $NVBASE/modules_update/$MODID $TMPDIR
   exit 0
 fi
 if $DEBUG; then
@@ -194,9 +194,9 @@ for i in $(find $MODPATH -type f -name "*.sh" -o -name "*.prop" -o -name "*.rule
                              fi;;
   esac
 done
-$IS64BIT || for i in $(find $MODPATH/system -type d -name "lib64"); do rm -rf $i 2>/dev/null; done  
-[ -d "/system/priv-app" ] || mv -f $MODPATH/system/priv-app $MODPATH/system/app 2>/dev/null
-[ -d "/system/xbin" ] || mv -f $MODPATH/system/xbin $MODPATH/system/bin 2>/dev/null
+$IS64BIT || for i in $(find $MODPATH/system -type d -name "lib64"); do rm -rf $i ; done
+[ -d "/system/priv-app" ] || mv -f $MODPATH/system/priv-app $MODPATH/system/app
+[ -d "/system/xbin" ] || mv -f $MODPATH/system/xbin $MODPATH/system/bin
 if $DYNLIB; then
   for FILE in $(find $MODPATH/system/lib* -type f 2>/dev/null | sed "s|$MODPATH/system/||"); do
     [ -s $MODPATH/system/$FILE ] || continue
