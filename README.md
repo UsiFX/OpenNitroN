@@ -46,11 +46,12 @@ The installer (`installer.sh`) simply clones this repository
 in your home's Directory (`/home`) and creates copy of the executables
 in `/usr/bin` for the daemon itself, and/or `/usr/include` for the header file
 by simply run:
-`curl -sS https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh | sh`
-
+``` bash
+ wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh && bash installer.sh install
+```
 it should output you the following:
 ``` bash
-$ curl -sS https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh | sh
+$ wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh && bash installer.sh install
 usage: installer.sh [install] [uninstall]
 ```
 use the script according to your opinion.
