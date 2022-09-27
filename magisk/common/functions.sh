@@ -15,6 +15,7 @@ cleanup() {
 
 abort() {
 	ui_print "$1"
+	cleanup
  	rm -rf $MODPATH 2>/dev/null
  	rm -rf $TMPDIR 2>/dev/null
 	exit 1
