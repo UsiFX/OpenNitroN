@@ -29,7 +29,7 @@ STOCK='\e[1;0m'
 PR_PREFIX="nitron_broadcast():"
 grep -q "androidboot" /proc/cmdline && NITRON_LOG_DIR='/cache' || NITRON_LOG_DIR='/tmp'
 PROMPT_COMMAND='sync'
-HEADER_SOURCE="${PREFIX/\/usr}/usr/etc"
+HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
 DAEMON_SOURCE=$(dirname $0)
 
 # Include headers
