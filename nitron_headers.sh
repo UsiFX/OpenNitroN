@@ -1,4 +1,9 @@
 #
+# shellcheck disable=SC2148
+# shellcheck disable=SC2034
+#
+# nitronD Headers.
+#
 # Copyright Identiter: GPL-3.0
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
