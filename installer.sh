@@ -1,59 +1,58 @@
 #!/usr/bin/env bash
 #
+# Simple nitronD installer
+#
 # Copyright Identiter: GPL-3.0
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
-set -x
-
 # Ensures proper use
-if ! [[ $(uname -s) == "Linux" ]]; then
-  echo "ERROR: run NitronD Installer on Linux" >&2
-  if [[ $(whoami) == root ]]; then
-    echo "ERROR: do not run NitronD Installer as root" >&2
-  fi
-  exit 1
+if ! [[ $(uname -s) =~ ^(Linux|GNU*)$ ]]; then
+	echo "ERROR: run nitronD Installer on Linux" >&2
+	exit 1
+elif ! [[ -t 0 ]]; then
+	echo "ERROR: run nitronD Installer from a terminal" >&2
+	exit 1
+elif [[ $(whoami) == root ]]; then
+	echo "ERROR: do not run nitronD Installer as root" >&2
+	exit 1
+elif [[ ${BASH_SOURCE[0]} != "$0" ]]; then
+	echo "ERROR: nitronD Installer cannot be sourced" >&2
+	return 1
 fi
+
+# Shell options
+set -e
+shopt -s progcomp
+shopt -u dirspell progcomp_alias
 
 # Required variables
-repo="https://github.com/UsiFX/OpenNitroN.git"
-target="${HOME}/OpenNitroN-temp"
-bin="${PREFIX/\/usr}/usr/bin"
-etc="${PREFIX/\/usr}/usr/etc"
-required_deps=(git)
+REPO="https://github.com/UsiFX/OpenNitroN.git"
+TARGET_REPO="${HOME}/OpenNitroN-temp"
+BIN_DIR="${PREFIX/\/usr}/usr/bin"
+INCLUDE_DIR="${PREFIX/\/usr}/usr/include"
+REQUIRED_DEPS=(git dialog)
 
-if [[ ! "$(grep -nr "androidboot" /proc/cmdline)" ]]; then
-	[[ ! "$(which ${required_deps[@]} 2>/dev/null)" ]] && {
-	        echo "please download following packages, (${required_deps[@]})"
-		exit 1
-	}
-fi
+which ${REQUIRED_DEPS[@]} >/dev/null || echo "please download following packages, (${REQUIRED_DEPS[@]})"
 
 case $1 in
 	install)
 		echo "downloading nitrond..."
-		git clone "$repo" "$target"
+		git clone --depth=1 $REPO $TARGET_REPO
 		echo "installing nitrond..."
-		chmod 755 "${target}"
-		chmod +x "${target}/nitrond"
-		chmod +x "${target}/nitron_headers.sh"
-		sudo cp -f "${target}/nitrond" "${bin}/nitrond"
-		sudo cp -f "${target}/nitron_headers.sh" "${etc}/nitron_headers.sh"
-		sudo chmod 755 "${bin}/nitrond"
-		sudo chmod 755 "${etc}/nitron_headers.sh"
+		chmod 755 "${TARGET_REPO}"
+		chmod +x "${TARGET_REPO}/nitrond"
+		chmod +x "${TARGET_REPO}/nitron_headers.sh"
+		sudo cp -f "${TARGET_REPO}/nitrond" "${BIN_DIR}/nitrond"
+		sudo cp -f "${TARGET_REPO}/nitron_headers.sh" "${INCLUDE_DIR}/nitron_headers.sh"
+		sudo chmod 755 "${BIN_DIR}/nitrond"
+		sudo chmod 755 "${INCLUDE_DIR}/nitron_headers.sh"
 	;;
-	install-android)
-		[[ "$(grep -nr "androidboot" /proc/cmdline)" ]] && {
-			[[ "$(id -u)" == "0" ]] && {
-				echo "downloading nitrond files..."
-				curl -o "/system/bin/nitrond" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond"
-				curl -o "/system/etc/nitron_headers.sh" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers.sh"
-				chmod +x "/system/bin/nitrond"
-				chmod +x "/system/etc/nitron_headers.sh"
-				chmod 755 "/system/bin/nitrond"
-				chmod 755 "/system/etc/nitron_headers.sh"
-			} || { echo "please run with SU."; exit 1 ;}
-		} || { echo "this is not android environment..."; exit 1;}
+	uninstall)
+		echo "uinstalling nitrond..."
+		sudo rm -f $(which nitrond)
+		sudo rm -f $INCLUDE_DIR/nitron_headers.sh
+		echo "finished uninstallation!"
 	;;
-	*)	echo "test." ;;
+	*)	echo "usage: installer.sh [install] [uninstall]" ;;
 esac
