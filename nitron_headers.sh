@@ -8,6 +8,8 @@
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
+export NITRON_HEADER_VERSION='1.0.0'
+
 console_dialog() {
 	PR_PREFIX="console_dialog():"
 	HEIGHT=16

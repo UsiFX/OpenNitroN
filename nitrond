@@ -479,6 +479,7 @@ else
 				else
 					echo -e "nitrond $NITRON_VERSION"
 				fi
+				echo -e "nitron_headers $NITRON_HEADER_VERSION"
 				;;
 			"-c" | "--console-mode")
 				if [[ ! "$(hash dialog 2>/dev/null)" ]]; then
