@@ -482,7 +482,7 @@ else
 				echo -e "nitron_headers $NITRON_HEADER_VERSION"
 				;;
 			"-c" | "--console-mode")
-				if [[ ! "$(hash dialog 2>/dev/null)" ]]; then
+				if [[ "$(hash dialog 2>/dev/null && echo $?)" != "0" ]]; then
 					printn -l "dialog not found, switch: console_legacy()"
 					console_legacy
 				else
