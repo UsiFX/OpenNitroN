@@ -373,7 +373,7 @@ updaten() {
 			printn -l "returned with $?"
 			printn -i "looking for update..."
 			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
-			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers.sh" 2>/dev/null
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 			printn -w "backing up..."
 			cp "$0" "$NITRON_LOG_DIR/nitrond_current"
