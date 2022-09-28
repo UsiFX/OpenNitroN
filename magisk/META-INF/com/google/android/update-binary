@@ -1,5 +1,8 @@
 #!/sbin/sh
 #
+# shellcheck disable=SC2034
+# shellcheck disable=SC1091
+#
 # Initialiser, simple MMT
 # Written by UsiFX, pedrozzz0
 #
@@ -12,7 +15,7 @@ umask 022
 # Echo before loading util_functions
 ui_print() { echo "$1"; }
 
-rmtouch() { [[ -e "$1" ]] && rm -rf "$1" 2>/dev/null; }
+rmtouch() { [ -e "$1" ] && rm -rf "$1" 2>/dev/null; }
 
 ####################
 # SETUP ENVIRONMENT
@@ -24,7 +27,7 @@ ZIPFILE="$3"
 mount /data 2>/dev/null
 
 # Load utility functions
-. /data/adb/magisk/util_functions.sh
+. "/data/adb/magisk/util_functions.sh"
 
 # Preperation for flashable zips
 setup_flashable
