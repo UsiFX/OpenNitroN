@@ -2,6 +2,7 @@
 #
 # shellcheck disable=SC2034
 # shellcheck disable=SC1091
+# shellcheck disable=SC2015
 #
 # Initialiser, simple MMT
 # Written by UsiFX, pedrozzz0
@@ -12,14 +13,23 @@
 
 umask 022
 
+
+# Global vars
+TMPDIR="/dev/tmp"
+PERSISTDIR="/sbin/.magisk/mirror/persist"
+
 # Echo before loading util_functions
 ui_print() { echo "$1"; }
 
 rmtouch() { [ -e "$1" ] && rm -rf "$1" 2>/dev/null; }
 
-####################
-# SETUP ENVIRONMENT
-####################
+
+rmtouch "$TMPDIR"
+mkdir -p "$TMPDIR"
+
+#
+# setup Env.
+#
 
 OUTFD="$2"
 ZIPFILE="$3"
@@ -41,5 +51,41 @@ api_level_arch_detect
 # Setup busybox and binaries
 $BOOTMODE && boot_actions || recovery_actions
 
-install_module
+#
+# Preparation
+#
+
+# Extract prop file
+unzip -o "$ZIPFILE" module.prop -d "$TMPDIR" >&2
+[ ! -f "$TMPDIR/module.prop" ] && abort "[!] Unable to extract zip file!"
+
+# Mod vars
+NVBASE="/data/adb"
+$BOOTMODE && MODDIRNAME=modules_update || MODDIRNAME=modules
+MODULEROOT="$NVBASE/$MODDIRNAME"
+MODID="$(grep_prop "id" "$TMPDIR/module.prop")"
+MODPATH="$MODULEROOT/$MODID"
+MODNAME="$(grep_prop "name" "$TMPDIR/module.prop")"
+
+# Create mod paths
+rmtouch "$MODPATH"
+mkdir -p "$MODPATH"
+
+#
+# Installation
+#
+
+# Extract to $MODPATH
+unzip -o "$ZIPFILE" -d "$MODPATH" >&2
+
+# load functions
+. "$MODPATH/common/functions.sh"
+
+#
+# finialization
+#
+
+cd /
+"$BOOTMODE" || recovery_cleanup
+rmtouch "$TMPDIR"
 exit 0
