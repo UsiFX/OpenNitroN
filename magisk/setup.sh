@@ -14,7 +14,7 @@ set_permissions() { set_perm_recursive "$MODPATH" 0 0 0755 0644 ;}
 info_print()
 {
 	ui_print ""
-	awk '{print}' "$MODPATH/NiTRON"
+	awk '{print}' "$MODPATH/common/ntdbanner"
 	ui_print ""
 }
 
