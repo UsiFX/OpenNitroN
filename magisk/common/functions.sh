@@ -144,8 +144,8 @@ else
   LIBDIR=/system
 fi
 if ! $BOOTMODE; then
-    "- Only uninstall is supported in recovery"
-    "  Uninstalling!"
+    "[!] Only uninstall is supported in recovery"
+    "[!] Uninstalling..."
   touch "$MODPATH/remove"
   [ -s $INFO ] && install_script "$MODPATH"/uninstall.sh || rm -f "$INFO" "$MODPATH"/uninstall.sh
   recovery_cleanup
@@ -159,10 +159,10 @@ if $DEBUG; then
     "  Be sure to save it after module install"
   set -x
 fi
-  "- Extracting module files"
+  "[*] Extracting module files"
 unzip -o "$ZIPFILE" -x 'META-INF/*' 'common/functions.sh' -d "$MODPATH" >&2
 
-  "- Removing old files"
+  "[*] Removing old files"
 if [ -f "$INFO" ]; then
   while read -r LINE; do
     if [ "$(echo "$LINE" | tail -c 1)" = "~" ]; then
@@ -179,9 +179,8 @@ if [ -f "$INFO" ]; then
   done < "$INFO"
   rm -f "$INFO"
 fi
-  "- Installing"
+  "[-] Installing"
 [ -f "$MODPATH/setup.sh" ] && . "$MODPATH"/setup.sh
-  "Installing for $ARCH SDK $API device..."
 for i in $(find "$MODPATH" -type f -name "*.sh" -o -name "*.prop" -o -name "*.rule"); do
   [ -f $i ] && { sed -i -e "/^#/d" -e "/^ *$/d" "$i"; [ "$(tail -1 "$i")" ] && echo "" >> "$i"; } || continue
   case $i in
@@ -210,8 +209,7 @@ if $DYNLIB; then
   # Delete empty lib folders (busybox find doesn't have this capability)
   toybox find "$MODPATH"/system/lib* -type d -empty -delete >/dev/null 2>&1
 fi
-  " "
-  "- Setting Permissions"
+  "[~] Setting Permissions"
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 if [ -d "$MODPATH"/system/vendor ]; then
   set_perm_recursive "$MODPATH"/system/vendor 0 0 0755 0644 u:object_r:vendor_file:s0
