@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 #
+# shellcheck disable=SC2145
+#
 # Simple nitronD installer
 #
 # Copyright Identiter: GPL-3.0
@@ -33,12 +35,12 @@ BIN_DIR="${PREFIX/\/usr}/usr/bin"
 INCLUDE_DIR="${PREFIX/\/usr}/usr/include"
 REQUIRED_DEPS=(git dialog)
 
-which ${REQUIRED_DEPS[@]} >/dev/null || echo "please download following packages, (${REQUIRED_DEPS[@]})"
+which "${REQUIRED_DEPS[@]}" >/dev/null || echo "please download following packages, '${REQUIRED_DEPS[@]}'"
 
 case $1 in
 	install)
 		echo "downloading nitrond..."
-		git clone --depth=1 $REPO $TARGET_REPO
+		git clone --depth=1 "$REPO" "$TARGET_REPO"
 		echo "installing nitrond..."
 		chmod 755 "${TARGET_REPO}"
 		chmod +x "${TARGET_REPO}/nitrond"
@@ -50,8 +52,8 @@ case $1 in
 	;;
 	uninstall)
 		echo "uinstalling nitrond..."
-		sudo rm -f $(which nitrond)
-		sudo rm -f $INCLUDE_DIR/nitron_headers.sh
+		sudo rm -f "$(which nitrond)"
+		sudo rm -f "$INCLUDE_DIR"/nitron_headers.sh
 		echo "finished uninstallation!"
 	;;
 	*)	echo "usage: installer.sh [install] [uninstall]" ;;
