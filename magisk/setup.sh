@@ -22,6 +22,7 @@ info_print()
 # Change the logic to whatever you want
 main()
 {
+	info_print
 	ui_print ""
 	ui_print "[~] The NiTRON Project [~]"
 	sleep 1
@@ -49,3 +50,5 @@ main()
 		set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 	}
 }
+
+main
