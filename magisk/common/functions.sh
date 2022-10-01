@@ -163,13 +163,13 @@ fi
 
 if $DEBUG; then
 	ui_print "[-] Debug mode enabled."
-	ui_print "~ Module install log will include debug info"
-	ui_print "~ Be sure to save it after module install"
+	ui_print " ~ Module install log will include debug info"
+	ui_print " ~ Be sure to save it after module install"
 	set -x
 fi
 
 ui_print "[*] Extracting module files"
-unzip -o "$ZIPFILE" -x 'META-INF/*' 'common/functions.sh' -d "$MODPATH" >&2
+unzip -o "$ZIPFILE" -x 'META-INF/*' 'common/functions.sh' 'setup.sh'-d "$MODPATH" >&2
 
 if [ -f "$INFO" ]; then
 	while read -r LINE; do
@@ -189,7 +189,7 @@ if [ -f "$INFO" ]; then
 fi
 
 ui_print "[-] Installing"
-[ -f "$MODPATH/setup.sh" ] && . "$MODPATH"/setup.sh
+. "$MODPATH/setup.sh"
 for i in $(find "$MODPATH" -type f -name "*.sh" -o -name "*.prop" -o -name "*.rule"); do
 	[ -f "$i" ] && { sed -i -e "/^#/d" -e "/^ *$/d" "$i"; [ "$(tail -1 "$i")" ] && echo "" >> "$i"; } || continue
 	case $i in
@@ -206,8 +206,6 @@ for i in $(find "$MODPATH" -type f -name "*.sh" -o -name "*.prop" -o -name "*.ru
 done
 
 $IS64BIT || for i in $(find "$MODPATH"/system -type d -name "lib64"); do rm -rf "$i" ; done
-[ -d "/system/priv-app" ] || mv -f "$MODPATH"/system/priv-app "$MODPATH"/system/app
-[ -d "/system/xbin" ] || mv -f "$MODPATH"/system/xbin "$MODPATH"/system/bin
 if $DYNLIB; then
 	for FILE in $(find "$MODPATH"/system/lib* -type f 2>/dev/null | sed "s|$MODPATH/system/||"); do
 		[ -s "$MODPATH"/system/"$FILE" ] || continue
