@@ -87,6 +87,10 @@ unzip -o "$ZIPFILE" -d "$MODPATH" >&2
 
 cd /
 "$BOOTMODE" || recovery_cleanup
+ui_print "[*] Cleaning place holders..."
+rmtouch "$MODPATH/system/placeholder"
+rmtouch "$MODPATH/system/bin/placeholder"
+rmtouch "$MODPATH/system/etc/placeholder"
 rmtouch "$TMPDIR"
 ui_print "[*] Done."
 exit 0
