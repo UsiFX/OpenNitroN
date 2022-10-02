@@ -492,7 +492,7 @@ else
 				;;
 			"-L" | "--License") echo "
 #
-# nitronD v1.7 (An Extensive Kernel tweaker)
+# nitronD v1.0.0 (An Extensive Kernel tweaker)
 # Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
 #
 #			GNU GENERAL PUBLIC LICENSE
