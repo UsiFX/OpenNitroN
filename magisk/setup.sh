@@ -49,9 +49,11 @@ main()
 		set_perm_recursive "$MODPATH/system/xbin" 0 0 0755 0644
 		set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 	}
-	ui_print " [*] Installing Daemon..."
+	ui_print "[*] Installing Daemon..."
 	cp -af "$MODPATH/nitrond" "$MODPATH/system/bin"
-	ui_print " [*] Installing Headers..."
+	sleep 0.5
+	ui_print "[*] Installing Headers..."
+	sleep 0.5
 	cp -af "$MODPATH/nitron_headers.sh" "$MODPATH/system/etc"
 }
 
