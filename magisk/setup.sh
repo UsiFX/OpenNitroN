@@ -51,6 +51,7 @@ main()
 	}
 	ui_print "[*] Installing Daemon..."
 	cp -af "$MODPATH/nitrond" "$MODPATH/system/bin"
+	sed -i '1c\#!/system/bin/sh' "$MODPATH/system/bin/nitrond"
 	sleep 0.5
 	ui_print "[*] Installing Headers..."
 	sleep 0.5
