@@ -33,7 +33,7 @@ compile()
 	cp -af "${OBJECTS[@]}" "$OUT/product"
 	cd "$OUT/product" || exit
 	zip -0 -r9 -ll "$OUT/target/$FILENAME.zip" . -x "$FILENAME" >/dev/null
-	echo " ZIP  $FILENAME"
+	echo " ZIP  $OUT/target/$FILENAME.zip"
 	cd ../..
 	return $?
 }
