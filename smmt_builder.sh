@@ -3,6 +3,7 @@
 # shellcheck disable=SC2145
 # shellcheck disable=SC2181
 # shellcheck disable=SC2015
+# shellcheck disable=SC2157
 #
 # Simple nitronD simpleMMT Builder
 #
@@ -64,7 +65,7 @@ do
 			compile
 		;;
 		"--sign")
-			"$OUT/target/$FILENAME.zip" && {
+			[[ "$OUT/target/$FILENAME.zip" ]] && {
 				java -jar "$(pwd)/etc/zipsigner/zipsigner-3.0.jar" "$OUT/target/$FILENAME.zip" "$OUT/target/$FILENAME-signed-OFFICIAL.zip"
 				echo " SIGN  $OUT/target/$FILENAME-signed-OFFICIAL.zip"
 				exit $?
