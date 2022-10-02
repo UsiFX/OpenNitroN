@@ -8,7 +8,7 @@
 # Copyright Identiter: GPL-3.0
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
-#set -x
+
 TIMESTAMP=$(date +%Y%m%d)
 VERSION='0.7.4'
 OBJECTS=("nitrond" "nitron_headers.sh")
@@ -29,12 +29,13 @@ compile()
 {
 	[[ -d "$OUT/target" ]] || mkdir "$OUT/target"
 	[[ -d "$OUT/product" ]] || mkdir "$OUT/product"
+	cp -afr "magisk/." "$OUT/product"
 	cp -af "${OBJECTS[@]}" "$OUT/product"
-	cp -af "${MMT_OBJECTS[@]}" "$OUT/product"
-	[[ -d "$OUT/product/META-INF/com/google/android" ]] || mkdir -p "$OUT/product/META-INF/com/google/android"
-	mv -f "$OUT/product/update-binary" "$OUT/product/META-INF/com/google/android"
-	zip -0 -r9 -ll "$OUT/target/$FILENAME.zip" "$OUT/product/." -x "$FILENAME" >/dev/null
+	cd "$OUT/product" || exit
+	zip -0 -r9 -ll "$OUT/target/$FILENAME.zip" . -x "$FILENAME" >/dev/null
 	echo " ZIP  $FILENAME"
+	cd ../..
+	return $?
 }
 
 help()
