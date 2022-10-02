@@ -168,9 +168,6 @@ if $DEBUG; then
 	set -x
 fi
 
-ui_print "[*] Extracting module files"
-unzip -o "$ZIPFILE" -x 'META-INF/*' 'common/functions.sh' 'setup.sh'-d "$MODPATH" >&2
-
 if [ -f "$INFO" ]; then
 	while read -r LINE; do
 		if [ "$(echo "$LINE" | tail -c 1)" = "~" ]; then
@@ -188,7 +185,6 @@ if [ -f "$INFO" ]; then
 	rm -f "$INFO"
 fi
 
-ui_print "[-] Installing"
 . "$MODPATH/setup.sh"
 for i in $(find "$MODPATH" -type f -name "*.sh" -o -name "*.prop" -o -name "*.rule"); do
 	[ -f "$i" ] && { sed -i -e "/^#/d" -e "/^ *$/d" "$i"; [ "$(tail -1 "$i")" ] && echo "" >> "$i"; } || continue
