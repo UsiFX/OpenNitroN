@@ -13,7 +13,7 @@ TIMESTAMP=$(date +%Y%m%d)
 VERSION='0.7.4'
 OBJECTS=("nitrond" "nitron_headers.sh")
 MMT_OBJECTS=("magisk/META-INF/com/google/android/update-binary" "magisk/setup.sh" "magisk/common/functions.sh" "magisk/uninstall.sh")
-FILENAME="NitronX-$VERSION-$TIMESTAMP"
+FILENAME="NitronX-$VERSION-$RANDOM-$TIMESTAMP"
 
 if [[ -z "$object_directory" ]]; then
 	OUT=$(pwd)/out
