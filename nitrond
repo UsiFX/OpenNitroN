@@ -54,12 +54,12 @@ printn() {
 
 	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n"
 
-	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] $0: $PR_PREFIX $2" >>"$NITRON_LOG_DIR"/nitron.log
+	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX $2" >>"$NITRON_LOG_DIR"/nitron.log
 }
 
 writen() {
 	[[ ! -f "$1" ]] && {
-		echo "[$(date +%I:%M:%S)] $0: $1: not found, skipping..." >> "$NITRON_LOG_DIR"/nitron.log
+		echo "[$(date +%I:%M:%S)] nitrond: $1: not found, skipping..." >> "$NITRON_LOG_DIR"/nitron.log
 		return 1
 	}
 
@@ -68,10 +68,10 @@ writen() {
 
 	# Write new value, bail out if it fail
 	if ! echo "$2" > "$1" 2>/dev/null; then
-		echo "[$(date +%I:%M:%S)] $0: $1: failed to change node" >> "$NITRON_LOG_DIR"/nitron.log
+		echo "[$(date +%I:%M:%S)] nitrond: $1: failed to change node" >> "$NITRON_LOG_DIR"/nitron.log
 		return 1
 	else
-		echo "[$(date +%I:%M:%S)] $0: $1: changed node[$2]" >> "$NITRON_LOG_DIR"/nitron.log
+		echo "[$(date +%I:%M:%S)] nitrond: $1: changed node[$2]" >> "$NITRON_LOG_DIR"/nitron.log
 		return 0
 	fi
 }
@@ -450,32 +450,32 @@ else
 			"-sg" | "--set-green")
 				magicn -g
 				if grep -q "androidboot" /proc/cmdline; then
-					printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
 				else
-					printn -n "$0: current mode set to: $NITRON_MODE"
+					printn -n "nitrond: current mode set to: $NITRON_MODE"
 				fi
 				;;
 			"-sr" | "--set-red")
 				magicn -r
 				if grep -q "androidboot" /proc/cmdline; then
-					printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
 				else
-					printn -n "$0: current mode set to: $NITRON_MODE"
+					printn -n "nitrond: current mode set to: $NITRON_MODE"
 				fi
 				;;
 			"-sy" | "--set-yellow")
 				magicn -y
 				if grep -q "androidboot" /proc/cmdline; then
-					printn -n "$0: current mode set to: $(getprop ro.nitron.mode)"
+					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
 				else
-					printn -n "$0: current mode set to: $NITRON_MODE"
+					printn -n "nitrond: current mode set to: $NITRON_MODE"
 				fi
 				;;
 			"-sdm" | "--show-default-mode")
 				if grep -q "androidboot" /proc/cmdline; then
-					echo -e "$0: mode: $(getprop ro.nitron.mode)"
+					echo -e "nitrond: mode: $(getprop ro.nitron.mode)"
 				else
-					echo -e "$0: mode: $NITRON_MODE"
+					echo -e "nitrond: mode: $NITRON_MODE"
 				fi
 				;;
 			"-v" | "--version")
