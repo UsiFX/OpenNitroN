@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
-# shellcheck disable=SC2181
 # shellcheck disable=SC2145
+# shellcheck disable=SC2181
+# shellcheck disable=SC2015
 #
 # Simple nitronD simpleMMT Builder
 #
@@ -45,7 +46,8 @@ echo "usage: smmt_builder.sh [OPTIONS] e.g: smmt_builder.sh --shellcheck
 options:
   --compile    ~ execute with dirty compilation
   --shellcheck ~ execute with compilation check
-  --clean      ~ clean the out directory"
+  --clean      ~ clean the out directory
+  --sign       ~ sign with AOSP keys"
 }
 
 for opts in "${@}"
@@ -60,6 +62,13 @@ do
 		;;
 		"--compile")
 			compile
+		;;
+		"--sign")
+			"$OUT/target/$FILENAME.zip" && {
+				java -jar "$(pwd)/etc/zipsigner/zipsigner-3.0.jar" "$OUT/target/$FILENAME.zip" "$OUT/target/$FILENAME-signed-OFFICIAL.zip"
+				echo " SIGN  $OUT/target/$FILENAME-signed-OFFICIAL.zip"
+				exit $?
+			} || { echo "There is no compiled ZIP file to Sign. Error"; exit 1 ;}
 		;;
 		"--clean")
 			rm -rf "$OUT"
