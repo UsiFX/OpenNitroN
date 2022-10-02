@@ -26,3 +26,8 @@ console*.*
 # Emacs-cached files
 #
 *#
+
+#
+# Build Output
+#
+out/
