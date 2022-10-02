@@ -58,7 +58,18 @@ usage: installer.sh [install] [uninstall]
 use the script according to your opinion.
 
 **for android:**
-the installation module for android is still under development.
+  - for developers:
+if you wanna build the source code and have fun modifying it we have made it easier
+by making a small build script.
+just run it by:
+```bash
+bash smmt_builder.sh [OPTIONS]
+```
+
+replace [OPTIONS] with compiler arguments such as `--clean` & `--shellcheck`
+
+  - for users:
+go to release section and download latest official build.
 
 ## Options
 ```
@@ -86,7 +97,7 @@ If don't, just open a [new clear and descriptive issue](https://github.com/UsiFX
 ## License
 
 ```
-nitronD v1.7 (An Extensive Kernel tweaker)
+nitronD v1.0.1 (An Extensive Kernel tweaker)
 Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
 
                        GNU GENERAL PUBLIC LICENSE
