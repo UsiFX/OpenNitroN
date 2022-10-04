@@ -20,7 +20,7 @@ If don't, just open a [new clear and descriptive issue](https://github.com/UsiFX
 
 ```
 simpleMMT v1.0 (A/An Simple & Extensive Magisk Module Template)
-Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
+Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>, Kartik728 <titanupdates728@gmail.com>
 
                        GNU GENERAL PUBLIC LICENSE
                         Version 3, 29 June 2007
@@ -40,4 +40,4 @@ of this license document, but changing it is not allowed.
 
 PAYPAL: `xprjkts@gmail.com`
 
-KO-FI: `https://ko-fi.com/xprjkt`
+KO-FI: `https://ko-fi.com/xprjkt` OR `https://ko-fi.com/kartik728`

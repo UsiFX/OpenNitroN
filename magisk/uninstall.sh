@@ -4,6 +4,7 @@
 #
 # Copyright Identiter: GPL-3.0
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
+# Kartik728 <titanupdates728@gmail.com>
 #
 # shellcheck disable=SC2148
 # shellcheck disable=SC2015

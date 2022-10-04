@@ -2,6 +2,7 @@
 #
 # MMT Reborn Installation
 # Rewritten by: UsiFX <xprjkts@gmail.com>
+# Kartik728 <titanupdates728@gmail.com>
 #
 
 # Set permissions
@@ -50,12 +51,19 @@ main()
 		set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 	}
 	ui_print "[*] Installing Daemon..."
+	sleep 0.5
 	cp -af "$MODPATH/nitrond" "$MODPATH/system/bin"
 	sed -i '1c\#!/system/bin/sh' "$MODPATH/system/bin/nitrond"
 	sleep 0.5
+	ui_print "[*] Installed Dameon"
+	sleep 0.5
+	ui_print ""
 	ui_print "[*] Installing Headers..."
 	sleep 0.5
 	cp -af "$MODPATH/nitron_headers.sh" "$MODPATH/system/etc"
+	sleep 0.5
+	ui_print "[*] Installed Headers"
+	ui_print ""
 }
 
 main
