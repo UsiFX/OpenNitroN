@@ -372,8 +372,8 @@ updaten() {
 		} || {
 			printn -l "returned with $?"
 			printn -i "looking for update..."
-			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
-			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers.sh" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitron_headers.sh" 2>/dev/null
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 			printn -w "backing up..."
 			cp "$0" "$NITRON_LOG_DIR/nitrond_current"
@@ -407,7 +407,7 @@ updaten() {
 
 if grep -q "androidboot" /proc/cmdline; then
 	printn -l "working in android platform, using resetprop algorithm..."
-	resetprop ro.nitron.version 1.0.1
+	resetprop ro.nitron.version 1.0.1-staging
 	[[ ! "$(resetprop ro.nitron.mode)" ]] && {
 		printn -l "we are working on first use, Supplying initial mode..."
 		resetprop ro.nitron.mode default
@@ -415,7 +415,7 @@ if grep -q "androidboot" /proc/cmdline; then
 else
 	printn -l "working in Unknown Linux platform, using export algorithm..."
 	export NITRON_FORCECHECK_UPDATE
-	export NITRON_VERSION='1.0.1'
+	export NITRON_VERSION='1.0.1-staging'
 	[[ ! -e "$NITRON_MODE" ]] && {
 		printn -l "we are working on first use, Supplying initial mode..."
 		export NITRON_MODE='default'

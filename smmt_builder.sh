@@ -12,7 +12,7 @@
 #
 
 TIMESTAMP=$(date +%Y%m%d)
-VERSION='1.0.1'
+VERSION='1.0.1-staging'
 OBJECTS=("nitrond" "nitron_headers.sh")
 MMT_OBJECTS=("magisk/META-INF/com/google/android/update-binary" "magisk/setup.sh" "magisk/common/functions.sh" "magisk/uninstall.sh")
 FILENAME="NitronX-$VERSION-$RANDOM-$TIMESTAMP"
