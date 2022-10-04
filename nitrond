@@ -91,7 +91,7 @@ Options:
 magicn() {
 	PR_PREFIX="magicn():"
 	set_gaming_mode() {
-		resetprop ro.nitron.mode red
+		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode red || export NITRON_MODE="red"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
 		writen /proc/sys/kernel/sched_autogroup_enabled 0
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -176,7 +176,7 @@ magicn() {
 		writen /sys/devices/system/cpu/cpu0/cpufreq/smooth_step 1
 	}
 	set_battery_mode() {
-		resetprop ro.nitron.mode green
+		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode green || export NITRON_MODE="green"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -252,7 +252,7 @@ magicn() {
 		writen /dev/stune/schedtune.prefer_idle 1
 	}
 	set_balance_mode() {
-		resetprop ro.nitron.mode yellow
+		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode yellow || export NITRON_MODE="yellow"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 1
