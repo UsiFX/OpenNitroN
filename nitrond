@@ -28,7 +28,7 @@ WHITE='\e[1;37m'
 YELLOW='\e[01;33m'
 STOCK='\e[1;0m'
 
-PR_PREFIX="nitron_broadcast():"
+PR_PREFIX="nitron_broadcast"
 grep -q "androidboot" /proc/cmdline && NITRON_LOG_DIR='/cache' || NITRON_LOG_DIR='/tmp'
 PROMPT_COMMAND='sync'
 grep -q "androidboot" /proc/cmdline && HEADER_SOURCE="/system/etc" || HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
@@ -54,7 +54,7 @@ printn() {
 
 	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n"
 
-	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX $2" >>"$NITRON_LOG_DIR"/nitron.log
+	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[$?]: $2" >>"$NITRON_LOG_DIR"/nitron.log
 }
 
 writen() {
@@ -89,9 +89,9 @@ Options:
 }
 
 magicn() {
-	PR_PREFIX="magicn():"
+	PR_PREFIX="magicn"
 	set_gaming_mode() {
-		resetprop ro.nitron.mode red
+		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode red || export NITRON_MODE="red"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
 		writen /proc/sys/kernel/sched_autogroup_enabled 0
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -176,7 +176,7 @@ magicn() {
 		writen /sys/devices/system/cpu/cpu0/cpufreq/smooth_step 1
 	}
 	set_battery_mode() {
-		resetprop ro.nitron.mode green
+		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode green || export NITRON_MODE="green"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -252,7 +252,7 @@ magicn() {
 		writen /dev/stune/schedtune.prefer_idle 1
 	}
 	set_balance_mode() {
-		resetprop ro.nitron.mode yellow
+		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode yellow || export NITRON_MODE="yellow"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 1
@@ -352,7 +352,7 @@ magicn() {
 }
 
 updaten() {
-	PR_PREFIX="updaten():"
+	PR_PREFIX="updaten"
 	printn -n "checking connectivity..."
 	if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
 		printn -e "aborted from system variable"
@@ -365,15 +365,14 @@ updaten() {
 	else
 		printn -l "pinging 8.8.8.8 ..."
 		[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" != "0" ]] && {
+			return 1
 			printn -w "network unreachable"
 			printn -l "failed"
-			printn -l "returned with $?"
-			return 1
 		} || {
-			printn -l "returned with $?"
 			printn -i "looking for update..."
-			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
-			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitron_headers.sh" 2>/dev/null
+			printn -l "updating..."
+			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers.sh" 2>/dev/null
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 			printn -w "backing up..."
 			cp "$0" "$NITRON_LOG_DIR/nitrond_current"
