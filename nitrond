@@ -5,6 +5,7 @@
 # shellcheck disable=SC2015
 #
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
+# Kartik728 <titanupdates728@gmail.com> 
 #
 # This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -81,15 +82,163 @@ __magicn_help() {
 Usage: magicn [-g|-r|-y|-h]
 
 Options:
- -g, --green   ~ switch to user friendly tunables
- -r, --red     ~ switch to hardcore mode
- -y, --yellow  ~ switch to balance focusment
+ -g, --green   ~ switch to Battery mode
+ -y, --yellow  ~ switch to Balanced mode
+ -r, --red     ~ switch to Gaming mode
  -h, --help    ~ prints this menu
 "
 }
 
 magicn() {
 	PR_PREFIX="magicn"
+	set_battery_mode() {
+		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode battery || export NITRON_MODE="battery"
+		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
+		writen /proc/sys/kernel/sched_autogroup_enabled 1
+		writen /proc/sys/kernel/sched_child_runs_first 0
+		writen /proc/sys/kernel/sched_tunable_scaling 0
+		writen /proc/sys/kernel/sched_migration_cost_ns 5000000
+		writen /proc/sys/kernel/sched_nr_migrate 256
+		writen /proc/sys/kernel/sched_schedstats 0
+		writen /proc/sys/kernel/printk_devkmsg off
+		writen /proc/sys/vm/dirty_background_ratio 2
+		writen /proc/sys/vm/dirty_ratio 5
+		writen /proc/sys/vm/dirty_expire_centisecs 500
+		writen /proc/sys/vm/dirty_writeback_centisecs 500
+		writen /proc/sys/vm/page-cluster 0
+		writen /proc/sys/vm/stat_interval 10
+		writen /proc/sys/vm/swappiness 100
+		writen /proc/sys/vm/vfs_cache_pressure 100
+		writen /proc/sys/net/ipv4/tcp_ecn 1
+		writen /proc/sys/net/ipv4/tcp_fastopen 3
+		writen /proc/sys/net/ipv4/tcp_syncookies 0
+		writen /sys/module/ged/parameters/gx_game_mode 0
+		writen /sys/module/ged/parameters/gx_force_cpu_boost 0
+		writen /sys/module/ged/parameters/boost_amp 0
+		writen /sys/module/ged/parameters/boost_extra 0
+		writen /sys/module/ged/parameters/boost_gpu_enable 0
+		writen /sys/module/ged/parameters/enable_cpu_boost 0
+		writen /sys/module/ged/parameters/enable_gpu_boost 0
+		writen /sys/module/ged/parameters/enable_game_self_frc_detect 0
+		writen /sys/module/ged/parameters/gpu_idle 100
+		writen /sys/block/mmcblk0/queue/scheduler noop
+		writen /sys/block/mmcblk1/queue/scheduler noop
+		writen /sys/block/sda/queue/scheduler noop
+		writen /sys/block/sdb/queue/scheduler noop
+		writen /proc/cpufreq/cpufreq_power_mode 1
+		writen /proc/cpufreq/cpufreq_cci_mode 0
+		writen /sys/devices/system/cpu/eas/enable 1
+		writen /sys/devices/system/cpu/perf/enable 0
+		writen /proc/gpufreq/gpufreq_opp_freq 99000
+		writen /proc/ppm/enabled 0
+		writen /proc/ppm/policy_status 1
+		writen /sys/devices/system/cpu/cpufreq/policy0/scaling_governor powersave
+		writen /sys/devices/system/cpu/cpufreq/policy4/scaling_governor schedutil
+		writen /sys/devices/system/cpu/cpufreq/policy6/scaling_governor schedutil
+		writen /proc/ppm/policy/hard_userlimit_max_cpu_freq 998000
+		writen /proc/ppm/policy/hard_userlimit_min_cpu_freq 850000
+		writen /dev/cpuset/foreground/cpus 0-5
+		writen /dev/cpuset/background/cpus 0-7
+		writen /dev/cpuset/system-background/cpus 0-7
+		writen /dev/cpuset/top-app/cpus 0-7
+		writen /dev/cpuset/restricted/cpus
+		writen /dev/stune/background/schedtune.util.max.effective 0
+		writen /dev/stune/background/schedtune.util.min.effective 0
+		writen /dev/stune/background/schedtune.util.max 0
+		writen /dev/stune/background/schedtune.util.min 0
+		writen /dev/stune/background/schedtune.boost 0
+		writen /dev/stune/background/schedtune.prefer_idle 1
+		writen /dev/stune/foreground/schedtune.util.max.effective 1
+		writen /dev/stune/foreground/schedtune.util.min.effective 0
+		writen /dev/stune/foreground/schedtune.util.max 1
+		writen /dev/stune/foreground/schedtune.util.min 0
+		writen /dev/stune/foreground/schedtune.boost 0
+		writen /dev/stune/foreground/schedtune.prefer_idle 1
+		writen /dev/stune/top-app/schedtune.util.max.effective 0
+		writen /dev/stune/top-app/schedtune.util.min.effective 0
+		writen /dev/stune/top-app/schedtune.util.max 128
+		writen /dev/stune/top-app/schedtune.util.min 0
+		writen /dev/stune/top-app/schedtune.boost 0
+		writen /dev/stune/top-app/schedtune.prefer_idle 1
+		writen /dev/stune/schedtune.util.min 0
+		writen /dev/stune/schedtune.util.max 512
+		writen /dev/stune/schedtune.util.max.effective 512
+		writen /dev/stune/schedtune.util.min.effective 0
+		writen /dev/stune/schedtune.boost 0
+		writen /dev/stune/schedtune.prefer_idle 1
+	}
+	set_balanced_mode() {
+		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode balanced || export NITRON_MODE="balanced"
+		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
+		writen /proc/sys/kernel/sched_autogroup_enabled 1
+		writen /proc/sys/kernel/sched_child_runs_first 1
+		writen /proc/sys/kernel/sched_tunable_scaling 0
+		writen /proc/sys/kernel/sched_migration_cost_ns 5000000
+		writen /proc/sys/kernel/sched_nr_migrate 32
+		writen /proc/sys/kernel/sched_schedstats 0
+		writen /proc/sys/kernel/printk_devkmsg off
+		writen /proc/sys/vm/dirty_background_ratio 10
+		writen /proc/sys/vm/dirty_ratio 30
+		writen /proc/sys/vm/dirty_expire_centisecs 3000
+		writen /proc/sys/vm/dirty_writeback_centisecs 3000
+		writen /proc/sys/vm/page-cluster 0
+		writen /proc/sys/vm/stat_interval 10
+		writen /proc/sys/vm/swappiness 100
+		writen /proc/sys/vm/vfs_cache_pressure 100
+		writen /proc/sys/net/ipv4/tcp_ecn 1
+		writen /proc/sys/net/ipv4/tcp_fastopen 3
+		writen /proc/sys/net/ipv4/tcp_syncookies 0
+		writen /sys/module/ged/parameters/gx_game_mode 0
+		writen /sys/module/ged/parameters/gx_force_cpu_boost 0
+		writen /sys/module/ged/parameters/boost_amp 0
+		writen /sys/module/ged/parameters/boost_extra 0
+		writen /sys/module/ged/parameters/boost_gpu_enable 0
+		writen /sys/module/ged/parameters/enable_cpu_boost 0
+		writen /sys/module/ged/parameters/enable_gpu_boost 0
+		writen /sys/module/ged/parameters/enable_game_self_frc_detect 0
+		writen /sys/module/ged/parameters/gpu_idle 100
+		writen /proc/cpufreq/cpufreq_power_mode 0
+		writen /proc/cpufreq/cpufreq_cci_mode 0
+		writen /sys/devices/system/cpu/eas/enable 2
+		writen /sys/devices/system/cpu/perf/enable 0
+		writen /proc/gpufreq/gpufreq_opp_freq 0
+		writen /sys/block/mmcblk0/queue/scheduler cfq
+		writen /sys/block/mmcblk1/queue/scheduler cfq
+		writen /sys/block/sda/queue/scheduler cfq
+		writen /sys/block/sdb/queue/scheduler cfq
+		writen /sys/devices/system/cpu/cpufreq/policy0/scaling_governor schedutil
+		writen /sys/devices/system/cpu/cpufreq/policy4/scaling_governor schedutil
+		writen /sys/devices/system/cpu/cpufreq/policy6/scaling_governor schedutil
+		writen /proc/ppm/policy/hard_userlimit_max_cpu_freq 2000000
+		writen /proc/ppm/policy/hard_userlimit_min_cpu_freq 850000
+		writen /proc/ppm/policy/hard_userlimit_max_cpu_freq 1700000
+		writen /proc/ppm/policy/hard_userlimit_min_cpu_freq 500000
+		writen /dev/cpuset/foreground/cpus 0-7
+		writen /dev/cpuset/background/cpus 0-6
+		writen /dev/cpuset/system-background/cpus 0-4
+		writen /dev/cpuset/top-app/cpus 0-7
+		writen /dev/cpuset/restricted/cpus 0
+		writen /dev/stune/background/schedtune.util.max.effective 0
+		writen /dev/stune/background/schedtune.util.min.effective 0
+		writen /dev/stune/background/schedtune.util.max 0
+		writen /dev/stune/background/schedtune.util.min 0
+		writen /dev/stune/background/schedtune.boost 0
+		writen /dev/stune/foreground/schedtune.util.max.effective 1024
+		writen /dev/stune/foreground/schedtune.util.min.effective 1024
+		writen /dev/stune/foreground/schedtune.util.max 1024
+		writen /dev/stune/foreground/schedtune.util.min 0
+		writen /dev/stune/foreground/schedtune.boost 0
+		writen /dev/stune/top-app/schedtune.util.max.effective 1024
+		writen /dev/stune/top-app/schedtune.util.min.effective 0
+		writen /dev/stune/top-app/schedtune.util.max 1024
+		writen /dev/stune/top-app/schedtune.util.min 0
+		writen /dev/stune/top-app/schedtune.boost 0
+		writen /dev/stune/schedtune.util.min 0
+		writen /dev/stune/schedtune.util.max 0
+		writen /dev/stune/schedtune.util.max.effective 1024
+		writen /dev/stune/schedtune.util.min.effective 0
+		writen /dev/stune/schedtune.boost 0
+	}
 	set_gaming_mode() {
 		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode red || export NITRON_MODE="red"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
@@ -175,159 +324,17 @@ magicn() {
 		writen /sys/devices/system/cpu/cpu0/cpufreq/smooth_offset 1
 		writen /sys/devices/system/cpu/cpu0/cpufreq/smooth_step 1
 	}
-	set_battery_mode() {
-		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode green || export NITRON_MODE="green"
-		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
-		writen /proc/sys/kernel/sched_autogroup_enabled 1
-		writen /proc/sys/kernel/sched_child_runs_first 0
-		writen /proc/sys/kernel/sched_tunable_scaling 0
-		writen /proc/sys/kernel/sched_migration_cost_ns 5000000
-		writen /proc/sys/kernel/sched_nr_migrate 256
-		writen /proc/sys/kernel/sched_schedstats 0
-		writen /proc/sys/kernel/printk_devkmsg off
-		writen /proc/sys/vm/dirty_background_ratio 2
-		writen /proc/sys/vm/dirty_ratio 5
-		writen /proc/sys/vm/dirty_expire_centisecs 500
-		writen /proc/sys/vm/dirty_writeback_centisecs 500
-		writen /proc/sys/vm/page-cluster 0
-		writen /proc/sys/vm/stat_interval 10
-		writen /proc/sys/vm/swappiness 100
-		writen /proc/sys/vm/vfs_cache_pressure 100
-		writen /proc/sys/net/ipv4/tcp_ecn 1
-		writen /proc/sys/net/ipv4/tcp_fastopen 3
-		writen /proc/sys/net/ipv4/tcp_syncookies 0
-		writen /sys/module/ged/parameters/gx_game_mode 0
-		writen /sys/module/ged/parameters/gx_force_cpu_boost 0
-		writen /sys/module/ged/parameters/boost_amp 0
-		writen /sys/module/ged/parameters/boost_extra 0
-		writen /sys/module/ged/parameters/boost_gpu_enable 0
-		writen /sys/module/ged/parameters/enable_cpu_boost 0
-		writen /sys/module/ged/parameters/enable_gpu_boost 0
-		writen /sys/module/ged/parameters/enable_game_self_frc_detect 0
-		writen /sys/module/ged/parameters/gpu_idle 100
-		writen /sys/block/mmcblk0/queue/scheduler noop
-		writen /sys/block/mmcblk1/queue/scheduler noop
-		writen /sys/block/sda/queue/scheduler noop
-		writen /sys/block/sdb/queue/scheduler noop
-		writen /proc/cpufreq/cpufreq_power_mode 1
-		writen /proc/cpufreq/cpufreq_cci_mode 0
-		writen /sys/devices/system/cpu/eas/enable 1
-		writen /sys/devices/system/cpu/perf/enable 0
-		writen /proc/gpufreq/gpufreq_opp_freq 99000
-		writen /proc/ppm/enabled 0
-		writen /proc/ppm/policy_status 1
-		writen /sys/devices/system/cpu/cpufreq/policy0/scaling_governor powersave
-		writen /sys/devices/system/cpu/cpufreq/policy4/scaling_governor schedutil
-		writen /sys/devices/system/cpu/cpufreq/policy6/scaling_governor schedutil
-		writen /proc/ppm/policy/hard_userlimit_max_cpu_freq 998000
-		writen /proc/ppm/policy/hard_userlimit_min_cpu_freq 850000
-		writen /dev/cpuset/foreground/cpus 0-5
-		writen /dev/cpuset/background/cpus 0-7
-		writen /dev/cpuset/system-background/cpus 0-7
-		writen /dev/cpuset/top-app/cpus 0-7
-		writen /dev/cpuset/restricted/cpus
-		writen /dev/stune/background/schedtune.util.max.effective 0
-		writen /dev/stune/background/schedtune.util.min.effective 0
-		writen /dev/stune/background/schedtune.util.max 0
-		writen /dev/stune/background/schedtune.util.min 0
-		writen /dev/stune/background/schedtune.boost 0
-		writen /dev/stune/background/schedtune.prefer_idle 1
-		writen /dev/stune/foreground/schedtune.util.max.effective 1
-		writen /dev/stune/foreground/schedtune.util.min.effective 0
-		writen /dev/stune/foreground/schedtune.util.max 1
-		writen /dev/stune/foreground/schedtune.util.min 0
-		writen /dev/stune/foreground/schedtune.boost 0
-		writen /dev/stune/foreground/schedtune.prefer_idle 1
-		writen /dev/stune/top-app/schedtune.util.max.effective 0
-		writen /dev/stune/top-app/schedtune.util.min.effective 0
-		writen /dev/stune/top-app/schedtune.util.max 128
-		writen /dev/stune/top-app/schedtune.util.min 0
-		writen /dev/stune/top-app/schedtune.boost 0
-		writen /dev/stune/top-app/schedtune.prefer_idle 1
-		writen /dev/stune/schedtune.util.min 0
-		writen /dev/stune/schedtune.util.max 512
-		writen /dev/stune/schedtune.util.max.effective 512
-		writen /dev/stune/schedtune.util.min.effective 0
-		writen /dev/stune/schedtune.boost 0
-		writen /dev/stune/schedtune.prefer_idle 1
-	}
-	set_balance_mode() {
-		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode yellow || export NITRON_MODE="yellow"
-		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
-		writen /proc/sys/kernel/sched_autogroup_enabled 1
-		writen /proc/sys/kernel/sched_child_runs_first 1
-		writen /proc/sys/kernel/sched_tunable_scaling 0
-		writen /proc/sys/kernel/sched_migration_cost_ns 5000000
-		writen /proc/sys/kernel/sched_nr_migrate 32
-		writen /proc/sys/kernel/sched_schedstats 0
-		writen /proc/sys/kernel/printk_devkmsg off
-		writen /proc/sys/vm/dirty_background_ratio 10
-		writen /proc/sys/vm/dirty_ratio 30
-		writen /proc/sys/vm/dirty_expire_centisecs 3000
-		writen /proc/sys/vm/dirty_writeback_centisecs 3000
-		writen /proc/sys/vm/page-cluster 0
-		writen /proc/sys/vm/stat_interval 10
-		writen /proc/sys/vm/swappiness 100
-		writen /proc/sys/vm/vfs_cache_pressure 100
-		writen /proc/sys/net/ipv4/tcp_ecn 1
-		writen /proc/sys/net/ipv4/tcp_fastopen 3
-		writen /proc/sys/net/ipv4/tcp_syncookies 0
-		writen /sys/module/ged/parameters/gx_game_mode 0
-		writen /sys/module/ged/parameters/gx_force_cpu_boost 0
-		writen /sys/module/ged/parameters/boost_amp 0
-		writen /sys/module/ged/parameters/boost_extra 0
-		writen /sys/module/ged/parameters/boost_gpu_enable 0
-		writen /sys/module/ged/parameters/enable_cpu_boost 0
-		writen /sys/module/ged/parameters/enable_gpu_boost 0
-		writen /sys/module/ged/parameters/enable_game_self_frc_detect 0
-		writen /sys/module/ged/parameters/gpu_idle 100
-		writen /proc/cpufreq/cpufreq_power_mode 0
-		writen /proc/cpufreq/cpufreq_cci_mode 0
-		writen /sys/devices/system/cpu/eas/enable 2
-		writen /sys/devices/system/cpu/perf/enable 0
-		writen /proc/gpufreq/gpufreq_opp_freq 0
-		writen /sys/block/mmcblk0/queue/scheduler cfq
-		writen /sys/block/mmcblk1/queue/scheduler cfq
-		writen /sys/block/sda/queue/scheduler cfq
-		writen /sys/block/sdb/queue/scheduler cfq
-		writen /sys/devices/system/cpu/cpufreq/policy0/scaling_governor schedutil
-		writen /sys/devices/system/cpu/cpufreq/policy4/scaling_governor schedutil
-		writen /sys/devices/system/cpu/cpufreq/policy6/scaling_governor schedutil
-		writen /proc/ppm/policy/hard_userlimit_max_cpu_freq 2000000
-		writen /proc/ppm/policy/hard_userlimit_min_cpu_freq 850000
-		writen /proc/ppm/policy/hard_userlimit_max_cpu_freq 1700000
-		writen /proc/ppm/policy/hard_userlimit_min_cpu_freq 500000
-		writen /dev/cpuset/foreground/cpus 0-7
-		writen /dev/cpuset/background/cpus 0-6
-		writen /dev/cpuset/system-background/cpus 0-4
-		writen /dev/cpuset/top-app/cpus 0-7
-		writen /dev/cpuset/restricted/cpus 0
-		writen /dev/stune/background/schedtune.util.max.effective 0
-		writen /dev/stune/background/schedtune.util.min.effective 0
-		writen /dev/stune/background/schedtune.util.max 0
-		writen /dev/stune/background/schedtune.util.min 0
-		writen /dev/stune/background/schedtune.boost 0
-		writen /dev/stune/foreground/schedtune.util.max.effective 1024
-		writen /dev/stune/foreground/schedtune.util.min.effective 1024
-		writen /dev/stune/foreground/schedtune.util.max 1024
-		writen /dev/stune/foreground/schedtune.util.min 0
-		writen /dev/stune/foreground/schedtune.boost 0
-		writen /dev/stune/top-app/schedtune.util.max.effective 1024
-		writen /dev/stune/top-app/schedtune.util.min.effective 0
-		writen /dev/stune/top-app/schedtune.util.max 1024
-		writen /dev/stune/top-app/schedtune.util.min 0
-		writen /dev/stune/top-app/schedtune.boost 0
-		writen /dev/stune/schedtune.util.min 0
-		writen /dev/stune/schedtune.util.max 0
-		writen /dev/stune/schedtune.util.max.effective 1024
-		writen /dev/stune/schedtune.util.min.effective 0
-		writen /dev/stune/schedtune.boost 0
-	}
 
 	case $* in
 		"-g" | "--green")
 			printn -l "--- started"
 			set_battery_mode
+			printn -l "--- finished"
+			return $?
+			;;
+		"-y" | "--yellow")
+			printn -l "--- started"
+			set_balanced_mode
 			printn -l "--- finished"
 			return $?
 			;;
@@ -337,12 +344,7 @@ magicn() {
 			printn -l "--- finished"
 			return $?
 			;;
-		"-y" | "--yellow")
-			printn -l "--- started"
-			set_balance_mode
-			printn -l "--- finished"
-			return $?
-			;;
+
 		"-h" | "--help") __magicn_help ;;
 		*)
 			printn -e "unknown option $*"
