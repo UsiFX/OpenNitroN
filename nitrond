@@ -354,48 +354,52 @@ magicn() {
 updaten() {
 	PR_PREFIX="updaten"
 	printn -n "checking connectivity..."
-	if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
-		printn -e "aborted from system variable"
-		printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
-		return 1
-	elif [[ "$NITRON_FORCECHECK_UPDATE" == "false" ]]; then
-		printn -e "aborted from system variable"
-		printn -l "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
-		return 1
-	else
-		printn -l "pinging 8.8.8.8 ..."
-		[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" != "0" ]] && {
+	which getprop >/dev/null && {
+		if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
+			printn -e "aborted from system variable"
+			printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
 			return 1
-			printn -w "network unreachable"
-			printn -l "failed"
-		} || {
-			printn -i "looking for update..."
-			printn -l "updating..."
-			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
-			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers.sh" 2>/dev/null
-			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
-			printn -w "backing up..."
-			cp "$0" "$NITRON_LOG_DIR/nitrond_current"
-			cp "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current"
-			if [[ "$(diff "$NITRON_LOG_DIR/nitrond_current" "$NITRON_LOG_DIR/nitrond_src_cache")" ]]; then
-				printn -i "updating..."
-				grep -q "androidboot" /proc/cmdline && {
-					printn -w "modifying the interepter..."
-					sed -i '1c\#!/system/bin/sh' "$NITRON_LOG_DIR/nitrond_src_cache"
-					printn -i "OK"
-				}
-				cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
-				printn -n "updated successfully."
-				if [[ "$(diff "$NITRON_LOG_DIR/nitronh_current" "$NITRON_LOG_DIR/nitronh_src_cache")" ]]; then
-					printn -i "attempting to update headers..."
-					cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitron_headers.sh"
+		fi
+	} || {
+		if [[ "$NITRON_FORCECHECK_UPDATE" == "false" ]]; then
+			printn -e "aborted from system variable"
+			printn -l "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
+			return 1
+		else
+			printn -l "pinging 8.8.8.8 ..."
+			[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" != "0" ]] && {
+				return 1
+				printn -w "network unreachable"
+				printn -l "failed"
+			} || {
+				printn -i "looking for update..."
+				printn -l "updating..."
+				curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
+				curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitron_headers.sh" 2>/dev/null
+				chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
+				printn -w "backing up..."
+				cp "$0" "$NITRON_LOG_DIR/nitrond_current"
+				cp "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current"
+				if [[ "$(diff "$NITRON_LOG_DIR/nitrond_current" "$NITRON_LOG_DIR/nitrond_src_cache")" ]]; then
+					printn -i "updating..."
+					grep -q "androidboot" /proc/cmdline && {
+						printn -w "modifying the interepter..."
+						sed -i '1c\#!/system/bin/sh' "$NITRON_LOG_DIR/nitrond_src_cache"
+						printn -i "OK"
+					}
+					cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
 					printn -n "updated successfully."
+					if [[ "$(diff "$NITRON_LOG_DIR/nitronh_current" "$NITRON_LOG_DIR/nitronh_src_cache")" ]]; then
+						printn -i "attempting to update headers..."
+						cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitron_headers.sh"
+						printn -n "updated successfully."
+					fi
+				else
+					printn -i "up to date."
 				fi
-			else
-				printn -i "up to date."
-			fi
-		}
-	fi
+			}
+		fi
+	}
 }
 
 # Bail out if we aren't running as SU
