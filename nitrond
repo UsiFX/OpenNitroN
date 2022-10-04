@@ -54,7 +54,7 @@ printn() {
 
 	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n"
 
-	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX $2" >>"$NITRON_LOG_DIR"/nitron.log
+	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[$?] $2" >>"$NITRON_LOG_DIR"/nitron.log
 }
 
 writen() {
