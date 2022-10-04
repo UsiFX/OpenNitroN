@@ -11,7 +11,7 @@
 export NITRON_HEADER_VERSION='1.0.0'
 
 console_dialog() {
-	PR_PREFIX="console_dialog():"
+	PR_PREFIX="console_dialog"
 	HEIGHT=16
 	WIDTH=40
 	CHOICE_HEIGHT=30
@@ -49,7 +49,7 @@ print_banner() {
 }
 
 console_legacy() {
-	PR_PREFIX="console_legacy():"
+	PR_PREFIX="console_legacy"
 	while :
 	do
 	clear

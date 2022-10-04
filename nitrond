@@ -28,7 +28,7 @@ WHITE='\e[1;37m'
 YELLOW='\e[01;33m'
 STOCK='\e[1;0m'
 
-PR_PREFIX="nitron_broadcast():"
+PR_PREFIX="nitron_broadcast"
 grep -q "androidboot" /proc/cmdline && NITRON_LOG_DIR='/cache' || NITRON_LOG_DIR='/tmp'
 PROMPT_COMMAND='sync'
 grep -q "androidboot" /proc/cmdline && HEADER_SOURCE="/system/etc" || HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
@@ -54,7 +54,7 @@ printn() {
 
 	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n"
 
-	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[$?] $2" >>"$NITRON_LOG_DIR"/nitron.log
+	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[$?]: $2" >>"$NITRON_LOG_DIR"/nitron.log
 }
 
 writen() {
@@ -89,7 +89,7 @@ Options:
 }
 
 magicn() {
-	PR_PREFIX="magicn():"
+	PR_PREFIX="magicn"
 	set_gaming_mode() {
 		grep -q "androidboot" /proc/cmdline && resetprop ro.nitron.mode red || export NITRON_MODE="red"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
@@ -352,7 +352,7 @@ magicn() {
 }
 
 updaten() {
-	PR_PREFIX="updaten():"
+	PR_PREFIX="updaten"
 	printn -n "checking connectivity..."
 	if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
 		printn -e "aborted from system variable"
