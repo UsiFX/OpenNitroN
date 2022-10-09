@@ -45,7 +45,7 @@ compile()
 debcompile()
 {
 	[[ -d "$OUT/target" ]] || mkdir -p "$OUT/target"
-	[[ -d "$OUT/product" ]] || mkdir -p "$OUT/debian/product"
+	[[ -d "$OUT/debian" ]] || mkdir -p "$OUT/debian/product"
 	echo " RM   ${PLACEHOLDERS[@]}"
 	rm -f ${PLACEHOLDERS[@]}
 	cp -afr "debian/." "$OUT/debian/product"
