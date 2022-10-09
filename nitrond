@@ -414,7 +414,8 @@ updaten() {
 	{
 		printn -n "checking connectivity..."
 		printn -l "pinging 8.8.8.8 ..."
-		pingn && updatealg || printn -e "something went wrong, please check debug files."
+		[[ $? != "0" ]] && printn -e "something went wrong, please check debug files."
+		pingn && updatealg
 	}
 	init
 }
