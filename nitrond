@@ -396,7 +396,7 @@ updaten() {
 		fi
 	}
 
-	command -v setprop 2>&1 && {
+	command -v setprop >/dev/null && {
 		if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
 			printn -e "aborted from system variable"
 			printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
