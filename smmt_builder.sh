@@ -15,6 +15,7 @@ TIMESTAMP=$(date +%Y%m%d)
 VERSION='1.0.1-staging'
 OBJECTS=("nitrond" "nitron_headers.sh")
 MMT_OBJECTS=("magisk/META-INF/com/google/android/update-binary" "magisk/setup.sh" "magisk/common/functions.sh" "magisk/uninstall.sh")
+PLACEHOLDERS=("debian/usr/placeholder" "debian/usr/bin/placeholder" "debian/usr/include/placeholder")
 FILENAME="NitronX-$VERSION-$RANDOM-$TIMESTAMP"
 
 if [[ -z "$object_directory" ]]; then
@@ -40,26 +41,49 @@ compile()
 	return $?
 }
 
+
+debcompile()
+{
+	[[ -d "$OUT/target" ]] || mkdir -p "$OUT/target"
+	[[ -d "$OUT/debian" ]] || mkdir -p "$OUT/debian/product"
+	echo " RM   ${PLACEHOLDERS[@]}"
+	rm -f ${PLACEHOLDERS[@]}
+	cp -afr "debian/." "$OUT/debian/product"
+	cp -af "${OBJECTS[@]}" "$OUT/debian/product"
+	cd "$OUT/debian/product" || exit
+	mv -f "$OUT/debian/product/nitrond" "$OUT/debian/product/usr/bin"
+	mv -f "$OUT/debian/product/nitron_headers.sh" "$OUT/debian/product/usr/include"
+	dpkg-deb --build --root-owner-group "$OUT/debian/product" "$OUT/target/$FILENAME.deb"
+	echo " DPKG  $OUT/target/$FILENAME.deb"
+	cd ../../..
+	return $?
+}
+
 help()
 {
 echo "usage: smmt_builder.sh [OPTIONS] e.g: smmt_builder.sh --shellcheck
 
 options:
-  --compile    ~ execute with dirty compilation
-  --shellcheck ~ execute with compilation check
-  --clean      ~ clean the out directory
-  --sign       ~ sign with AOSP keys"
+ [FOR ANDROID ONLY]
+  --compile       ~ execute with dirty compilation
+  --shellcheck    ~ execute with compilation check
+  --sign          ~ sign with AOSP keys
+ [FOR DPKG ONLY]
+  --dpkg-compile  ~ execute with dirty compilation
+
+others:
+  --clean         ~ clean the out directory
+"
 }
 
 for opts in "${@}"
 do
 	case "${opts}" in
 		"--shellcheck")
-			shellcheck "${MMT_OBJECTS[@]}"
+			[[ ${opts[@]} == *"--compile"* ]] && shellcheck "${MMT_OBJECTS[@]}"; echo " SHCHK  ${MMT_OBJECTS[@]}"
 			shellcheck "${OBJECTS[@]}"
-			echo " SHCHK  ${MMT_OBJECTS[@]}"
 			echo " SHCHK  ${OBJECTS[@]}"
-			[[ $? == "0" ]] && compile || echo "failed"
+			[[ $? == "0" ]] || echo "failed"
 		;;
 		"--compile")
 			compile
@@ -75,6 +99,9 @@ do
 			rm -rf "$OUT"
 			echo " CLEAN  $OUT"
 			mkdir "$OUT"
+		;;
+		"--dpkg-compile")
+			debcompile
 		;;
 		*)
 			help
