@@ -429,7 +429,7 @@ updaten() {
 
 if grep -q "androidboot" /proc/cmdline; then
 	printn -l "working in android platform, using resetprop algorithm..."
-	resetprop ro.nitron.version 1.0.1-staging
+	resetprop ro.nitron.version 1.0.1
 	[[ ! "$(resetprop ro.nitron.mode)" ]] && {
 		printn -l "we are working on first use, Supplying initial mode..."
 		resetprop ro.nitron.mode default
@@ -437,7 +437,7 @@ if grep -q "androidboot" /proc/cmdline; then
 else
 	printn -l "working in Unknown Linux platform, using export algorithm..."
 	export NITRON_FORCECHECK_UPDATE
-	export NITRON_VERSION='1.0.1-staging'
+	export NITRON_VERSION='1.0.1'
 	[[ ! -e "$NITRON_MODE" ]] && {
 		printn -l "we are working on first use, Supplying initial mode..."
 		export NITRON_MODE='default'
