@@ -19,6 +19,7 @@
   <img src="https://img.shields.io/github/stars/UsiFX/OpenNitroN.svg?logo=github-sponsors" alt="Stars">
 </a>
 
+![GitHub All Releases](https://img.shields.io/github/downloads/UsiFX/openNitroN/total?label=Downloads%20on%20GitHub)
 
 ## Table of Contents
 
