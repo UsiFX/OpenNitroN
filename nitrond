@@ -533,8 +533,9 @@ else
 			"-h" | "--help") __nitron_help ;;
 			"-u" | "--update") updaten ;;
 			"-d" | "--debug")
-				set -x
+				set -x 2>"$NITRON_LOG_DIR"/nitron.verbose.log
 				printn -w "execution under debug, please provide arguments to debug"
+				printn -w "verbose is saved at: $NITRON_LOG_DIR/nitron.verbose.log"
 			;;
 			*) printn -e "unknown option $*, check 'nitrond --help'." ;;
 		esac
