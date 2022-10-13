@@ -134,19 +134,19 @@ oschk()
 {
 	PR_PREFIX="oschk"
 	OSCHK=$(uname -o)
+
 	case "$OSCHK" in
-		"Android")
-			PLATFORM="Android"
-			printn -l "OS: $PLATFORM"
-			return 0
-		;;
 		"GNU/Linux")
 			PLATFORM="GNU/Linux"
 			printn -l "OS: $PLATFORM"
 			return 0
 		;;
 		"Linux")
-			PLATFORM="Linux"
+			if grep -q "androidboot" /proc/cmdline; then
+				PLATFORM="Android"
+			else
+				PLATFORM="Linux"
+			fi
 			printn -l "OS: $PLATFORM"
 			return 0
 		;;
