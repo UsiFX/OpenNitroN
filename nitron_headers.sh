@@ -67,7 +67,7 @@ console_legacy() {
 	print_banner
 	COLUMNS=150
 	OPTIONS=("Switch Mode" "Show device state" "Update" "Show help menu" "Exit")
-	PS3="$(printn -i "Choose one of the following Main options:")"
+	PS3="?): "
 		select CHOICE in "${OPTIONS[@]}"; do
 			num=$REPLY
 			case $num in
@@ -77,7 +77,7 @@ console_legacy() {
 						print_banner
 						COLUMNS=150
 						MODE_OPTIONS=("Gaming" "Balance" "Battery" "Back to main menu" "Exit")
-						PS3="$(printn -i "Choose one of the following Mode options:")"
+						PS3="?): "
 						select MODE_CHOICE in "${MODE_OPTIONS[@]}"; do
 							mode_num=$REPLY
 							case $mode_num in
