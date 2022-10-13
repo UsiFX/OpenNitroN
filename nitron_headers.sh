@@ -10,6 +10,8 @@
 
 export NITRON_HEADER_VERSION='1.0.0'
 
+cmdavail() { PR_PRERIX="cmdavail" ;command -v $1 >/dev/null && return 0; printn -l "$1: available" || return 1; printn -l "$1: unavailable"; }
+
 console_dialog() {
 	PR_PREFIX="console_dialog"
 	HEIGHT=16
