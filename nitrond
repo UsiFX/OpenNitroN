@@ -397,7 +397,7 @@ updaten() {
 		fi
 	}
 
-	command -v setprop >/dev/null && {
+	cmdavail setprop && {
 		if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
 			printn -e "aborted from system variable"
 			printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
@@ -509,13 +509,13 @@ else
 				echo -e "nitron_headers $NITRON_HEADER_VERSION"
 				;;
 			"-c" | "--console-mode")
-				if [[ "$(which dialog 2>/dev/null && echo $?)" != "0" ]]; then
+				cmdavail dialog && {
 					printn -l "dialog not found, switch: console_legacy()"
 					console_legacy
-				else
+				} || {
 					console_dialog
 					printn -l "--- started"
-				fi
+				}
 				;;
 			"-L" | "--License") echo "
 #
@@ -533,8 +533,9 @@ else
 			"-h" | "--help") __nitron_help ;;
 			"-u" | "--update") updaten ;;
 			"-d" | "--debug")
-				set -x
+				set -x 2>"$NITRON_LOG_DIR"/nitron.verbose.log
 				printn -w "execution under debug, please provide arguments to debug"
+				printn -w "verbose is saved at: $NITRON_LOG_DIR/nitron.verbose.log"
 			;;
 			*) printn -e "unknown option $*, check 'nitrond --help'." ;;
 		esac
