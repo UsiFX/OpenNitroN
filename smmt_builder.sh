@@ -4,6 +4,7 @@
 # shellcheck disable=SC2181
 # shellcheck disable=SC2015
 # shellcheck disable=SC2157
+# shellcheck disable=SC2199
 #
 # Simple nitronD simpleMMT Builder
 #
@@ -46,8 +47,7 @@ debcompile()
 {
 	[[ -d "$OUT/target" ]] || mkdir -p "$OUT/target"
 	[[ -d "$OUT/debian" ]] || mkdir -p "$OUT/debian/product"
-	echo " RM   ${PLACEHOLDERS[@]}"
-	rm -f ${PLACEHOLDERS[@]}
+	rm -f "${PLACEHOLDERS[@]}" && echo " RM   ${PLACEHOLDERS[@]}"
 	cp -afr "debian/." "$OUT/debian/product"
 	cp -af "${OBJECTS[@]}" "$OUT/debian/product"
 	cd "$OUT/debian/product" || exit
