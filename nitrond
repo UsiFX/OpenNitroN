@@ -472,51 +472,51 @@ else
 		case "${arg}" in
 			"-sg" | "--set-green")
 				magicn -g
-				androidchk && {
+				if androidchk; then
 					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
-				} || linuxchk && {
+				elif linuxchk; then
 					printn -n "nitrond: current mode set to: $NITRON_MODE"
-				}
+				fi
 				;;
 			"-sr" | "--set-red")
 				magicn -r
-				androidchk && {
+				if androidchk; then
 					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
-				} || linuxchk && {
+				elif linuxchk; then
 					printn -n "nitrond: current mode set to: $NITRON_MODE"
-				}
+				fi
 				;;
 			"-sy" | "--set-yellow")
 				magicn -y
-				androidchk && {
+				if androidchk; then
 					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
-				} || linuxchk && {
+				elif linuxchk; then
 					printn -n "nitrond: current mode set to: $NITRON_MODE"
-				}
+				fi
 				;;
 			"-sdm" | "--show-default-mode")
-				androidchk && {
+				if androidchk; then
 					echo -e "nitrond: mode: $(getprop ro.nitron.mode)"
-				} || linuxchk && {
+				elif linuxchk; then
 					echo -e "nitrond: mode: $NITRON_MODE"
-				}
+				fi
 				;;
 			"-v" | "--version")
-				androidchk && {
+				if androidchk; then
 					echo -e "nitrond $(getprop ro.nitron.version)"
-				} || linuxchk && {
+				elif linuxchk; then
 					echo -e "nitrond $NITRON_VERSION"
-				}
+				fi
 				echo -e "nitron_headers $NITRON_HEADER_VERSION"
 				;;
 			"-c" | "--console-mode")
-				cmdavail dialog && {
+				if cmdavail dialog; then
 					printn -l "dialog not found, switch: console_legacy()"
 					console_legacy
-				} || {
+				else
 					console_dialog
 					printn -l "--- started"
-				}
+				fi
 				;;
 			"-L" | "--License") echo "
 #
