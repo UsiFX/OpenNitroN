@@ -10,7 +10,7 @@
 
 export NITRON_HEADER_VERSION='1.0.0'
 
-cmdavail() { PR_PREFIX="cmdavail"; command -v $1 >/dev/null && return 0; printn -l "$1: available" || return 1; printn -l "$1: unavailable"; }
+cmdavail() { PR_PREFIX="cmdavail"; command -v "$1" >/dev/null && return 0; printn -l "$1: available" || return 1; printn -l "$1: unavailable"; }
 
 console_dialog() {
 	PR_PREFIX="console_dialog"
@@ -129,3 +129,7 @@ console_legacy() {
 		done
 	done
 }
+
+androidchk() { PR_PREFIX="androidchk"; grep -q "androidboot" /proc/cmdline && PLATFORM="Android"; printn -l "OS: $PLATFORM"; return 0 ;}
+
+linuxchk() { PR_PREFIX="linuxchk"; [[ "$(uname -s)" == "Linux" ]] && PLATFORM="GNU/Linux"; printn -l "OS: $PLATFORM"; return 0 || printn -l "OS: UNKNOWN"; return 1 ;}
