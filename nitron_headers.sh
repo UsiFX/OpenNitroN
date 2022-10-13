@@ -27,7 +27,6 @@ console_dialog() {
 	WIDTH=40
 	CHOICE_HEIGHT=30
 	BACKTITLE="The Open NitroN Kernel tweaking Project"
-	TITLE="nitron v0.7"
 	MENU="Choose one of the following options: "
 	OPTIONS=(1 "Switch Mode"
 		2 "Show device stats"
