@@ -130,11 +130,33 @@ console_legacy() {
 	done
 }
 
-# androidchk && and/or || <condition>
-androidchk() { PR_PREFIX="androidchk"; grep -q "androidboot" /proc/cmdline && PLATFORM="Android"; printn -l "OS: $PLATFORM"; return 0 ;}
-
-# linuxchk && and/or || <condition>
-linuxchk() { PR_PREFIX="linuxchk"; [[ "$(uname -s)" == "Linux" ]] && PLATFORM="GNU/Linux"; printn -l "OS: $PLATFORM"; return 0 || printn -l "OS: UNKNOWN"; return 1 ;}
+oschk()
+{
+	PR_PREFIX="oschk"
+	OSCHK=$(uname -o)
+	case "$OSCHK" in
+		"Android")
+			set PLATFORM="Android"
+			printn -l "OS: $PLATFORM"
+			return 0
+		;;
+		"GNU/Linux")
+			set PLATFORM="GNU/Linux"
+			printn -l "OS: $PLATFORM"
+			return 0
+		;;
+		"Linux")
+			set PLATFORM="Linux"
+			printn -l "OS: $PLATFORM"
+			return 0
+		;;
+		*)
+			set PLATFORM="Unknown"
+			printn -l "OS: $PLATFORM"
+			printn -e "Unknown Operating System, cannot start."
+		;;
+	esac
+}
 
 # infogrbn <directory> <value>
 infogrbn() { cat "$1" | grep "$2" | awk '{ print $2 }';}
@@ -146,7 +168,7 @@ apin() {
 	resrchk()
 	{
 		echo "PID: $$"
-		androidchk && echo "OS: Android" || linuxchk && echo "OS: GNU/Linux"
+		echo "OS: $PLATFORM"
 		echo "Kernel: $(uname -sr)"
 		echo "Memory(gB): $(($(infogrbn "/proc/meminfo" "MemTotal") \ 1024 \ 1024 ))"
 		echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")"
@@ -169,7 +191,7 @@ Options:
 			resrchk
 		;;
 		*)
-			__api_helo
+			__api_help
 		;;
 	esac
 }
