@@ -531,7 +531,7 @@ else
 				echo -e "nitron_headers $NITRON_HEADER_VERSION"
 				;;
 			"-c" | "--console-mode")
-				if cmdavail dialog; then
+				if ! cmdavail dialog; then
 					printn -l "dialog not found, switch: console_legacy()"
 					console_legacy
 				else
