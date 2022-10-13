@@ -49,11 +49,11 @@ in your home's Directory (`/home`) and creates copy of the executables
 in `/usr/bin` for the daemon itself, and/or `/usr/include` for the header file
 by simply run:
 ``` bash
- wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh && bash installer.sh install
+ wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/installer.sh && bash installer.sh install
 ```
 it should output you the following:
 ``` bash
-$ wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh && bash installer.sh install
+$ wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/installer.sh && bash installer.sh install
 usage: installer.sh [install] [uninstall]
 ```
 use the script according to your opinion.
