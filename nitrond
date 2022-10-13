@@ -531,12 +531,12 @@ else
 				echo -e "nitron_headers $NITRON_HEADER_VERSION"
 				;;
 			"-c" | "--console-mode")
-				if ! cmdavail dialog; then
-					printn -l "dialog not found, switch: console_legacy()"
-					console_legacy
-				else
+				if cmdavail dialog; then
 					console_dialog
 					printn -l "--- started"
+				else
+					printn -l "dialog not found, switch: console_legacy()"
+					console_legacy
 				fi
 				;;
 			"-L" | "--License") echo "
