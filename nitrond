@@ -37,9 +37,6 @@ PR_PREFIX="nitron_broadcast"
 DAEMON_SOURCE=$(dirname "$0")
 PROMPT_COMMAND='sync'
 
-# Initialise OS Compatibility check
-oschk
-
 # Include headers
 if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]]; then
 	echo "missing header, $HEADER_SOURCE/nitron_headers.sh"
@@ -47,6 +44,9 @@ if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]]; then
 else
 	source "$HEADER_SOURCE"/nitron_headers.sh
 fi
+
+# Initialise OS Compatibility check
+oschk
 
 printn() {
 	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
