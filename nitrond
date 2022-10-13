@@ -4,6 +4,7 @@
 # shellcheck disable=SC1091
 # shellcheck disable=SC2015
 # shellcheck disable=SC1087
+# shellcheck disable=SC2181
 #
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 # Kartik728 <titanupdates728@gmail.com>
@@ -415,7 +416,7 @@ updaten() {
 	{
 		printn -n "checking connectivity..."
 		printn -l "pinging 8.8.8.8 ..."
-		[[ $? != "0" ]] && printn -e "something went wrong, please check debug files."
+		[[ "$?" != "0" ]] && printn -e "something went wrong, please check debug files."
 		pingn && updatealg
 	}
 	init
