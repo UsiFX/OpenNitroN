@@ -45,9 +45,6 @@ else
 	source "$HEADER_SOURCE"/nitron_headers.sh
 fi
 
-# Initialise OS Compatibility check
-oschk
-
 printn() {
 	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
 
@@ -93,6 +90,9 @@ Options:
  -h, --help    ~ prints this menu
 "
 }
+
+# Initialise OS Compatibility check
+oschk
 
 magicn() {
 	PR_PREFIX="magicn"
