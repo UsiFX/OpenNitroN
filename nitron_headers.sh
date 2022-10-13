@@ -130,6 +130,47 @@ console_legacy() {
 	done
 }
 
+# androidchk && and/or || <condition>
 androidchk() { PR_PREFIX="androidchk"; grep -q "androidboot" /proc/cmdline && PLATFORM="Android"; printn -l "OS: $PLATFORM"; return 0 ;}
 
+# linuxchk && and/or || <condition>
 linuxchk() { PR_PREFIX="linuxchk"; [[ "$(uname -s)" == "Linux" ]] && PLATFORM="GNU/Linux"; printn -l "OS: $PLATFORM"; return 0 || printn -l "OS: UNKNOWN"; return 1 ;}
+
+# infogrbn <directory> <value>
+infogrbn() { cat "$1" | grep "$2" | awk '{ print $2 }';}
+
+# infogrblongn <directory> <value>
+infogrblongn() { cat "$1" | grep "$2" | awk '{ print $3,$4,$5,$6 }';}
+
+apin() {
+	resrchk()
+	{
+		echo "PID: $$"
+		androidchk && echo "OS: Android" || linuxchk && echo "OS: GNU/Linux"
+		echo "Kernel: $(uname -sr)"
+		echo "Memory(gB): $(($(infogrbn "/proc/meminfo" "MemTotal") \ 1024 \ 1024 ))"
+		echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")"
+		echo "Machine: $(uname -m)"
+	}
+
+	__api_help()
+	{
+		echo "
+Usage: apin [OPTION(s)] (e.g. apin -rc)
+
+Options:
+  -rc, --resource-check		~ prints hardware resources information
+  -h, --help			~ prints this help menu
+"
+	}
+
+	case $* in
+		"-rc" | "--resource-check")
+			resrchk
+		;;
+		*)
+			__api_helo
+		;;
+	esac
+}
+
