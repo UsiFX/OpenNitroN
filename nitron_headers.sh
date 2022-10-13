@@ -136,22 +136,22 @@ oschk()
 	OSCHK=$(uname -o)
 	case "$OSCHK" in
 		"Android")
-			set PLATFORM="Android"
+			PLATFORM="Android"
 			printn -l "OS: $PLATFORM"
 			return 0
 		;;
 		"GNU/Linux")
-			set PLATFORM="GNU/Linux"
+			PLATFORM="GNU/Linux"
 			printn -l "OS: $PLATFORM"
 			return 0
 		;;
 		"Linux")
-			set PLATFORM="Linux"
+			PLATFORM="Linux"
 			printn -l "OS: $PLATFORM"
 			return 0
 		;;
 		*)
-			set PLATFORM="Unknown"
+			PLATFORM="Unknown"
 			printn -l "OS: $PLATFORM"
 			printn -e "Unknown Operating System, cannot start."
 		;;
