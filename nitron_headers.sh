@@ -22,10 +22,10 @@ cmdavail() {
 }
 
 # infogrbn <directory> <value>
-infogrbn() { cat "$1" | grep "$2" | awk '{ print $2 }';}
+infogrbn() { grep "$2" "$1" | awk '{ print $2 }';}
 
 # infogrblongn <directory> <value>
-infogrblongn() { cat "$1" | grep "$2" | awk '{ print $3,$4,$5,$6 }';}
+infogrblongn() { grep "$2" "$1" | awk '{ print $3,$4,$5,$6 }';}
 
 setmoden() { echo "$1" >> "$NITRON_LOG_DIR"/nitron.mode.lock ;}
 
