@@ -31,3 +31,8 @@ console*.*
 # Build Output
 #
 out/
+
+#
+# GNU/Nano-cached files
+#
+*.save
