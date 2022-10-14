@@ -408,6 +408,26 @@ updaten() {
 		fi
 	}
 
+	rollbackalg()
+	{
+		if ! "$NTIRON_LOG_DIR"/nitrond_current; then
+			printn -e "previous daemon update cache is unavailable"
+		elif ! "$NTIRON_LOG_DIR"/nitronh_current; then
+			printn -e "previous header update cache is unavailable"
+		else
+			continue
+		fi
+		if [[ "$(diff "$0" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
+			printn -i "downgrading..."
+			cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
+		elif [[ "$(diff "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
+			printn -i "attempting to downgrade headers..."
+			cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitron_headers.sh"
+		else
+			printn -i "there is no difference between current update and previous one."
+		fi
+	}
+
 	cmdavail setprop && {
 		if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
 			printn -e "aborted from system variable"
@@ -429,7 +449,16 @@ updaten() {
 		[[ "$?" != "0" ]] && printn -e "something went wrong, please check debug files."
 		pingn && updatealg
 	}
-	init
+
+	case $* in
+		"-a" | "--apply")
+			init
+		;;
+		"-d" | "--downgrade")
+			rollbackalg
+			[[ "$?" != "0" ]] && printn -e "something went wrong, please check debug files."
+		;;
+	esac
 }
 
 # Bail out if we aren't running as SU
@@ -469,10 +498,15 @@ Options:
   -sdm, --show-default-mode     ~ prints current tweaking mode
   -c, --console-mode            ~ enter User-Friendly user selections
   -u, --update                  ~ force update to latest
+
+Others:
   -h, --help                    ~ shows this Help menu
   -v, --version                 ~ shows tool version
-  -d, --debug    [DEV-ONLY]     ~ run any command under debug flag
   -L, --License                 ~ shows Tool License
+
+Advanced:
+  -dd, --downgrade		~ downgrade to previous upgrade
+  -d, --debug                   ~ run any command under debug flag
 "
 }
 
@@ -548,12 +582,13 @@ else
 #"
 			;;
 			"-h" | "--help") __nitron_help ;;
-			"-u" | "--update") updaten ;;
+			"-u" | "--update") updaten -a ;;
 			"-d" | "--debug")
 				set -x 2>"$NITRON_LOG_DIR"/nitron.verbose.log
 				printn -w "execution under debug, please provide arguments to debug"
 				printn -w "verbose is saved at: $NITRON_LOG_DIR/nitron.verbose.log"
 			;;
+			"-dd" | "--downgrade") updaten -d ;;
 			*) printn -e "unknown option $*, check 'nitrond --help'." ;;
 		esac
 	done
