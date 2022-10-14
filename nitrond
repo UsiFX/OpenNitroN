@@ -410,9 +410,9 @@ updaten() {
 
 	rollbackalg()
 	{
-		if ! "$NTIRON_LOG_DIR"/nitrond_current; then
+		if ! "$NITRON_LOG_DIR"/nitrond_current; then
 			printn -e "previous daemon update cache is unavailable"
-		elif ! "$NTIRON_LOG_DIR"/nitronh_current; then
+		elif ! "$NITRON_LOG_DIR"/nitronh_current; then
 			printn -e "previous header update cache is unavailable"
 		else
 			continue
