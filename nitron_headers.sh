@@ -27,29 +27,29 @@ infogrbn() { cat "$1" | grep "$2" | awk '{ print $2 }';}
 # infogrblongn <directory> <value>
 infogrblongn() { cat "$1" | grep "$2" | awk '{ print $3,$4,$5,$6 }';}
 
+setmoden() { echo "$1" >> "$NITRON_LOG_DIR"/nitron.mode.lock ;}
+
 modelockn()
 {
 	"$NITRON_LOG_DIR"/nitron.mode.lock || touch "$NITRON_LOG_DIR"/nitron.mode.lock
 	MODES=$(cat "$NITRON_LOG_DIR"/nitron.mode.lock)
+	NITRON_MODE="$MODES"
 	case "$MODES" in
 		"battery")
-			echo "battery" >> "$NITRON_LOG_DIR"/nitron.mode.lock
-			NITRON_MODE="battery"
+			setmoden "battery"
 		;;
 		"balanced")
-			echo "balanced" >> "$NITRON_LOG_DIR"/nitron.mode.lock
-			NITRON_MODE="balanced"
+			setmoden "balanced"
 		;;
 		"red")
-			echo "red" >> "$NITRON_LOG_DIR"/nitron.mode.lock
-			NITRON_MODE="red"
+			setmoden "red"
 		;;
 		*)
-			echo "UnInitialised" >> "$NITRON_LOG_DIR"/nitron.mode.lock
-			NITRON_MODE="UnInitialised"
+			setmoden "UnInitialised"
 		;;
 	esac
 }
+
 apin() {
 	resrchk()
 	{

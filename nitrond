@@ -100,7 +100,7 @@ magicn() {
 		if [[ "$PLATFORM" == "Android" ]]; then
 			resetprop ro.nitron.mode battery
 		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			export NITRON_MODE="battery"
+			setmoden "battery"
 		fi
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
@@ -180,7 +180,7 @@ magicn() {
 		if [[ "$PLATFORM" == "Android" ]]; then
 			resetprop ro.nitron.mode balanced
 		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			export NITRON_MODE="balanced"
+			setmoden "balanced"
 		fi
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
@@ -256,7 +256,7 @@ magicn() {
 		if [[ "$PLATFORM" == "Android" ]]; then
 			resetprop ro.nitron.mode red
 		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			export NITRON_MODE="red"
+			setmoden "red"
 		fi
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
 		writen /proc/sys/kernel/sched_autogroup_enabled 0
@@ -441,7 +441,7 @@ updaten() {
 if [[ "$PLATFORM" == "Android" ]]; then
 	printn -l "working in android platform, using resetprop algorithm..."
 	resetprop ro.nitron.version 1.0.2-staging
-	[[ ! "$(resetprop ro.nitron.mode)" ]] && {
+	"$(resetprop ro.nitron.mode)" || {
 		printn -l "we are working on first use, Supplying initial mode..."
 		resetprop ro.nitron.mode default
 	}
