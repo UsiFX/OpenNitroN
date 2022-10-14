@@ -8,7 +8,7 @@
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
-export NITRON_HEADER_VERSION='1.0.0'
+export NITRON_HEADER_VERSION='1.1.0'
 
 cmdavail() {
 	PR_PREFIX="cmdavail"
