@@ -414,8 +414,6 @@ updaten() {
 			printn -e "previous daemon update cache is unavailable"
 		elif [[ ! -f "$NITRON_LOG_DIR"/nitronh_current ]]; then
 			printn -e "previous header update cache is unavailable"
-		else
-			continue
 		fi
 		if [[ "$(diff "$0" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
 			printn -i "downgrading..."
