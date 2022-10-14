@@ -417,10 +417,10 @@ updaten() {
 		fi
 		if [[ "$(diff "$0" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
 			printn -i "downgrading..."
-			cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
+			cat "$NITRON_LOG_DIR/nitrond_current" > "$0"
 		elif [[ "$(diff "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
 			printn -i "attempting to downgrade headers..."
-			cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitron_headers.sh"
+			cat "$NITRON_LOG_DIR/nitronh_current" > "$HEADER_SOURCE/nitron_headers.sh"
 		else
 			printn -i "there is no difference between current update and previous one."
 		fi
