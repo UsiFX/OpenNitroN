@@ -441,7 +441,7 @@ updaten() {
 if [[ "$PLATFORM" == "Android" ]]; then
 	printn -l "working in android platform, using resetprop algorithm..."
 	resetprop ro.nitron.version 1.0.2-staging
-	! resetprop ro.nitron.mode && {
+	! resetprop ro.nitron.mode >/dev/null && {
 		printn -l "we are working on first use, Supplying initial mode..."
 		resetprop ro.nitron.mode default
 	}
