@@ -21,6 +21,44 @@ cmdavail() {
 	fi
 }
 
+# infogrbn <directory> <value>
+infogrbn() { cat "$1" | grep "$2" | awk '{ print $2 }';}
+
+# infogrblongn <directory> <value>
+infogrblongn() { cat "$1" | grep "$2" | awk '{ print $3,$4,$5,$6 }';}
+
+apin() {
+	resrchk()
+	{
+		echo "PID: $$"
+		echo "OS: $PLATFORM"
+		echo "Kernel: $(uname -sr)"
+		echo "Memory: $(( $(infogrbn "/proc/meminfo" "MemTotal") / 1024 / 1024))gb"
+		echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")"
+		echo "Machine: $(uname -m)"
+	}
+
+	__api_help()
+	{
+		echo "
+Usage: apin [OPTION(s)] (e.g. apin -rc)
+
+Options:
+  -rc, --resource-check		~ prints hardware resources information
+  -h, --help			~ prints this help menu
+"
+	}
+
+	case $* in
+		"-rc" | "--resource-check")
+			resrchk
+		;;
+		*)
+			__api_help
+		;;
+	esac
+}
+
 console_dialog() {
 	PR_PREFIX="console_dialog"
 	HEIGHT=16
@@ -114,9 +152,7 @@ console_legacy() {
 					done
 					;;
 				2)
-					printn -w "wip"
-					sleep 2
-					break
+					apin -rc
 					;;
 				3)
 					updaten
@@ -162,44 +198,6 @@ oschk()
 			PLATFORM="Unknown"
 			printn -l "OS: $PLATFORM"
 			printn -e "Unknown Operating System, cannot start."
-		;;
-	esac
-}
-
-# infogrbn <directory> <value>
-infogrbn() { cat "$1" | grep "$2" | awk '{ print $2 }';}
-
-# infogrblongn <directory> <value>
-infogrblongn() { cat "$1" | grep "$2" | awk '{ print $3,$4,$5,$6 }';}
-
-apin() {
-	resrchk()
-	{
-		echo "PID: $$"
-		echo "OS: $PLATFORM"
-		echo "Kernel: $(uname -sr)"
-		echo "Memory: $(( $(infogrbn "/proc/meminfo" "MemTotal") / 1024 / 1024))gb"
-		echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")"
-		echo "Machine: $(uname -m)"
-	}
-
-	__api_help()
-	{
-		echo "
-Usage: apin [OPTION(s)] (e.g. apin -rc)
-
-Options:
-  -rc, --resource-check		~ prints hardware resources information
-  -h, --help			~ prints this help menu
-"
-	}
-
-	case $* in
-		"-rc" | "--resource-check")
-			resrchk
-		;;
-		*)
-			__api_help
 		;;
 	esac
 }
