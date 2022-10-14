@@ -450,11 +450,17 @@ updaten() {
 
 	case $* in
 		"-a" | "--apply")
+			printn -l "--- triggered"
 			init
+			printn -l "--- finished"
+
 		;;
 		"-d" | "--downgrade")
+			printn -l "--- triggered"
+			printn -l "attempting to downgrade!"
 			rollbackalg
-			[[ "$?" != "0" ]] && printn -e "something went wrong, please check debug files."
+			[[ "$?" != "0" ]] && printn -e "something went wrong, please check debug files."; printn -l "--- finished"
+
 		;;
 	esac
 }
