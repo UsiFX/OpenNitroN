@@ -383,7 +383,22 @@ pingn() {
 }
 
 updaten() {
+	cmdavail setprop && {
+		if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
+			printn -e "aborted from system variable"
+			printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
+			return 1
+		fi
+	} || {
+		if [[ "$NITRON_FORCECHECK_UPDATE" == "false" ]]; then
+			printn -e "aborted from system variable"
+			printn -l "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
+			return 1
+		fi
+	}
+
 	PR_PREFIX="updaten"
+
 	updatealg()
 	{
 		printn -i "looking for update..."
@@ -423,20 +438,6 @@ updaten() {
 			cat "$NITRON_LOG_DIR/nitronh_current" > "$HEADER_SOURCE/nitron_headers.sh"
 		else
 			printn -i "there is no difference between current update and previous one."
-		fi
-	}
-
-	cmdavail setprop && {
-		if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
-			printn -e "aborted from system variable"
-			printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
-			return 1
-		fi
-	} || {
-		if [[ "$NITRON_FORCECHECK_UPDATE" == "false" ]]; then
-			printn -e "aborted from system variable"
-			printn -l "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
-			return 1
 		fi
 	}
 
