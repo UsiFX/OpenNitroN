@@ -33,7 +33,7 @@ modelockn()
 {
 	"$NITRON_LOG_DIR"/nitron.mode.lock || touch "$NITRON_LOG_DIR"/nitron.mode.lock
 	MODES=$(cat "$NITRON_LOG_DIR"/nitron.mode.lock)
-	NITRON_MODE="$MODES"
+	env NITRON_MODE="$MODES"
 	case "$MODES" in
 		"battery")
 			setmoden "battery"
