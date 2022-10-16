@@ -20,10 +20,10 @@ PLACEHOLDERS=("debian/usr/placeholder" "debian/usr/bin/placeholder" "debian/usr/
 FILENAME="NitronX-$VERSION-$RANDOM-$TIMESTAMP"
 
 if [[ -z "$object_directory" ]]; then
-	OUT=$(pwd)/out
+	export OUT=$(pwd)/out
 	echo "Using $OUT as source of NitroN"
 else
-	OUT="$object_directory"
+	export OUT="$object_directory"
 	echo "Using $OUT as source of NitroN"
 fi
 
@@ -59,6 +59,19 @@ debcompile()
 	return $?
 }
 
+aurcompile()
+{
+	[[ -d "$OUT/target" ]] || mkdir -p "$OUT/target"
+	[[ -d "$OUT/archlinux" ]] || mkdir -p "$OUT/archlinux/product"
+	cp -afr "archlinux/." "$OUT/archlinux/product"
+	cp -af "${OBJECTS[@]}" "$OUT/archlinux/product"
+	cd "$OUT/archlinux/product" || exit
+	makepkg --config ../../../makepkg.conf --allsource -f "$OUT/archlinux/product"
+	echo " MKPKG  $OUT/target/$FILENAME.zst"
+	cd ../../..
+	return $?
+}
+
 help()
 {
 echo "usage: smmt_builder.sh [OPTIONS] e.g: smmt_builder.sh --shellcheck
@@ -70,6 +83,8 @@ options:
   --sign          ~ sign with AOSP keys
  [FOR DPKG ONLY]
   --dpkg-compile  ~ execute with dirty compilation
+ [FOR AUR ONLY]
+  --aur-compile   ~ execute with dirty compilation
 
 others:
   --clean         ~ clean the out directory
@@ -102,6 +117,9 @@ do
 		;;
 		"--dpkg-compile")
 			debcompile
+		;;
+		"--aur-compile")
+			aurcompile
 		;;
 		*)
 			help
