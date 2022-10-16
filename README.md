@@ -1,6 +1,6 @@
 <img src="https://hacktoberfest.com/_next/static/media/opengraph.da6e44c0.png">
 
-# <div align=center> The NitroN: Open Edition </div>
+# <div align=center> The NitroN: Open Edition Staging version </div>
 
 
 <a href="https://app.codiga.io/hub/project/34591/OpenNitroN/dashboard">
