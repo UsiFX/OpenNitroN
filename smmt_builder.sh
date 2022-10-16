@@ -66,7 +66,7 @@ aurcompile()
 	cp -afr "archlinux/." "$OUT/archlinux/product"
 	cp -af "${OBJECTS[@]}" "$OUT/archlinux/product"
 	cd "$OUT/archlinux/product" || exit
-	makepkg --config ../../../makepkg.conf --allsource -f "$OUT/archlinux/product"
+	makepkg --config ../../../makepkg.conf -f "$OUT/archlinux/product"
 	echo " MKPKG  $OUT/target/$FILENAME.zst"
 	cd ../../..
 	return $?
