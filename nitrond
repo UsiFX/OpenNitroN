@@ -561,9 +561,7 @@ Copyright (C) 2022-2023 UsiFX <xprjkts@gmail.com>
 Copyright (C) 2022-2023 Kartik728 <titanupdates728@gmail.com>
 
 This program may be freely redistributed under
-the terms of the GNU Generic Public License.
-
-"
+the terms of the GNU Generic Public License."
 			;;
 			"-c" | "--console-mode")
 				if cmdavail dialog; then
