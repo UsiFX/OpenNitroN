@@ -31,6 +31,8 @@ WHITE='\e[1;37m'
 YELLOW='\e[01;33m'
 STOCK='\e[1;0m'
 
+export NITRON_FORCECHECK_UPDATE
+export NITRON_VERSION='1.0.4-staging'
 grep -q "androidboot" /proc/cmdline && HEADER_SOURCE="/system/etc" || HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
 grep -q "androidboot" /proc/cmdline && NITRON_LOG_DIR='/cache' || NITRON_LOG_DIR='/tmp'
 PR_PREFIX="nitron_broadcast"
@@ -474,15 +476,12 @@ updaten() {
 
 if [[ "$PLATFORM" == "Android" ]]; then
 	printn -l "working in android platform, using resetprop algorithm..."
-	resetprop ro.nitron.version 1.0.4-staging
 	! resetprop ro.nitron.mode >/dev/null && {
 		printn -l "we are working on first use, Supplying initial mode..."
 		resetprop ro.nitron.mode default
 	}
 elif [[ "$PLATFORM" == *"Linux"* ]]; then
 	printn -l "working in Unknown Linux platform, using export algorithm..."
-	export NITRON_FORCECHECK_UPDATE
-	export NITRON_VERSION='1.0.4-staging'
 	"$NITRON_MODE" || {
 		printn -l "we are working on first use, Supplying initial mode..."
 		modelockn
@@ -532,7 +531,7 @@ else
 				elif [[ "$PLATFORM" == *"Linux"* ]]; then
 					printn -n "nitrond: current mode set to: $NITRON_MODE"
 				fi
-				;;
+			;;
 			"-sr" | "--set-red")
 				magicn -r
 				if [[ "$PLATFORM" == "Android" ]]; then
@@ -540,7 +539,7 @@ else
 				elif [[ "$PLATFORM" == *"Linux"* ]]; then
 					printn -n "nitrond: current mode set to: $NITRON_MODE"
 				fi
-				;;
+			;;
 			"-sy" | "--set-yellow")
 				magicn -y
 				if [[ "$PLATFORM" == "Android" ]]; then
@@ -548,22 +547,24 @@ else
 				elif [[ "$PLATFORM" == *"Linux"* ]]; then
 					printn -n "nitrond: current mode set to: $NITRON_MODE"
 				fi
-				;;
+			;;
 			"-sdm" | "--show-default-mode")
 				if [[ "$PLATFORM" == "Android" ]]; then
 					echo -e "nitrond: mode: $(getprop ro.nitron.mode)"
 				elif [[ "$PLATFORM" == *"Linux"* ]]; then
 					echo -e "nitrond: mode: $NITRON_MODE"
 				fi
-				;;
+			;;
 			"-v" | "--version")
-				if [[ "$PLATFORM" == "Android" ]]; then
-					echo -e "nitrond $(getprop ro.nitron.version)"
-				elif [[ "$PLATFORM" == *"Linux"* ]]; then
-					echo -e "nitrond $NITRON_VERSION"
-				fi
-				echo -e "nitron_headers $NITRON_HEADER_VERSION"
-				;;
+				echo -e "Nitron Daemon $(apin -dv) - nitron_headers $(apin -hv)
+Copyright (C) 2022-2023 UsiFX <xprjkts@gmail.com>
+Copyright (C) 2022-2023 Kartik728 <titanupdates728@gmail.com>
+
+This program may be freely redistributed under
+the terms of the GNU Generic Public License.
+
+"
+			;;
 			"-c" | "--console-mode")
 				if cmdavail dialog; then
 					console_dialog
@@ -572,19 +573,6 @@ else
 					printn -l "dialog not found, switch: console_legacy()"
 					console_legacy
 				fi
-				;;
-			"-L" | "--License") echo "
-#
-# nitronD v1.0.4-staging (An Extensive Kernel tweaker)
-# Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
-#
-#			GNU GENERAL PUBLIC LICENSE
-#			 Version 3, 29 June 2007
-#
-# Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
-# Everyone is permitted to copy and distribute verbatim copies
-# of this license document, but changing it is not allowed.
-#"
 			;;
 			"-h" | "--help") __nitron_help ;;
 			"-u" | "--update") updaten -a ;;

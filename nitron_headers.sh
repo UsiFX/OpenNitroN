@@ -1,5 +1,5 @@
 #
-# shellcheck disable=SC2148
+
 # shellcheck disable=SC2034
 #
 # nitronD Headers.
@@ -139,6 +139,8 @@ Usage: apin [OPTION(s)] (e.g. apin -rc)
 
 Options:
   -rc, --resource-check		~ prints hardware resources information
+  -dv, --daemon-version         ~ prints daemon version
+  -hv, --header-version         ~ prints header version
   -h, --help			~ prints this help menu
 "
 	}
@@ -146,6 +148,12 @@ Options:
 	case $* in
 		"-rc" | "--resource-check")
 			resrchk
+		;;
+		"-dv" | "--daemon-version")
+			echo "$NITRON_VERSION"
+		;;
+		"-hv" | "--header-version")
+			echo "$NITRON_HEADER_VERSION"
 		;;
 		*)
 			__api_help
@@ -296,3 +304,4 @@ oschk()
 	esac
 }
 
+	set_balanced_mode() {
