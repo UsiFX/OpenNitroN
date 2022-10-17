@@ -474,7 +474,7 @@ updaten() {
 
 if [[ "$PLATFORM" == "Android" ]]; then
 	printn -l "working in android platform, using resetprop algorithm..."
-	resetprop ro.nitron.version 1.0.3-staging
+	resetprop ro.nitron.version 1.0.4-staging
 	! resetprop ro.nitron.mode >/dev/null && {
 		printn -l "we are working on first use, Supplying initial mode..."
 		resetprop ro.nitron.mode default
@@ -482,7 +482,7 @@ if [[ "$PLATFORM" == "Android" ]]; then
 elif [[ "$PLATFORM" == *"Linux"* ]]; then
 	printn -l "working in Unknown Linux platform, using export algorithm..."
 	export NITRON_FORCECHECK_UPDATE
-	export NITRON_VERSION='1.0.3-staging'
+	export NITRON_VERSION='1.0.4-staging'
 	"$NITRON_MODE" || {
 		printn -l "we are working on first use, Supplying initial mode..."
 		modelockn
@@ -575,7 +575,7 @@ else
 				;;
 			"-L" | "--License") echo "
 #
-# nitronD v1.0.3-staging (An Extensive Kernel tweaker)
+# nitronD v1.0.4-staging (An Extensive Kernel tweaker)
 # Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
 #
 #			GNU GENERAL PUBLIC LICENSE
