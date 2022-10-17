@@ -496,21 +496,20 @@ Commands:
   deviceinfo			~ shows device resource information
 
 Options:
+  -sdm, --show-default-mode     ~ prints current tweaking mode
   -sg, --set-green              ~ apply Battery mode
   -sr, --set-red                ~ apply Gaming mode
   -sy, --set-yellow             ~ apply Balanced mode
-  -sdm, --show-default-mode     ~ prints current tweaking mode
   -c, --console-mode            ~ enter User-Friendly user selections
-  -u, --update                  ~ force update to latest
 
 Others:
   -h, --help                    ~ shows this Help menu
   -v, --version                 ~ shows tool version
-  -L, --License                 ~ shows Tool License
+  -u, --update                  ~ update to latest
 
 Advanced:
   -dd, --downgrade		~ downgrade to previous upgrade
-  -d, --debug                   ~ run any command under debug flag
+  -d, --debug                   ~ run commands under debuggable verbose flags
 "
 }
 
