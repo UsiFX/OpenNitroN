@@ -1,5 +1,5 @@
 #
-
+# shellcheck disable=SC2148
 # shellcheck disable=SC2034
 #
 # nitronD Headers.
@@ -303,5 +303,3 @@ oschk()
 		;;
 	esac
 }
-
-	set_balanced_mode() {
