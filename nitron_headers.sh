@@ -72,7 +72,6 @@ apin() {
 		5) batt_hth="OV" ;;
 		6) batt_hth="UF" ;;
 		7) batt_hth="Cold" ;;
-		*) batt_hth="$batt_hth" ;;
 	esac
 
 	# Battery status
@@ -84,7 +83,6 @@ apin() {
 		3) batt_sts="Discharging" ;;
 		4) batt_sts="Not charging" ;;
 		5) batt_sts="Full" ;;
-		*) batt_sts="$batt_sts" ;;
 	esac
 
 	# Battery total capacity
