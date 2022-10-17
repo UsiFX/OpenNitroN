@@ -54,7 +54,7 @@ apin() {
 	cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
 
 	# Number of CPU cores
-	nr_cores=$(cat /sys/devices/system/cpu/possible | awk -F "-" '{print $2}')
+	nr_cores=$(awk -F "-" '{print $2}' "/sys/devices/system/cpu/possible")
 	nr_cores=$((nr_cores + 1))
 
 	# Battery info
