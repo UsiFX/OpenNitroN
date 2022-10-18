@@ -118,6 +118,7 @@ apin() {
 		echo "PID: $$"
 		echo "OS: $PLATFORM"
 		echo "Kernel: $(uname -sr)"
+		echo "SU Provider: $(su --version)"
 		echo "Memory: $(( $(infogrbn "/proc/meminfo" "MemTotal") / 1024 / 1024))gb"
 		echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")"
 		echo "Machine: $(uname -m)"
