@@ -13,10 +13,8 @@ export NITRON_HEADER_VERSION='1.1.0'
 cmdavail() {
 	PR_PREFIX="cmdavail"
 	if command -v "$1" >/dev/null; then
-		return 0
 		printn -l "$1: available"
 	else
-		return 1
 		printn -l "$1: unavailable"
 	fi
 }
