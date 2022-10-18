@@ -404,9 +404,11 @@ updaten() {
 	updatealg()
 	{
 		printn -i "looking for update..."
-		curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
-		curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitron_headers.sh" 2>/dev/null
-		chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
+		cmdavail curl && {
+			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitron_headers.sh" 2>/dev/null
+			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
+		} || printn -e "curl is not available in the system, cannot update."
 		printn -w "backing up..."
 		cp "$0" "$NITRON_LOG_DIR/nitrond_current"
 		cp "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current"
