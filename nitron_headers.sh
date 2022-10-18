@@ -8,7 +8,7 @@
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
-export NITRON_HEADER_VERSION='1.1.0'
+export NITRON_HEADER_VERSION='2.0.0'
 
 cmdavail() {
 	PR_PREFIX="cmdavail"
@@ -85,6 +85,16 @@ apin() {
 	batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design)
 	[[ "$batt_cpct" == "" ]] && batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
 
+	instype()
+	{
+		if [[ "$(su --version)" == *"MAGISK"* ]]; then
+			if [[ -d "/data/adb/modules/nitrond.magisk" ]]; then
+				INSTALLATION="Magisk Module"
+			fi
+		else
+			INSTALLATION="Custom"
+		fi
+	}
 
 	androiddevinfo()
 	{
@@ -125,6 +135,9 @@ apin() {
 		echo "Battery Status: $batt_sts"
 		echo "Battery Capacity: $batt_cpct"
 		[[ "$PLATFORM" == "Android" ]] && androiddevinfo
+		echo "Nitron Daemon Version: $(apin -dv)"
+		echo "Nitron Header Version: $(apin -hv)"
+		echo "Nitron Installation type: $INSTALLATION"
 	}
 
 	__api_help()
@@ -140,6 +153,7 @@ Options:
 "
 	}
 
+	instype
 	case $* in
 		"-rc" | "--resource-check")
 			resrchk
@@ -153,6 +167,26 @@ Options:
 		"-mc" | "--mode-check")
 			modelockn
 			echo "$MODES"
+		;;
+		"-as" | "--android-status")
+			if [[ "$PLATFORM" == "Android" ]]; then
+				if [[ "$INSTALLATION" == "Magisk Module" ]]; then
+					case "$(apin -mc)" in
+						"Battery")
+							sed -i '/description=/s/.*/description=[ 🟩 Green mode applied ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
+						;;
+						"Balanced")
+							sed -i '/description=/s/.*/description=[ 🟨 Balanced mode applied ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
+						;;
+						"Gaming")
+							sed -i '/description=/s/.*/description=[ 🟥 Gaming mode applied ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
+						;;
+						*)
+							sed -i '/description=/s/.*/description=[ 🤔 Uninitialized ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
+						;;
+					esac
+				fi
+			fi
 		;;
 		*)
 			__api_help

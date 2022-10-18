@@ -99,6 +99,9 @@ oschk
 # Initialise Mode set
 modelockn
 
+# Initialise Android Magisk Module status set-er
+apin -as
+
 magicn() {
 	PR_PREFIX="magicn"
 	set_battery_mode() {
