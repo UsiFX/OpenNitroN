@@ -27,25 +27,21 @@ infogrbn() { grep "$2" "$1" | awk '{ print $2 }';}
 # infogrblongn <directory> <value>
 infogrblongn() { grep "$2" "$1" | awk '{ print $3,$4,$5,$6 }';}
 
-setmoden() { echo "$1" >> "$NITRON_LOG_DIR"/nitron.mode.lock ;}
+setmoden() { echo "$1" > "$NITRON_LOG_DIR"/nitron.mode.lock ;}
 
 modelockn()
 {
-	"$NITRON_LOG_DIR"/nitron.mode.lock || touch "$NITRON_LOG_DIR"/nitron.mode.lock
+	[[ -d "$NITRON_LOG_DIR"/nitron.mode.lock ]] && setmoden "UnInitialised"
 	MODES=$(cat "$NITRON_LOG_DIR"/nitron.mode.lock)
-	env NITRON_MODE="$MODES"
 	case "$MODES" in
-		"battery")
-			setmoden "battery"
+		"Battery")
+			setmoden "Battery"
 		;;
-		"balanced")
-			setmoden "balanced"
+		"Balanced")
+			setmoden "Balanced"
 		;;
-		"red")
-			setmoden "red"
-		;;
-		*)
-			setmoden "UnInitialised"
+		"Gaming")
+			setmoden "Gaming"
 		;;
 	esac
 }
@@ -153,6 +149,10 @@ Options:
 		;;
 		"-hv" | "--header-version")
 			echo "$NITRON_HEADER_VERSION"
+		;;
+		"-mc" | "--mode-check")
+			modelockn
+			echo "$MODES"
 		;;
 		*)
 			__api_help

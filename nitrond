@@ -96,14 +96,13 @@ Options:
 # Initialise OS Compatibility check
 oschk
 
+# Initialise Mode set
+modelockn
+
 magicn() {
 	PR_PREFIX="magicn"
 	set_battery_mode() {
-		if [[ "$PLATFORM" == "Android" ]]; then
-			resetprop ro.nitron.mode Battery
-		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			setmoden "Battery"
-		fi
+		setmoden "Battery"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -179,11 +178,7 @@ magicn() {
 		writen /dev/stune/schedtune.prefer_idle 1
 	}
 	set_balanced_mode() {
-		if [[ "$PLATFORM" == "Android" ]]; then
-			resetprop ro.nitron.mode Balanced
-		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			setmoden "Balanced"
-		fi
+		setmoden "Balanced"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 1
@@ -255,11 +250,7 @@ magicn() {
 		writen /dev/stune/schedtune.boost 0
 	}
 	set_gaming_mode() {
-		if [[ "$PLATFORM" == "Android" ]]; then
-			resetprop ro.nitron.mode Gaming
-		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			setmoden "Gaming"
-		fi
+		setmoden "Gaming"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
 		writen /proc/sys/kernel/sched_autogroup_enabled 0
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -474,20 +465,6 @@ updaten() {
 	exit 1
 }
 
-if [[ "$PLATFORM" == "Android" ]]; then
-	printn -l "working in android platform, using resetprop algorithm..."
-	! resetprop ro.nitron.mode >/dev/null && {
-		printn -l "we are working on first use, Supplying initial mode..."
-		resetprop ro.nitron.mode default
-	}
-elif [[ "$PLATFORM" == *"Linux"* ]]; then
-	printn -l "working in Unknown Linux platform, using export algorithm..."
-	"$NITRON_MODE" || {
-		printn -l "we are working on first use, Supplying initial mode..."
-		modelockn
-	}
-fi
-
 __nitron_help() {
 	echo "
 Usage: nitrond [OPTION] (e.g. nitrond --update)
@@ -525,34 +502,17 @@ else
 			;;
 			"-sg" | "--set-green")
 				magicn -g
-				if [[ "$PLATFORM" == "Android" ]]; then
-					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
-				elif [[ "$PLATFORM" == *"Linux"* ]]; then
-					printn -n "nitrond: current mode set to: $NITRON_MODE"
-				fi
+				printn -n "nitrond: current mode: $(apin -mc)"
 			;;
 			"-sr" | "--set-red")
 				magicn -r
-				if [[ "$PLATFORM" == "Android" ]]; then
-					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
-				elif [[ "$PLATFORM" == *"Linux"* ]]; then
-					printn -n "nitrond: current mode set to: $NITRON_MODE"
-				fi
+				printn -n "nitrond: current mode: $(apin -mc)"
 			;;
 			"-sy" | "--set-yellow")
-				magicn -y
-				if [[ "$PLATFORM" == "Android" ]]; then
-					printn -n "nitrond: current mode set to: $(getprop ro.nitron.mode)"
-				elif [[ "$PLATFORM" == *"Linux"* ]]; then
-					printn -n "nitrond: current mode set to: $NITRON_MODE"
-				fi
+				printn -n "nitrond: current mode: $(apin -mc)"
 			;;
 			"-sdm" | "--show-default-mode")
-				if [[ "$PLATFORM" == "Android" ]]; then
-					echo -e "nitrond: mode: $(getprop ro.nitron.mode)"
-				elif [[ "$PLATFORM" == *"Linux"* ]]; then
-					echo -e "nitrond: mode: $NITRON_MODE"
-				fi
+				printn -i "mode: $(apin -mc)"
 			;;
 			"-v" | "--version")
 				echo -e "Nitron Daemon $(apin -dv) - nitron_headers $(apin -hv)
