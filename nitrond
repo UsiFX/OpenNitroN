@@ -412,6 +412,7 @@ updaten() {
 			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitron_headers.sh" 2>/dev/null
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 		} || printn -e "curl is not available in the system, cannot update."
+		PR_PREFIX="updaten"
 		printn -w "backing up..."
 		cp "$0" "$NITRON_LOG_DIR/nitrond_current"
 		cp "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current"
@@ -427,6 +428,7 @@ updaten() {
 			cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitron_headers.sh"
 		else
 			printn -i "up to date."
+			return 0
 		fi
 	}
 
