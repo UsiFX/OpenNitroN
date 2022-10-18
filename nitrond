@@ -100,9 +100,9 @@ magicn() {
 	PR_PREFIX="magicn"
 	set_battery_mode() {
 		if [[ "$PLATFORM" == "Android" ]]; then
-			resetprop ro.nitron.mode battery
+			resetprop ro.nitron.mode Battery
 		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			setmoden "battery"
+			setmoden "Battery"
 		fi
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
@@ -180,9 +180,9 @@ magicn() {
 	}
 	set_balanced_mode() {
 		if [[ "$PLATFORM" == "Android" ]]; then
-			resetprop ro.nitron.mode balanced
+			resetprop ro.nitron.mode Balanced
 		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			setmoden "balanced"
+			setmoden "Balanced"
 		fi
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
@@ -256,9 +256,9 @@ magicn() {
 	}
 	set_gaming_mode() {
 		if [[ "$PLATFORM" == "Android" ]]; then
-			resetprop ro.nitron.mode red
+			resetprop ro.nitron.mode Gaming
 		elif [[ "$PLATFORM" == *"Linux"* ]]; then
-			setmoden "red"
+			setmoden "Gaming"
 		fi
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
 		writen /proc/sys/kernel/sched_autogroup_enabled 0
