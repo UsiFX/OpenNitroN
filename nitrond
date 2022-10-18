@@ -379,10 +379,11 @@ pingn() {
 	[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" != "0" ]] && {
 		printn -lf "failed"
 		printn -e "nitrond: network: unreachable"
+		return 1
 	} || {
 		printn -n "nitrond: network: ok"
 		printn -l "connectivity is stable"
-		return $?
+		return 0
 	}
 }
 
