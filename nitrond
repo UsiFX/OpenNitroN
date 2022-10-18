@@ -509,6 +509,7 @@ else
 				printn -n "nitrond: current mode: $(apin -mc)"
 			;;
 			"-sy" | "--set-yellow")
+				magicn -y
 				printn -n "nitrond: current mode: $(apin -mc)"
 			;;
 			"-sdm" | "--show-default-mode")
