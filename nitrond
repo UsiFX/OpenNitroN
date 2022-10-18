@@ -72,7 +72,7 @@ writen() {
 	chmod +w "$1" 2>/dev/null
 
 	# Write new value, bail out if it fail
-	if ! $(echo "$2" > "$1" >/dev/null); then
+	if ! echo "$2" > "$1" >/dev/null; then
 		echo "[$(date +%I:%M:%S)] nitrond: $1: failed to change node" >> "$NITRON_LOG_DIR"/nitron.log
 		return 1
 	else
