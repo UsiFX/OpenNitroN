@@ -14,8 +14,10 @@ cmdavail() {
 	PR_PREFIX="cmdavail"
 	if command -v "$1" >/dev/null; then
 		printn -l "$1: available"
+		return 0
 	else
 		printn -l "$1: unavailable"
+		return 1
 	fi
 }
 
