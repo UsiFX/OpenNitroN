@@ -16,7 +16,7 @@ cmdavail() {
 		printn -l "$1: available"
 		return 0
 	else
-		printn -l "$1: unavailable"
+		printn -lf "$1: unavailable"
 		return 1
 	fi
 }
@@ -297,7 +297,7 @@ oschk()
 		;;
 		*)
 			PLATFORM="Unknown"
-			printn -l "OS: $PLATFORM"
+			printn -lf "OS: $PLATFORM"
 			printn -e "Unknown Operating System, cannot start."
 		;;
 	esac

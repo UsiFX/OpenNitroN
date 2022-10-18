@@ -59,7 +59,9 @@ printn() {
 
 	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n"
 
-	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[$?]: $2" >>"$NITRON_LOG_DIR"/nitron.log
+	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[0]: $2" >>"$NITRON_LOG_DIR"/nitron.log
+
+	[[ "$1" == "-lf" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[1]: $2" >>"$NITRON_LOG_DIR"/nitron.log
 }
 
 writen() {
@@ -375,7 +377,7 @@ magicn() {
 pingn() {
 	PR_PREFIX="pingn"
 	[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" != "0" ]] && {
-		printn -l "failed"
+		printn -lf "failed"
 		printn -e "nitrond: network: unreachable"
 	} || {
 		printn -n "nitrond: network: ok"
@@ -388,13 +390,13 @@ updaten() {
 	cmdavail setprop && {
 		if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
 			printn -e "aborted from system variable"
-			printn -l "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
+			printn -lf "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
 			return 1
 		fi
 	} || {
 		if [[ "$NITRON_FORCECHECK_UPDATE" == "false" ]]; then
 			printn -e "aborted from system variable"
-			printn -l "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
+			printn -lf "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
 			return 1
 		fi
 	}
@@ -569,7 +571,7 @@ the terms of the GNU Generic Public License."
 					console_dialog
 					printn -l "--- started"
 				else
-					printn -l "dialog not found, switch: console_legacy()"
+					printn -lf "dialog not found, switch: console_legacy()"
 					console_legacy
 				fi
 			;;
