@@ -451,8 +451,8 @@ updaten() {
 	{
 		printn -n "checking connectivity..."
 		printn -l "pinging 8.8.8.8 ..."
-		[[ "$?" != "0" ]] && printn -e "something went wrong, please check debug files."
 		pingn && PR_PREFIX="updaten"; updatealg
+		[[ "$?" != "0" ]] && printn -e "something went wrong, please check debug files."
 	}
 
 	case $* in
