@@ -504,7 +504,7 @@ else
 			"deviceinfo")
 				apin -rc
 			;;
-			"cleangarbage")
+			"clean")
 				apin -c
 			;;
 			"-sg" | "--set-green")
