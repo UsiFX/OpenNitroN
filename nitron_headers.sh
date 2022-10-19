@@ -31,7 +31,9 @@ setmoden() { echo "$1" > "$NITRON_LOG_DIR"/nitron.mode.lock ;}
 
 modelockn()
 {
-	[[ -d "$NITRON_LOG_DIR"/nitron.mode.lock ]] && setmoden "UnInitialised"
+	if [[ ! -f "$NITRON_LOG_DIR"/nitron.mode.lock ]]; then
+		setmoden "UnInitialised"
+	fi
 	MODES=$(cat "$NITRON_LOG_DIR"/nitron.mode.lock)
 	case "$MODES" in
 		"Battery")

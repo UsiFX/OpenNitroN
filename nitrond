@@ -510,14 +510,17 @@ else
 			"-sg" | "--set-green")
 				magicn -g
 				printn -n "nitrond: current mode: $(apin -mc)"
+				apin -as
 			;;
 			"-sr" | "--set-red")
 				magicn -r
 				printn -n "nitrond: current mode: $(apin -mc)"
+				apin -as
 			;;
 			"-sy" | "--set-yellow")
 				magicn -y
 				printn -n "nitrond: current mode: $(apin -mc)"
+				apin -as
 			;;
 			"-sdm" | "--show-default-mode")
 				printn -i "mode: $(apin -mc)"
