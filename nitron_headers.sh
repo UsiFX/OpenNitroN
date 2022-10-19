@@ -188,6 +188,18 @@ Options:
 				fi
 			fi
 		;;
+		"-c" | "--clean")
+			UPDATECACHE=("$NITRON_LOG_DIR/nitrond_src_cache" "$NITRON_LOG_DIR/nitronh_src_cache")
+			BACKUPCACHE=("$NITRON_LOG_DIR/nitrond_current" "$NITRON_LOG_DIR/nitronh_current")
+			MODELOCK="$NITRON_LOG_DIR/nitron.mode.lock"
+			printn -i "Removing update caches..."
+			rm -rf "${UPDATECACHE[@]}"
+			printn -i "Removing Old Backups..."
+			rm -rf "${BACKUPCACHE[@]}"
+			printn -i "Resetting Mode information..."
+			rm -rf "$MODELOCK"
+			modelockn
+		;;
 		*)
 			__api_help
 		;;

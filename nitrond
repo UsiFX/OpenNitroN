@@ -474,6 +474,7 @@ Usage: nitrond [OPTION] (e.g. nitrond --update)
 
 Commands:
   deviceinfo			~ shows device resource information
+  clean				~ wipe stored nitron data
 
 Options:
   -sdm, --show-default-mode     ~ prints current tweaking mode
@@ -502,6 +503,9 @@ else
 		case "${arg}" in
 			"deviceinfo")
 				apin -rc
+			;;
+			"cleangarbage")
+				apin -c
 			;;
 			"-sg" | "--set-green")
 				magicn -g
