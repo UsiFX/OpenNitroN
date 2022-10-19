@@ -140,6 +140,7 @@ apin() {
 		echo "Nitron Daemon Version: $(apin -dv)"
 		echo "Nitron Header Version: $(apin -hv)"
 		echo "Nitron Installation type: $INSTALLATION"
+		echo "Nitron Current mode: $(apin -mc)"
 	}
 
 	__api_help()
