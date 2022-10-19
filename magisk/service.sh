@@ -14,6 +14,9 @@ until [[ "$(getprop sys.boot_completed)" -eq "1" ]] || [[ "$(getprop dev.bootcom
 	sleep 1
 done
 
+# work on clean
+nitrond --clean > /dev/null
+
 # update on every boot
 nitrond --update > /dev/null
 
