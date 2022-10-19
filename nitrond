@@ -535,7 +535,7 @@ the terms of the GNU Generic Public License."
 					console_legacy
 				fi
 			;;
-			"-h" | "--help") __nitron_help ;;
+			*"?"* | "h"* | "-h" | "--help") __nitron_help ;;
 			"-u" | "--update") updaten -a ;;
 			"-d" | "--debug")
 				set -x 2>"$NITRON_LOG_DIR"/nitron.verbose.log
