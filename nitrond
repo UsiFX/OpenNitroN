@@ -421,8 +421,8 @@ updaten() {
 		else
 			printn -i "Header is up to date, $(apin -hv)"
 		fi
-		return 0
 		printn -l "update process(es) finished"
+		return 0
 	}
 
 	rollbackalg()
@@ -446,6 +446,7 @@ updaten() {
 			printn -i "there is no difference between current header update(s) and previous one(s)."
 		fi
 		printn -l "downgrade process(es) finished"
+		return 0
 	}
 
 	init()
