@@ -403,8 +403,8 @@ updaten() {
 		} || printn -e "curl is not available in the system, cannot update."
 		PR_PREFIX="updaten"
 		printn -w "backing up..."
-		cp "$0" "$NITRON_LOG_DIR/nitrond_current"
-		cp "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current"
+		cp "$0" "$NITRON_LOG_DIR/nitrond_current" >/dev/null
+		cp "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current" >/dev/null
 		[[ "$PLATFORM" == "Android" ]] && {
 			printn -w "modifying downloaded update interepter..."
 			sed -i '1c\#!/system/bin/sh' "$NITRON_LOG_DIR/nitrond_src_cache"
@@ -414,15 +414,14 @@ updaten() {
 			cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
 		else
 			printn -i "Daemon is up to date, $(apin -dv)"
-			return 0
 		fi
 		if [[ "$(diff "$NITRON_LOG_DIR/nitronh_src_cache" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
 			printn -i "attempting to update headers..."
 			cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitron_headers.sh"
 		else
 			printn -i "Header is up to date, $(apin -hv)"
-			return 0
 		fi
+		return 0
 	}
 
 	rollbackalg()
@@ -551,7 +550,7 @@ the terms of the GNU Generic Public License."
 				fi
 			;;
 			*"?"* | "h"* | "-h" | "--help") __nitron_help ;;
-			"-u" | "--update") updaten -a ;;
+			"-u" | "--update") updaten -a; return 0 ;;
 			"-d" | "--debug")
 				set -x 2>"$NITRON_LOG_DIR"/nitron.verbose.log
 				printn -w "execution under debug, please provide arguments to debug"
