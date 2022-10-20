@@ -17,10 +17,12 @@ done
 # work on clean
 nitrond clean >/dev/null
 
+sleep 100
+
 # update on every boot
 nitrond --update >/dev/null
 
 # dump information
-nitrond deviceinfo >> /sdcard/nitron.boot.log
-sleep 100
+nitrond deviceinfo >> "/sdcard/nitron.boot.log"
+
 nitrond &
