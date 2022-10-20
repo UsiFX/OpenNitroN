@@ -40,7 +40,8 @@ main()
 	ui_print "[SoC]: $(getprop ro.product.board)"
 	sleep 0.5
 	ui_print ""
-	ui_print "[~] I'd Suggest You To Not To Use Any Performance Module With This, To Avoid Confliction 🚫"
+	ui_print "[~] I'd Suggest You To Not To Use Any Performance Module"
+	ui_print "    With This, To Avoid Conflictions 🚫"
 	ui_print ""
 
 	set_permissions()
@@ -64,6 +65,10 @@ main()
 	sleep 0.5
 	ui_print "[*] Installed Headers"
 	ui_print ""
+	if ! command -v "curl"; then
+		ui_print "[!] cURL is not found on system,"
+		ui_print "      Universal Updater won't work!"
+	fi
 }
 
 main
