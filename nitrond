@@ -412,11 +412,15 @@ updaten() {
 		if [[ "$(diff "$NITRON_LOG_DIR/nitrond_src_cache" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
 			printn -i "updating..."
 			cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
-		elif [[ "$(diff "$NITRON_LOG_DIR/nitronh_src_cache" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
+		else
+			printn -i "Daemon is up to date, $(apin -dv)"
+			return 0
+		fi
+		if [[ "$(diff "$NITRON_LOG_DIR/nitronh_src_cache" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
 			printn -i "attempting to update headers..."
 			cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitron_headers.sh"
 		else
-			printn -i "up to date."
+			printn -i "Header is up to date, $(apin -hv)"
 			return 0
 		fi
 	}
@@ -425,17 +429,21 @@ updaten() {
 	{
 		if [[ ! -f "$NITRON_LOG_DIR"/nitrond_current ]]; then
 			printn -e "previous daemon update cache is unavailable"
-		elif [[ ! -f "$NITRON_LOG_DIR"/nitronh_current ]]; then
+		fi
+		if [[ ! -f "$NITRON_LOG_DIR"/nitronh_current ]]; then
 			printn -e "previous header update cache is unavailable"
 		fi
 		if [[ "$(diff "$0" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
-			printn -i "downgrading..."
+			printn -n "downgrading..."
 			cat "$NITRON_LOG_DIR/nitrond_current" > "$0"
-		elif [[ "$(diff "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
-			printn -i "attempting to downgrade headers..."
+		else
+			printn -i "there is no difference between current daemon update(s) and previous one(s)."
+		fi
+		if [[ "$(diff "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
+			printn -n "attempting to downgrade headers..."
 			cat "$NITRON_LOG_DIR/nitronh_current" > "$HEADER_SOURCE/nitron_headers.sh"
 		else
-			printn -i "there is no difference between current update and previous one."
+			printn -i "there is no difference between current header update(s) and previous one(s)."
 		fi
 	}
 
