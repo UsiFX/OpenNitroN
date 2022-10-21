@@ -527,7 +527,7 @@ else
 				pkill -f libauto >/dev/null 2>&1
 				setmoden "Automatic"
 				apin -as
-				(. "$HEADER_SOURCE"/libauto.sh) &
+				(. "$HEADER_SOURCE"/libauto.sh &) &
 			;;
 			"-sg" | "--set-green")
 				magicn -g
