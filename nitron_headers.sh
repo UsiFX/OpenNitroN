@@ -45,6 +45,9 @@ modelockn()
 		"Gaming")
 			setmoden "Gaming"
 		;;
+		"Automatic")
+			setmoden "Automatic"
+		;;
 	esac
 }
 
@@ -184,6 +187,9 @@ Options:
 						"Gaming")
 							sed -i '/description=/s/.*/description=[ 🟥 Gaming mode applied ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
 						;;
+						"Automatic")
+							sed -i '/description=/s/.*/description=[ ⚡ Automatic mode applied ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
+						;;
 						*)
 							sed -i '/description=/s/.*/description=[ 🤔 Uninitialized ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
 						;;
@@ -202,6 +208,9 @@ Options:
 			printn -i "Resetting Mode information..."
 			rm -rf "$MODELOCK"
 			modelockn
+		;;
+		"-cl" | "--clear-log")
+			rm -rf "$NITRON_LOG_DIR"/nitron.log
 		;;
 		*)
 			__api_help

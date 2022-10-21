@@ -34,14 +34,15 @@ STOCK='\e[1;0m'
 export NITRON_FORCECHECK_UPDATE
 export NITRON_VERSION='1.0.6-staging'
 grep -q "androidboot" /proc/cmdline && HEADER_SOURCE="/system/etc" || HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
-grep -q "androidboot" /proc/cmdline && NITRON_LOG_DIR='/cache' || NITRON_LOG_DIR='/tmp'
+grep -q "androidboot" /proc/cmdline && NITRON_RELAX_DIR='/sdcard'; NITRON_LOG_DIR='/cache' || { NITRON_RELAX_DIR='/etc' ; NITRON_LOG_DIR='/tmp'; }
 PR_PREFIX="nitron_broadcast"
 DAEMON_SOURCE=$(dirname "$0")
 PROMPT_COMMAND='sync'
 
 # Include headers
-if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]]; then
+if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]] || [[ ! -f $HEADER_SOURCE/libauto.sh ]]; then
 	echo "missing header, $HEADER_SOURCE/nitron_headers.sh"
+	echo "missing library, $HEADER_SOURCE/libauto.sh"
 	exit 1
 else
 	source "$HEADER_SOURCE"/nitron_headers.sh
@@ -62,6 +63,9 @@ printn() {
 	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[0]: $2" >>"$NITRON_LOG_DIR"/nitron.log
 
 	[[ "$1" == "-lf" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[1]: $2" >>"$NITRON_LOG_DIR"/nitron.log
+
+	[[ "$1" == "-ll" ]] && echo "[$(date +%I:%M:%S)] nitrond: $2" >>"$NITRON_RELAX_DIR"/nitron.log
+
 }
 
 writen() {
@@ -485,6 +489,7 @@ Usage: nitrond [OPTION] (e.g. nitrond --update)
 Commands:
   deviceinfo			~ shows device resource information
   clean				~ wipe stored nitron data
+  auto				~ automatically decide mode switchment up on Environment status
 
 Options:
   -sdm, --show-default-mode     ~ prints current tweaking mode
@@ -516,6 +521,13 @@ else
 			;;
 			"clean")
 				apin -c
+			;;
+			"auto")
+				killall -9 libauto.sh >/dev/null 2>&1
+				pkill -f libauto.sh >/dev/null 2>&1
+				setmoden "Automatic"
+				apin -as
+				(. "$HEADER_SOURCE"/libauto.sh &) &
 			;;
 			"-sg" | "--set-green")
 				magicn -g
