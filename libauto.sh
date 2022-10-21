@@ -13,7 +13,9 @@ com.mojang.minecraftpe
 com.activision.callofduty.shooter
 " >> "$NITRON_RELAX_DIR/nitron.auto.conf"
 
+pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
 pkggrab=$(ps -A -o %CPU,NAME)
+pidgrab=$(ps -A -o PID)
 cpuisinload=$(ps -A -o %CPU | awk -F: '{if($1>75)print$1}')
 cpuisinsuffer=$(ps -A -o %CPU | awk -F: '{if($1>85)print$1}')
 
@@ -34,23 +36,17 @@ auto()
 	elif [[ "$cpuisinload" -gt 85 ]]; then
 		magicn -y
 		printn -ll "heavy process(es) detected, applied balance mode"
-	else
-		magicn -g
-		printn -ll "no heavy load in CPU, relaxing with green mode"
 	fi
-	for pkgs in $(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
+	for relax in $(pidof ${pkgs[@]})
 	do
-		for pids in $(pgrep -f "${pkgs[@]}")
-		do
-			if [[ "$pids" == *"$pkggrab"* ]]; then
-				magicn -r
-				printn -ll "detected running app which available in configs, applied Red mode."
-			fi
-		done
+		if [[ "$pidgrab" == *"$relax"* ]] ; then
+			magicn -r
+			printn -ll "detected running app which available in configs, applied Red mode."
+		fi
 	done
 }
 
 while true; do
-	sleep 150
+	sleep 100
 	auto
 done

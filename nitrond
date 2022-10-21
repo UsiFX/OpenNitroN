@@ -523,11 +523,11 @@ else
 				apin -c
 			;;
 			"auto")
-				killall -9 libauto.sh >/dev/null 2>&1
-				pkill -f libauto.sh >/dev/null 2>&1
+				killall -9 libauto >/dev/null 2>&1
+				pkill -f libauto >/dev/null 2>&1
 				setmoden "Automatic"
 				apin -as
-				(. "$HEADER_SOURCE"/libauto.sh &) &
+				(. "$HEADER_SOURCE"/libauto.sh) &
 			;;
 			"-sg" | "--set-green")
 				magicn -g
