@@ -87,8 +87,8 @@ apin() {
 	esac
 
 	# Battery total capacity
-	batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design)
-	[[ "$batt_cpct" == "" ]] && batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
+	[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design)
+ || batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
 
 	instype()
 	{
