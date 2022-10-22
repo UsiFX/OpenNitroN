@@ -347,7 +347,11 @@ oschk()
 			return 0
 		;;
 		"Linux")
-			PLATFORM="Linux"
+			if grep -q "androidboot" /proc/cmdline; then
+				PLATFORM="Android"
+			else
+				PLATFORM="Linux"
+			fi
 			printn -l "OS: $PLATFORM"
 			return 0
 		;;
