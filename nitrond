@@ -39,16 +39,6 @@ PR_PREFIX="nitron_broadcast"
 DAEMON_SOURCE=$(dirname "$0")
 PROMPT_COMMAND='sync'
 
-# Include headers
-if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]] || [[ ! -f $HEADER_SOURCE/libauto.sh ]]; then
-	echo "missing header, $HEADER_SOURCE/nitron_headers.sh"
-	echo "missing library, $HEADER_SOURCE/libauto.sh"
-	exit 1
-else
-	source "$HEADER_SOURCE"/nitron_headers.sh
-	source "$HEADER_SOURCE"/libauto.sh
-fi
-
 printn() {
 	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
 
@@ -68,6 +58,16 @@ printn() {
 	[[ "$1" == "-ll" ]] && echo "[$(date +%I:%M:%S)] nitrond: $2" >>"$NITRON_RELAX_DIR"/nitron.log
 
 }
+
+# Include headers
+if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]] || [[ ! -f $HEADER_SOURCE/libauto.sh ]]; then
+	echo "missing header, $HEADER_SOURCE/nitron_headers.sh"
+	echo "missing library, $HEADER_SOURCE/libauto.sh"
+	exit 1
+else
+	source "$HEADER_SOURCE"/nitron_headers.sh
+	source "$HEADER_SOURCE"/libauto.sh
+fi
 
 writen() {
 	[[ ! -f "$1" ]] && {
