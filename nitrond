@@ -527,6 +527,8 @@ else
 				pkill -f libauto >/dev/null 2>&1
 				setmoden "Automatic"
 				apin -as
+				printn -i "nitrond will stay on background, it's safe to terminate the session."
+				printn -w "run 'killall -9 nitrond' to force stop the daemon"
 				(. "$HEADER_SOURCE"/libauto.sh &) &
 			;;
 			"-sg" | "--set-green")
