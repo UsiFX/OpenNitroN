@@ -170,7 +170,7 @@ Options:
 			echo "$NITRON_HEADER_VERSION"
 		;;
 		"-lbv" | "--library-version")
-			echo "$NITRON_AUTOLIB_VERSION"
+			echo "$NITRON_LIBAUTO_VERSION"
 		;;
 		"-mc" | "--mode-check")
 			modelockn
