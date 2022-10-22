@@ -46,6 +46,7 @@ if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]] || [[ ! -f $HEADER_SOURCE/libauto
 	exit 1
 else
 	source "$HEADER_SOURCE"/nitron_headers.sh
+	source "$HEADER_SOURCE"/libauto.sh
 fi
 
 printn() {
@@ -529,7 +530,7 @@ else
 				apin -as
 				printn -i "nitrond will stay on background, it's safe to terminate the session."
 				printn -w "run 'killall -9 nitrond' to force stop the daemon"
-				(. "$HEADER_SOURCE"/libauto.sh &) &
+				(. "$HEADER_SOURCE"/libauto.sh -d &) &
 			;;
 			"-sg" | "--set-green")
 				magicn -g
@@ -550,7 +551,7 @@ else
 				printn -i "mode: $(apin -mc)"
 			;;
 			"-v" | "--version")
-				echo -e "Nitron Daemon $(apin -dv) - nitron_headers $(apin -hv)
+				echo -e "Nitron Daemon $(apin -dv) - nitron_headers $(apin -hv) - libauto $(apin -lbv)
 Copyright (C) 2022-2023 UsiFX <xprjkts@gmail.com>
 Copyright (C) 2022-2023 Kartik728 <titanupdates728@gmail.com>
 

@@ -13,6 +13,7 @@ com.mojang.minecraftpe
 com.activision.callofduty.shooter
 " >> "$NITRON_RELAX_DIR/nitron.auto.conf"
 
+NITRON_LIBAUTO_VERSION='1.0.2'
 pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
 printavailpids=$(ps -A -o PID)
 cpuisinload=$(ps -A -o %CPU | awk -F: '{if($1>75)print$1}')
@@ -41,7 +42,11 @@ auto()
 	done
 }
 
-while true; do
-	sleep 120
-	auto
-done
+case $@ in
+	"-d" | "--daemon")
+		while true; do
+			sleep 120
+			auto
+		done
+	;;
+esac
