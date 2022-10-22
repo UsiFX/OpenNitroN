@@ -336,18 +336,18 @@ oschk()
 			return 0
 		;;
 		"Linux")
-			if grep -q "androidboot" /proc/cmdline; then
-				PLATFORM="Android"
-			else
-				PLATFORM="Linux"
-			fi
+			PLATFORM="Linux"
 			printn -l "OS: $PLATFORM"
 			return 0
 		;;
 		*)
-			PLATFORM="Unknown"
-			printn -lf "OS: $PLATFORM"
-			printn -e "Unknown Operating System, cannot start."
+			if grep -q "androidboot" /proc/cmdline; then
+				PLATFORM="Android"
+			else
+				PLATFORM="Unknown"
+				printn -lf "OS: $PLATFORM"
+				printn -e "Unknown Operating System, cannot start."
+			fi
 		;;
 	esac
 }
