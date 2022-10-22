@@ -402,8 +402,8 @@ updaten() {
 	{
 		printn -i "looking for update..."
 		cmdavail curl && {
-			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
-			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitron_headers.sh" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/1.0.6-wip/nitrond" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/1.0.6-wip/nitron_headers.sh" 2>/dev/null
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 		} || printn -e "curl is not available in the system, cannot update."
 		PR_PREFIX="updaten"
