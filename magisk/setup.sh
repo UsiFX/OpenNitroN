@@ -65,6 +65,12 @@ main()
 	sleep 0.5
 	ui_print "[*] Installed Headers"
 	ui_print ""
+	ui_print "[*] Installing Libraries..."
+	sleep 0.5
+	cp -af "$MODPATH/libauto.sh" "$MODPATH/system/etc"
+	sleep 0.5
+	ui_print "Installed Libraries"
+	ui_print ""
 	if ! command -v "curl" >/dev/null; then
 		ui_print "[!] cURL is not found on system,"
 		ui_print "      Universal Updater won't work!"
