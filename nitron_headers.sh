@@ -48,6 +48,16 @@ modelockn()
 		"Automatic")
 			setmoden "Automatic"
 		;;
+		"Automatic [green]")
+			setmoden "Automatic [green]"
+
+		;;
+		"Automatic [yellow]")
+			setmoden "Automatic [yellow]"
+		;;
+		"Automatic [red]")
+			setmoden "Automatic [red]"
+		;;
 	esac
 }
 
@@ -134,6 +144,7 @@ apin() {
 		echo "Machine: $(uname -m)"
 		echo "CPU Governor: $cpu_gov"
 		echo "CPU Cores: $nr_cores"
+		echo "CPU Usage: $cputotalusage%"
 		echo "Battery Percentage: $batt_pctg%"
 		echo "Battery Health: $batt_hth"
 		echo "Battery Status: $batt_sts"

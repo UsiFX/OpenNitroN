@@ -110,7 +110,7 @@ apin -as
 magicn() {
 	PR_PREFIX="magicn"
 	set_battery_mode() {
-		setmoden "Battery"
+		[[ "$SOURCE" == "libauto" ]] && setmoden "Automatic [green]" || setmoden "Battery"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -186,7 +186,7 @@ magicn() {
 		writen /dev/stune/schedtune.prefer_idle 1
 	}
 	set_balanced_mode() {
-		setmoden "Balanced"
+		[[ "$SOURCE" == "libauto" ]] && setmoden "Automatic [yellow]" || setmoden "Balanced"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 1
@@ -258,7 +258,7 @@ magicn() {
 		writen /dev/stune/schedtune.boost 0
 	}
 	set_gaming_mode() {
-		setmoden "Gaming"
+		[[ "$SOURCE" == "libauto" ]] && setmoden "Automatic [red]" || setmoden "Gaming"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
 		writen /proc/sys/kernel/sched_autogroup_enabled 0
 		writen /proc/sys/kernel/sched_child_runs_first 0
