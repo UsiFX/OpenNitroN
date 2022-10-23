@@ -404,12 +404,14 @@ updaten() {
 		cmdavail curl && {
 			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/1.0.6-wip/nitrond" 2>/dev/null
 			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/1.0.6-wip/nitron_headers.sh" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitronl_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/1.0.6-wip/libauto.sh" 2>/dev/null
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 		} || printn -e "curl is not available in the system, cannot update."
 		PR_PREFIX="updaten"
 		printn -w "backing up..."
 		cp "$0" "$NITRON_LOG_DIR/nitrond_current" >/dev/null
 		cp "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current" >/dev/null
+		cp "$HEADER_SOURCE/libauto.sh" "$NITRON_LOG_DIR/nitronl_current" >/dev/null
 		[[ "$PLATFORM" == "Android" ]] && {
 			printn -w "modifying downloaded update interepter..."
 			sed -i '1c\#!/system/bin/sh' "$NITRON_LOG_DIR/nitrond_src_cache"
@@ -425,6 +427,12 @@ updaten() {
 			cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitron_headers.sh"
 		else
 			printn -i "Header is up to date, $(apin -hv)"
+		fi
+		if [[ "$(diff "$NITRON_LOG_DIR/nitronl_src_cache" "$NITRON_LOG_DIR/nitronl_current")" ]]; then
+			printn -i "attempting to update libraries..."
+			cat "$NITRON_LOG_DIR/nitronl_src_cache" > "$HEADER_SOURCE/libauto.sh"
+		else
+			printn -i "Library is up to date, $(apin -lv)"
 		fi
 		printn -l "update process(es) finished"
 		return 0
