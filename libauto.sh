@@ -15,18 +15,17 @@ com.activision.callofduty.shooter
 
 NITRON_LIBAUTO_VERSION='1.0.2'
 pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
-printavailpids=$(ps -A -o PID)
-cpuisinload=$(ps -A -o %CPU | awk -F: '{if($1>75)print$1}')
-cpuisinsuffer=$(ps -A -o %CPU | awk -F: '{if($1>85)print$1}')
+cpuisinload=$(ps -A -o %CPU | awk -F: '{if($1>75)print$1}' | cut -f1 -d\.)
+cpuisinsuffer=$(ps -A -o %CPU | awk -F: '{if($1>85)print$1}' | cut -f1 -d\.)
 
 printn -ll "nitrond: starting modifying modes up on Packages availability & Resource usage"
 
 auto()
 {
 	apin -cl
-	for relax in $(pidof ${pkgs[@]})
+	for relax in "$(pidof ${pkgs[@]} | tr ' ' '\n')"
 	do
-		if [[ "$relax" == *"$printavailpids"* ]]; then
+		if [[ "$(ps -A -o PID | grep "$relax")" ]]; then
 			if [[ "batt_pctg" -lt "25" ]]; then
 				magicn -g
 				printn -ll "battery is under %25, applied green mode"
