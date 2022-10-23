@@ -528,6 +528,9 @@ else
 				pkill -f libauto >/dev/null 2>&1
 				setmoden "Automatic"
 				apin -as
+				rm -rf "$NITRON_RELAX_DIR"/nitron.log
+				apin -rc >> "$NITRON_RELAX_DIR"/nitron.log
+				printn -ll "nitrond: starting modifying modes up on Packages availability & Resource usage"
 				printn -i "nitrond will stay on background, it's safe to terminate the session."
 				printn -w "run 'killall -9 nitrond' to force stop the daemon"
 				(. "$HEADER_SOURCE"/libauto.sh -d &) &
