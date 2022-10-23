@@ -10,6 +10,47 @@
 
 export NITRON_HEADER_VERSION='2.0.0'
 
+# Resource variables
+cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
+
+# Number of CPU cores
+nr_cores=$(awk -F "-" '{print $2}' "/sys/devices/system/cpu/possible")
+nr_cores=$((nr_cores + 1))
+
+# CPU Usage
+cputotalusage=$(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage ""}' | cut -f1 -d\.)
+
+# Battery info
+# Current battery capacity available
+[[ -e "/sys/class/power_supply/battery/capacity" ]] && batt_pctg=$(cat /sys/class/power_supply/battery/capacity) || batt_pctg=$(dumpsys battery 2>/dev/null | awk '/level/{print $2}')
+
+# Battery health
+batt_hth=$(dumpsys battery | awk '/health/{print $2}')
+[[ -e "/sys/class/power_supply/battery/health" ]] && batt_hth=$(cat /sys/class/power_supply/battery/health)
+case "$batt_hth" in
+	1) batt_hth="Unknown" ;;
+	2) batt_hth="Good" ;;
+	3) batt_hth="Overheat" ;;
+	4) batt_hth="Dead" ;;
+	5) batt_hth="OV" ;;
+	6) batt_hth="UF" ;;
+	7) batt_hth="Cold" ;;
+esac
+
+# Battery status
+batt_sts=$(dumpsys battery | awk '/status/{print $2}')
+[[ -e "/sys/class/power_supply/battery/status" ]] && batt_sts=$(cat /sys/class/power_supply/battery/status)
+case "$batt_sts" in
+	1) batt_sts="Unknown" ;;
+	2) batt_sts="Charging" ;;
+	3) batt_sts="Discharging" ;;
+	4) batt_sts="Not charging" ;;
+	5) batt_sts="Full" ;;
+esac
+
+# Battery total capacity
+[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
+
 cmdavail() {
 	PR_PREFIX="cmdavail"
 	if command -v "$1" >/dev/null; then
@@ -62,43 +103,6 @@ modelockn()
 }
 
 apin() {
-	cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
-
-	# Number of CPU cores
-	nr_cores=$(awk -F "-" '{print $2}' "/sys/devices/system/cpu/possible")
-	nr_cores=$((nr_cores + 1))
-
-	# Battery info
-	# Current battery capacity available
-	[[ -e "/sys/class/power_supply/battery/capacity" ]] && batt_pctg=$(cat /sys/class/power_supply/battery/capacity) || batt_pctg=$(dumpsys battery 2>/dev/null | awk '/level/{print $2}')
-
-	# Battery health
-	batt_hth=$(dumpsys battery | awk '/health/{print $2}')
-	[[ -e "/sys/class/power_supply/battery/health" ]] && batt_hth=$(cat /sys/class/power_supply/battery/health)
-	case "$batt_hth" in
-		1) batt_hth="Unknown" ;;
-		2) batt_hth="Good" ;;
-		3) batt_hth="Overheat" ;;
-		4) batt_hth="Dead" ;;
-		5) batt_hth="OV" ;;
-		6) batt_hth="UF" ;;
-		7) batt_hth="Cold" ;;
-	esac
-
-	# Battery status
-	batt_sts=$(dumpsys battery | awk '/status/{print $2}')
-	[[ -e "/sys/class/power_supply/battery/status" ]] && batt_sts=$(cat /sys/class/power_supply/battery/status)
-	case "$batt_sts" in
-		1) batt_sts="Unknown" ;;
-		2) batt_sts="Charging" ;;
-		3) batt_sts="Discharging" ;;
-		4) batt_sts="Not charging" ;;
-		5) batt_sts="Full" ;;
-	esac
-
-	# Battery total capacity
-	[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
-
 	instype()
 	{
 		if [[ "$(su --version)" == *"MAGISK"* ]]; then
