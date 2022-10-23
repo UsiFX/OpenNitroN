@@ -432,7 +432,7 @@ updaten() {
 			printn -i "attempting to update libraries..."
 			cat "$NITRON_LOG_DIR/nitronl_src_cache" > "$HEADER_SOURCE/libauto.sh"
 		else
-			printn -i "Library is up to date, $(apin -lv)"
+			printn -i "Library is up to date, $(apin -lbv)"
 		fi
 		printn -l "update process(es) finished"
 		return 0
