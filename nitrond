@@ -229,8 +229,6 @@ magicn() {
 		writen /sys/devices/system/cpu/cpufreq/policy6/scaling_governor schedutil
 		writen /proc/ppm/policy/hard_userlimit_max_cpu_freq 2000000
 		writen /proc/ppm/policy/hard_userlimit_min_cpu_freq 850000
-		writen /proc/ppm/policy/hard_userlimit_max_cpu_freq 1700000
-		writen /proc/ppm/policy/hard_userlimit_min_cpu_freq 500000
 		writen /dev/cpuset/foreground/cpus 0-7
 		writen /dev/cpuset/background/cpus 0-6
 		writen /dev/cpuset/system-background/cpus 0-4
