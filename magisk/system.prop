@@ -2,7 +2,9 @@
 # OpenNitron™ by Kartik728 (Kartik728 @ GitHub)
 # If you wanna use it as part of your project, please maintain the credits to it's respectives authors.
 
-# NiTRON Battery Mods
+## NiTRON Props ##
+
+# Battery Mods
 persist.sys.shutdown.mode=hibernate
 persist.radio.add_power_save=0
 wifi.supplicant_scan_interval=225
@@ -17,7 +19,7 @@ ro.ril.sensor.sleep.control=1
 power_supply.wakeup=enable
 ro.config.hw_power_saving=true
 
-# NiTRON Miscellaneous Android Logging Disabler
+# Miscellaneous Android Logging Disabler
 debugtool.anrhistory=0
 ro.com.google.locationfeatures=0
 ro.com.google.networklocation=0
@@ -47,7 +49,7 @@ debug.atrace.tags.enableflags=0
 debugtool.anrhistory=0
 profiler.hung.dumpdobugreport=false
 
-# NiTRON Touch Calibrator
+# Touch Calibrator
 touch.pressure.scale=0.0001
 touch.orientationAware=0
 persist.sys.ui.hw=1
@@ -72,3 +74,5 @@ MovementSpeedRatio=0.8
 TapSlop=1px
 persist.dev.pm.dyn_samplingrate=1
 touch.pressure.calibration=amplitude
+
+## Beta Miscellaneous Props ##
