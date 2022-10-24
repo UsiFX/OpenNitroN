@@ -69,7 +69,7 @@ main()
 	sleep 0.5
 	cp -af "$MODPATH/libauto.sh" "$MODPATH/system/etc"
 	sleep 0.5
-	ui_print "Installed Libraries"
+	ui_print "[*] Installed Libraries"
 	ui_print ""
 	if ! command -v "curl" >/dev/null; then
 		ui_print "[!] cURL is not found on system,"

@@ -89,14 +89,14 @@ modelockn()
 		"Automatic")
 			setmoden "Automatic"
 		;;
-		"Automatic [green]")
-			setmoden "Automatic [green]"
+		"Automatic green")
+			setmoden "Automatic green"
 
 		;;
-		"Automatic [yellow]")
-			setmoden "Automatic [yellow]"
+		"Automatic yellow")
+			setmoden "Automatic yellow"
 		;;
-		"Automatic [red]")
+		"Automatic red")
 			setmoden "Automatic [red]"
 		;;
 	esac
@@ -204,7 +204,7 @@ Options:
 						"Gaming")
 							sed -i '/description=/s/.*/description=[ 🟥 Gaming mode applied ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
 						;;
-						"Automatic")
+						"Automatic"*)
 							sed -i '/description=/s/.*/description=[ ⚡ Automatic mode applied ], Extensive Optmized Kernel Tweaker Daemon By: TITΛN × Noobies./' "/data/adb/modules/nitrond.magisk/module.prop"
 						;;
 						*)

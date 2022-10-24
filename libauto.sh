@@ -53,7 +53,6 @@ case $@ in
 	"-d" | "--daemon")
 		while true; do
 			auto
-#			sleep 60
 		done
 	;;
 esac
