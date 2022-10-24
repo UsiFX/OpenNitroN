@@ -76,3 +76,8 @@ persist.dev.pm.dyn_samplingrate=1
 touch.pressure.calibration=amplitude
 
 ## Beta Miscellaneous Props ##
+
+# Enable dexoat speed profile
+persist.bg.dexopt.enable=true
+pm.dexopt.bg-dexopt=speed-profile
+pm.dexopt.shared=speed
