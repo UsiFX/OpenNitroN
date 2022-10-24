@@ -20,28 +20,32 @@ com.activision.callofduty.shooter
 NITRON_LIBAUTO_VERSION='1.0.2'
 pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
 relax=$(pidof ${pkgs[@]} | tr ' ' '\n')
+pidsavail() { ps -A -o PID | grep -q "$relax" && echo $?;}
+
 auto()
 {
 		SOURCE="libauto"
-		if [[ "$(ps -A -o PID | grep "$relax")" ]]; then
-			[[ "$batt_pctg" -lt "25" ]] && {
+		if [[ $(pidsavail) == 0 ]]; then
+			if [[ "$batt_pctg" -lt "25" ]]; then
 				if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
 					magicn -g
 					printn -ll "battery is under %25, applied green mode"
 				fi
-			} || {
+			else
 				if [[ "$cputotalusage" -gt "50" ]]; then
-					[[ "$(apin -mc | awk '{print $2}')" != "yellow" ]] || {
+					if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
+						printn -ll "cpu usage is 50%+"
 						magicn -y
 						printn -ll "heavy process(es) detected, applied balance mode."
-					}
+					fi
 				elif [[ "$cputotalusage" -gt "65" ]]; then
-					[[ "$(apin -mc | awk '{print $2}')" != "red" ]] || {
-						magicn -r
-						printn -ll "cpu is under load applied Red mode, consuming battery."
-					}
+					if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
+							printn -ll "cpu usage is 65%+"
+							magicn -r
+							printn -ll "cpu is under load applied Red mode, consuming battery."
+					fi
 				fi
-			}
+			fi
 		fi
 }
 
