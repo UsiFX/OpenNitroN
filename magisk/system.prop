@@ -81,3 +81,9 @@ touch.pressure.calibration=amplitude
 persist.bg.dexopt.enable=true
 pm.dexopt.bg-dexopt=speed-profile
 pm.dexopt.shared=speed
+
+# Disable LMK debugging
+ro.lmk.debug=false
+ro.lmk.log_stats=false
+persist.sys.lmk.reportkills=false
+sys.lmk.reportkills=0
