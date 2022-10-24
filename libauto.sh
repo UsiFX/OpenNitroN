@@ -19,7 +19,7 @@ com.activision.callofduty.shooter
 
 NITRON_LIBAUTO_VERSION='1.0.2'
 pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
-relax=$(pidof "${pkgs[@]}" | tr ' ' '\n')
+relax=$(pidof ${pkgs[@]} | tr ' ' '\n')
 auto()
 {
 		SOURCE="libauto"
@@ -30,12 +30,12 @@ auto()
 					printn -ll "battery is under %25, applied green mode"
 				fi
 			} || {
-				if [[ "$cputotalusage" -gt "70" ]]; then
+				if [[ "$cputotalusage" -gt "50" ]]; then
 					[[ "$(apin -mc | awk '{print $2}')" != "yellow" ]] || {
 						magicn -y
 						printn -ll "heavy process(es) detected, applied balance mode."
 					}
-				elif [[ "$cputotalusage" -gt "85" ]]; then
+				elif [[ "$cputotalusage" -gt "65" ]]; then
 					[[ "$(apin -mc | awk '{print $2}')" != "red" ]] || {
 						magicn -r
 						printn -ll "cpu is under load applied Red mode, consuming battery."
@@ -49,7 +49,7 @@ case $@ in
 	"-d" | "--daemon")
 		while true; do
 			auto
-			sleep 60
+#			sleep 60
 		done
 	;;
 esac
