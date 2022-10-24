@@ -32,7 +32,7 @@ YELLOW='\e[01;33m'
 STOCK='\e[1;0m'
 
 export NITRON_FORCECHECK_UPDATE
-export NITRON_VERSION='1.0.6-wip'
+export NITRON_VERSION='1.0.8-staging'
 grep -q "androidboot" /proc/cmdline && HEADER_SOURCE="/system/etc" || HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
 grep -q "androidboot" /proc/cmdline && NITRON_RELAX_DIR='/sdcard'; NITRON_LOG_DIR='/cache' || { NITRON_RELAX_DIR='/etc' ; NITRON_LOG_DIR='/tmp'; }
 PR_PREFIX="nitron_broadcast"
@@ -400,9 +400,9 @@ updaten() {
 	{
 		printn -i "looking for update..."
 		cmdavail curl && {
-			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/1.0.6-wip/nitrond" 2>/dev/null
-			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/1.0.6-wip/nitron_headers.sh" 2>/dev/null
-			curl -o "$NITRON_LOG_DIR/nitronl_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/1.0.6-wip/libauto.sh" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitron_headers.sh" 2>/dev/null
+			curl -o "$NITRON_LOG_DIR/nitronl_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/libauto.sh" 2>/dev/null
 			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 		} || printn -e "curl is not available in the system, cannot update."
 		PR_PREFIX="updaten"

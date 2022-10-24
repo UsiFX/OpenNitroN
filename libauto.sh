@@ -17,7 +17,7 @@ com.mojang.minecraftpe
 com.activision.callofduty.shooter
 " >> "$NITRON_RELAX_DIR/nitron.auto.conf"
 
-NITRON_LIBAUTO_VERSION='1.0.2'
+NITRON_LIBAUTO_VERSION='1.1.0'
 pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
 relax=$(pidof ${pkgs[@]} | tr ' ' '\n')
 pidsavail() { ps -A -o PID | grep -q "$relax" && echo $?;}
