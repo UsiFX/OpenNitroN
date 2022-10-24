@@ -87,3 +87,23 @@ ro.lmk.debug=false
 ro.lmk.log_stats=false
 persist.sys.lmk.reportkills=false
 sys.lmk.reportkills=0
+
+# Improve Overall Performance
+debug.performance.tuning=1
+ro.zygote.preload.enable=0
+ro.zygote.preload.disable=1
+persist.sys.autoclearsave=3
+persist.preload.common=1
+persist.zygote.preload_threads=3
+ro.cpufreq.game=1
+debug.gralloc.gfx_ubwc_disable=0
+persist.sys.force_sw_gles=0
+persist.radio.atfwd.start=true
+ro.kernel.qemu.gles=0 
+sdm.debug.disable_scalar=0
+sdm.debug.disable_inline_rotator=1
+sdm.debug.disable_inline_rotator_secure=1
+sdm.debug.prefersplit=1
+sdm.debug.disable_dest_sc=1
+sys.disable_ext_animation=1
+sdm.debug.disable_partial_split=1
