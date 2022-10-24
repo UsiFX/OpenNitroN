@@ -8,7 +8,7 @@
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
-export NITRON_HEADER_VERSION='2.0.0'
+export NITRON_HEADER_VERSION='2.1.0'
 
 # Resource variables
 cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
