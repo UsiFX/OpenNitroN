@@ -2,6 +2,8 @@
 # shellcheck disable=SC2148
 # shellcheck disable=SC2034
 # shellcheck disable=SC2154
+# shellcheck disable=SC2009
+# shellcheck disable=SC2068
 #
 # nitronD AutoMaticProfiler
 #

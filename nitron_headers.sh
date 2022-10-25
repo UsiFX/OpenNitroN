@@ -1,6 +1,7 @@
 #
 # shellcheck disable=SC2148
 # shellcheck disable=SC2034
+# shellcheck disable=SC2117
 #
 # nitronD Headers.
 #

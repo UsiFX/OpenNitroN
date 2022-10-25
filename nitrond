@@ -5,6 +5,7 @@
 # shellcheck disable=SC2015
 # shellcheck disable=SC1087
 # shellcheck disable=SC2181
+# shellcheck disable=SC2261
 #
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 # Kartik728 <titanupdates728@gmail.com>
