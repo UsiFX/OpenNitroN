@@ -170,6 +170,11 @@ Options:
   -rc, --resource-check		~ prints hardware resources information
   -dv, --daemon-version         ~ prints daemon version
   -hv, --header-version         ~ prints header version
+  -lbv, --library-version	~ prints library version
+  -mc, --mode-check		~ prints current mode
+  -as, --android-status		~ updates magisk module description overlay
+  -cl, --clear-log		~ clean daemon log only
+  -c, --clean			~ cleans entirely all created files by daemon
   -h, --help			~ prints this help menu
 "
 	}
