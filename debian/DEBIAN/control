@@ -1,5 +1,6 @@
 Package: NitronX
 Version: 1.0.9-staging
 Architecture: all
+Depends: upower
 Maintainer: UsiFX <xprjkts@gmail.com>
 Description: Extensive, Enhanced kernel tweaker daemon
