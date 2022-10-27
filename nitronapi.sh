@@ -425,6 +425,7 @@ console_dialog() {
 						mainmenu
 					;;
 					5)
+						clear
 						exit 0
 					;;
 				esac
@@ -464,6 +465,7 @@ console_dialog() {
 				fi
 			;;
 			5)
+				clear
 				exit 0
 			;;
 		esac
