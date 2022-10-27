@@ -337,29 +337,136 @@ com.activision.callofduty.shooter
 }
 
 console_dialog() {
-	PR_PREFIX="console_dialog"
-	HEIGHT=16
-	WIDTH=40
-	CHOICE_HEIGHT=30
-	BACKTITLE="The Open NitroN Kernel tweaking Project"
-	MENU="Choose one of the following options: "
-	OPTIONS=(1 "Switch Mode"
-		2 "Show device stats"
-		3 "Update"
-		4 "Show help menu"
-		5 "Exit"
-	)
-	CHOICE=$(dialog --clear \
-		--backtitle "$BACKTITLE" \
-		--title "$TITLE" \
-		--menu "$MENU" \
-		$HEIGHT $WIDTH $CHOICE_HEIGHT \
-		"${OPTIONS[@]}" \
-		2>&1 >/dev/tty)
-	clear
-	case "${CHOICE}" in
-		*) printn -e "WIP" ;;
-	esac
+	mainmenu() {
+		PR_PREFIX="console_dialog"
+		HEIGHT=16
+		WIDTH=40
+		CHOICE_HEIGHT=30
+		BACKTITLE="The Open NitroN Kernel tweaking Project"
+		MENU="Choose one of the following options: "
+		OPTIONS=(1 "Switch Mode"
+			2 "Show device stats"
+			3 "Update"
+			4 "Show help menu"
+			5 "Exit"
+		)
+		CHOICE=$(dialog --clear \
+			--backtitle "$BACKTITLE" \
+			--title "$TITLE" \
+			--menu "$MENU" \
+			$HEIGHT $WIDTH $CHOICE_HEIGHT \
+			"${OPTIONS[@]}" \
+			2>&1 >/dev/tty)
+	}
+		mainmenu
+		clear
+		case "${CHOICE}" in
+			1)
+				submenu() {
+					MENU="Choose one of the following Modes: "
+					SUBOPTIONS=(1 "Battery (Green)"
+						2 "Balanced (Yellow)"
+						3 "Gaming (Red)"
+						4 "Back to main menu"
+						5 "Exit"
+					)
+					SUBCHOICE=$(dialog --clear \
+						--backtitle "$BACKTITLE" \
+						--title "$TITLE" \
+						--menu "$MENU" \
+						$HEIGHT $WIDTH $CHOICE_HEIGHT \
+						"${SUBOPTIONS[@]}" \
+						2>&1 >/dev/tty)
+				}
+				submenu
+				clear
+				case "${SUBCHOICE}" in
+					1)
+						clear
+						magicn -g
+						printn -i "Proccess Completed!"
+						echo -ne "\e[1mPress enter to continue or 0 to exit! \e[0m"
+						read -r a1
+						if [ "$a1" == "0" ]; then
+ 							return 0
+ 						else
+							clear
+							submenu
+						fi
+					;;
+					2)
+						clear
+						magicn -y
+						printn -i "Proccess Completed!"
+						echo -ne "\e[1mPress enter to continue or 0 to exit! \e[0m"
+						read -r a1
+						if [ "$a1" == "0" ]; then
+							return 0
+ 						else
+							clear
+							submenu
+						fi
+					;;
+					3)
+						clear
+						magicn -r
+						printn -i "Proccess Completed!"
+						echo -ne "\e[1mPress enter to continue or 0 to exit! \e[0m"
+						read -r a1
+						if [ "$a1" == "0" ]; then
+ 							return 0
+ 						else
+							clear
+							submenu
+						fi
+					;;
+					4)
+						clear
+						mainmenu
+					;;
+					5)
+						exit 0
+					;;
+				esac
+			;;
+			2)
+				clear
+				apin -rc
+				echo -ne "\e[1mPress enter to continue or 0 to exit! \e[0m"
+				read -r a2
+				if [ "$a2" == "0" ]; then
+ 					return 0
+ 				else
+					clear
+					mainmenu
+				fi
+			;;
+			3)
+				updaten -a; return 0
+				echo -ne "\e[1mPress enter to continue or 0 to exit! \e[0m"
+				read -r a2
+				if [ "$a2" == "0" ]; then
+ 					return 0
+ 				else
+					clear
+					mainmenu
+				fi
+			;;
+			4)
+				__nitron_help
+				echo -ne "\e[1mPress enter to continue or 0 to exit! \e[0m"
+				read -r a2
+				if [ "$a2" == "0" ]; then
+ 					return 0
+ 				else
+					clear
+					mainmenu
+				fi
+			;;
+			5)
+				exit 0
+			;;
+		esac
 }
 
 print_banner() {
