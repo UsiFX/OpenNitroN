@@ -56,24 +56,18 @@ main()
 	cp -af "$MODPATH/nitrond" "$MODPATH/system/bin"
 	sed -i '1c\#!/system/bin/sh' "$MODPATH/system/bin/nitrond"
 	sleep 0.5
-	ui_print "[*] Installed Dameon"
+	ui_print "[*] Installed Dameon."
 	sleep 0.5
 	ui_print ""
-	ui_print "[*] Installing Headers..."
+	ui_print "[*] Installing API..."
 	sleep 0.5
-	cp -af "$MODPATH/nitron_headers.sh" "$MODPATH/system/etc"
+	cp -af "$MODPATH/nitronapi.sh" "$MODPATH/system/etc"
 	sleep 0.5
-	ui_print "[*] Installed Headers"
-	ui_print ""
-	ui_print "[*] Installing Libraries..."
-	sleep 0.5
-	cp -af "$MODPATH/libauto.sh" "$MODPATH/system/etc"
-	sleep 0.5
-	ui_print "[*] Installed Libraries"
+	ui_print "[*] Installed API."
 	ui_print ""
 	if ! command -v "curl" >/dev/null; then
 		ui_print "[!] cURL is not found on system,"
-		ui_print "      Universal Updater won't work!"
+		ui_print "    Universal Updater won't work!"
 	fi
 }
 
