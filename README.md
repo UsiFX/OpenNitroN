@@ -98,7 +98,7 @@ If don't, just open a [new clear and descriptive issue](https://github.com/UsiFX
 ## License
 
 ```
-nitronD v1.0.8 (An Extensive Kernel tweaker)
+nitronD v1.0.9 (An Extensive Kernel tweaker)
 Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
 
                        GNU GENERAL PUBLIC LICENSE
