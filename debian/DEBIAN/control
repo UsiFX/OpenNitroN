@@ -1,5 +1,5 @@
 Package: NitronX
-Version: 1.0.9-staging
+Version: 1.1.0-staging
 Architecture: all
 Depends: upower
 Maintainer: UsiFX <xprjkts@gmail.com>
