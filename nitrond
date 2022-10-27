@@ -61,13 +61,11 @@ printn() {
 }
 
 # Include headers
-if [[ ! -f $HEADER_SOURCE/nitron_headers.sh ]] || [[ ! -f $HEADER_SOURCE/libauto.sh ]]; then
-	echo "missing header, $HEADER_SOURCE/nitron_headers.sh"
-	echo "missing library, $HEADER_SOURCE/libauto.sh"
+if [[ ! -f $HEADER_SOURCE/nitronapi.sh ]]; then
+	echo "missing header, $HEADER_SOURCE/nitronapi.sh"
 	exit 1
 else
-	source "$HEADER_SOURCE"/nitron_headers.sh
-	source "$HEADER_SOURCE"/libauto.sh
+	source "$HEADER_SOURCE"/nitronapi.sh
 fi
 
 writen() {
@@ -540,7 +538,7 @@ else
 				printn -ll "starting modifying modes up on Packages availability & Resource usage"
 				printn -i "nitrond will stay on background, it's safe to terminate the session."
 				printn -w "run 'killall -9 nitrond' to force stop the daemon"
-				(. "$HEADER_SOURCE"/libauto.sh -d &) &
+				( apin -ad &) &
 			;;
 			"-sg" | "--set-green")
 				magicn -g
@@ -561,12 +559,13 @@ else
 				printn -i "mode: $(apin -mc)"
 			;;
 			"-v" | "--version")
-				echo -e "Nitron Daemon $(apin -dv) - nitron_headers $(apin -hv) - libauto $(apin -lbv)
+				echo -e "NitronD $(apin -dv), API: $(apin -hv)
 Copyright (C) 2022-2023 UsiFX <xprjkts@gmail.com>
 Copyright (C) 2022-2023 Kartik728 <titanupdates728@gmail.com>
 
-This program may be freely redistributed under
-the terms of the GNU Generic Public License."
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.."
 			;;
 			"-c" | "--console-mode")
 				if cmdavail dialog; then

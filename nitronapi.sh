@@ -2,14 +2,21 @@
 # shellcheck disable=SC2148
 # shellcheck disable=SC2034
 # shellcheck disable=SC2117
+# shellcheck disable=SC2148
+# shellcheck disable=SC2034
+# shellcheck disable=SC2154
+# shellcheck disable=SC2009
+# shellcheck disable=SC2068
 #
-# nitronD Headers.
+# nitronD API Manager.
 #
 # Copyright Identiter: GPL-3.0
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
-export NITRON_HEADER_VERSION='2.1.0'
+export NITRON_HEADER_VERSION='2.2.0'
+
+## Variables
 
 # Resource variables
 cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
@@ -19,7 +26,7 @@ nr_cores=$(awk -F "-" '{print $2}' "/sys/devices/system/cpu/possible")
 nr_cores=$((nr_cores + 1))
 
 # CPU Usage
-cputotalusage=$(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage ""}' | cut -f1 -d\.)
+cputotalusage=$(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage ""}' | cut -f1 -d\.$cputotalusage)
 
 # Battery info
 # Current battery capacity available
@@ -52,6 +59,9 @@ esac
 # Battery total capacity
 [[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
 
+## End of variables
+
+# cmdavail <command> ## if available > return 0 & log; else return 1 & log
 cmdavail() {
 	PR_PREFIX="cmdavail"
 	if command -v "$1" >/dev/null; then
@@ -69,6 +79,7 @@ infogrbn() { grep "$2" "$1" | awk '{ print $2 }';}
 # infogrblongn <directory> <value>
 infogrblongn() { grep "$2" "$1" | awk '{ print $3,$4,$5,$6 }';}
 
+# setmoden <nitron mode>
 setmoden() { echo "$1" > "$NITRON_LOG_DIR"/nitron.mode.lock ;}
 
 modelockn()
@@ -103,7 +114,40 @@ modelockn()
 	esac
 }
 
+oschk()
+{
+	PR_PREFIX="oschk"
+	OSCHK=$(uname -o)
+
+	case "$OSCHK" in
+		"GNU/Linux")
+			PLATFORM="GNU/Linux"
+			printn -l "OS: $PLATFORM"
+			return 0
+		;;
+		"Linux")
+			if grep -q "androidboot" /proc/cmdline; then
+				PLATFORM="Android"
+			else
+				PLATFORM="Linux"
+			fi
+			printn -l "OS: $PLATFORM"
+			return 0
+		;;
+		*)
+			if grep -q "androidboot" /proc/cmdline; then
+				PLATFORM="Android"
+			else
+				PLATFORM="Unknown"
+				printn -lf "OS: $PLATFORM"
+				printn -e "Unknown Operating System, cannot start."
+			fi
+		;;
+	esac
+}
+
 apin() {
+	# Installation type check
 	instype()
 	{
 		if [[ "$(su --version)" == *"MAGISK"* ]]; then
@@ -115,6 +159,7 @@ apin() {
 		fi
 	}
 
+	# Android™ Device information grabber
 	androiddevinfo()
 	{
 		# Device info
@@ -138,6 +183,8 @@ apin() {
 		echo "Android ROM Info: $rom_info"
 		echo "Android Release Version: $arv"
 	}
+
+	# Common Information
 	resrchk()
 	{
 		echo "PID: $$"
@@ -161,6 +208,7 @@ apin() {
 		echo "Nitron Current mode: $(apin -mc)"
 	}
 
+	# API Help Menu
 	__api_help()
 	{
 		echo "
@@ -170,16 +218,18 @@ Options:
   -rc, --resource-check		~ prints hardware resources information
   -dv, --daemon-version         ~ prints daemon version
   -hv, --header-version         ~ prints header version
-  -lbv, --library-version	~ prints library version
   -mc, --mode-check		~ prints current mode
   -as, --android-status		~ updates magisk module description overlay
   -cl, --clear-log		~ clean daemon log only
+  -ad, --auto-daemon		~ start up background process for automatic
   -c, --clean			~ cleans entirely all created files by daemon
   -h, --help			~ prints this help menu
 "
 	}
 
+	# Start Installation type function
 	instype
+
 	case $* in
 		"-rc" | "--resource-check")
 			resrchk
@@ -189,9 +239,6 @@ Options:
 		;;
 		"-hv" | "--header-version")
 			echo "$NITRON_HEADER_VERSION"
-		;;
-		"-lbv" | "--library-version")
-			echo "$NITRON_LIBAUTO_VERSION"
 		;;
 		"-mc" | "--mode-check")
 			modelockn
@@ -235,8 +282,56 @@ Options:
 		"-cl" | "--clear-log")
 			rm -rf "$NITRON_LOG_DIR"/nitron.log
 		;;
+		"-ad" | "--auto-daemon")
+			[[ ! -f "$NITRON_RELAX_DIR/nitron.auto.conf" ]] && echo "# The nitrond Config File
+# Optimise packages up on resource usage and load
+# List all package/app names according to your needs
+com.tencent.ig
+com.mojang.minecraftpe
+com.activision.callofduty.shooter
+			" >> "$NITRON_RELAX_DIR/nitron.auto.conf"
+
+			NITRON_LIBAUTO_VERSION='1.1.0'
+			pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
+			relax=$(pidof ${pkgs[@]} | tr ' ' '\n')
+			pidsavail() { ps -A -o PID | grep -q "$relax" && echo $?;}
+
+			auto()
+			{
+					SOURCE="libauto"
+					if [[ $(pidsavail) == 0 ]]; then
+						if [[ "$batt_pctg" -lt "25" ]]; then
+							if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
+								magicn -g
+								printn -ll "battery is under %25, applied green mode"
+							fi
+						else
+							if (( cputotalusage >= "50" <= "64" )); then
+								if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
+									printn -ll "cpu usage is 50%+"
+									magicn -y
+									printn -ll "heavy process(es) detected, applied balance mode."
+								fi
+							elif [[ "$cputotalusage" -gt "65" ]]; then
+								if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
+										printn -ll "cpu usage is 65%+"
+										magicn -r
+										printn -ll "cpu is under load applied Red mode, consuming battery."
+								fi
+							fi
+						fi
+					fi
+			}
+			while true; do
+				auto
+			done
+		;;
+		"-h" | "--help")
+			__api_help
+		;;
 		*)
 			__api_help
+			return 1
 		;;
 	esac
 }
@@ -356,34 +451,3 @@ console_legacy() {
 	done
 }
 
-oschk()
-{
-	PR_PREFIX="oschk"
-	OSCHK=$(uname -o)
-
-	case "$OSCHK" in
-		"GNU/Linux")
-			PLATFORM="GNU/Linux"
-			printn -l "OS: $PLATFORM"
-			return 0
-		;;
-		"Linux")
-			if grep -q "androidboot" /proc/cmdline; then
-				PLATFORM="Android"
-			else
-				PLATFORM="Linux"
-			fi
-			printn -l "OS: $PLATFORM"
-			return 0
-		;;
-		*)
-			if grep -q "androidboot" /proc/cmdline; then
-				PLATFORM="Android"
-			else
-				PLATFORM="Unknown"
-				printn -lf "OS: $PLATFORM"
-				printn -e "Unknown Operating System, cannot start."
-			fi
-		;;
-	esac
-}
