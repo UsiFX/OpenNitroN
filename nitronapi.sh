@@ -44,30 +44,39 @@ cputotalusage=$(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END
 # Current battery capacity available
 [[ -e "/sys/class/power_supply/battery/capacity" ]] && batt_pctg=$(cat /sys/class/power_supply/battery/capacity) || cmdavail dumpsys && batt_pctg=$(dumpsys battery 2>/dev/null | awk '/level/{print $2}')
 
-# Battery health
-[[ -e "/sys/class/power_supply/battery/health" ]] && batt_hth=$(cat /sys/class/power_supply/battery/health) || cmdavail dumpsys && batt_hth=$(dumpsys battery | awk '/health/{print $2}')
-case "$batt_hth" in
-	1) batt_hth="Unknown" ;;
-	2) batt_hth="Good" ;;
-	3) batt_hth="Overheat" ;;
-	4) batt_hth="Dead" ;;
-	5) batt_hth="OV" ;;
-	6) batt_hth="UF" ;;
-	7) batt_hth="Cold" ;;
-esac
+if [[ "$batt_pctg" != "" ]]; then
+	# Battery health
+	[[ -e "/sys/class/power_supply/battery/health" ]] && batt_hth=$(cat /sys/class/power_supply/battery/health) || cmdavail dumpsys && batt_hth=$(dumpsys battery | awk '/health/{print $2}')
+	case "$batt_hth" in
+		1) batt_hth="Unknown" ;;
+		2) batt_hth="Good" ;;
+		3) batt_hth="Overheat" ;;
+		4) batt_hth="Dead" ;;
+		5) batt_hth="OV" ;;
+		6) batt_hth="UF" ;;
+		7) batt_hth="Cold" ;;
+	esac
 
-# Battery status
-[[ -e "/sys/class/power_supply/battery/status" ]] && batt_sts=$(cat /sys/class/power_supply/battery/status) || cmdavail dumpsys && batt_sts=$(dumpsys battery | awk '/status/{print $2}')
-case "$batt_sts" in
-	1) batt_sts="Unknown" ;;
-	2) batt_sts="Charging" ;;
-	3) batt_sts="Discharging" ;;
-	4) batt_sts="Not charging" ;;
-	5) batt_sts="Full" ;;
-esac
+	# Battery status
+	[[ -e "/sys/class/power_supply/battery/status" ]] && batt_sts=$(cat /sys/class/power_supply/battery/status) || cmdavail dumpsys && batt_sts=$(dumpsys battery | awk '/status/{print $2}')
+	case "$batt_sts" in
+		1) batt_sts="Unknown" ;;
+		2) batt_sts="Charging" ;;
+		3) batt_sts="Discharging" ;;
+		4) batt_sts="Not charging" ;;
+		5) batt_sts="Full" ;;
+	esac
 
-# Battery total capacity
-[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || cmdavail dumpsys && batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
+	# Battery total capacity
+	[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || cmdavail dumpsys && batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
+else
+	if cmdavail upower; then
+		batt_pctg=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "percentage:"| awk '{print $2}' | cut -f1 -d\%)
+		batt_cpct=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "capacity:"| awk '{print $2}' | cut -f1 -d\%)
+		batt_sts=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "state:"| awk '{print $2}')
+		batt_hth=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "warning-level:"| awk '{print $2}')
+	fi
+fi
 
 ## End of variables
 
