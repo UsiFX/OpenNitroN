@@ -35,10 +35,13 @@ STOCK='\e[1;0m'
 export NITRON_FORCECHECK_UPDATE
 export NITRON_VERSION='1.0.9-staging'
 grep -q "androidboot" /proc/cmdline && HEADER_SOURCE="/system/etc" || HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
-grep -q "androidboot" /proc/cmdline && NITRON_RELAX_DIR='/sdcard'; NITRON_LOG_DIR='/cache' || {
+if grep -q "androidboot" /proc/cmdline; then
+	NITRON_RELAX_DIR='/sdcard'
+	NITRON_LOG_DIR='/cache'
+else
 	NITRON_RELAX_DIR='/etc'
 	NITRON_LOG_DIR='/tmp'
-}
+fi
 PR_PREFIX="nitron_broadcast"
 DAEMON_SOURCE=$(dirname "$0")
 PROMPT_COMMAND='sync'
