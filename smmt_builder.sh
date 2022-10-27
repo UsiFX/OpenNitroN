@@ -52,7 +52,7 @@ debcompile()
 	cp -af "${OBJECTS[@]}" "$OUT/debian/product"
 	cd "$OUT/debian/product" || exit
 	mv -f "$OUT/debian/product/nitrond" "$OUT/debian/product/usr/bin"
-	mv -f "$OUT/debian/product/nitron_headers.sh" "$OUT/debian/product/usr/include"
+	mv -f "$OUT/debian/product/nitronapi.sh" "$OUT/debian/product/usr/include"
 	dpkg-deb --build --root-owner-group "$OUT/debian/product" "$OUT/target/$FILENAME.deb"
 	echo " DPKG  $OUT/target/$FILENAME.deb"
 	cd ../../..
