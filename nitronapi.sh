@@ -14,7 +14,19 @@
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
-export NITRON_HEADER_VERSION='2.2.0'
+export NITRON_HEADER_VERSION='2.3.0'
+
+# cmdavail <command> ## if available > return 0 & log; else return 1 & log
+cmdavail() {
+	PR_PREFIX="cmdavail"
+	if command -v "$1" >/dev/null; then
+		printn -l "$1: available"
+		return 0
+	else
+		printn -lf "$1: unavailable"
+		return 1
+	fi
+}
 
 ## Variables
 
@@ -30,11 +42,10 @@ cputotalusage=$(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END
 
 # Battery info
 # Current battery capacity available
-[[ -e "/sys/class/power_supply/battery/capacity" ]] && batt_pctg=$(cat /sys/class/power_supply/battery/capacity) || batt_pctg=$(dumpsys battery 2>/dev/null | awk '/level/{print $2}')
+[[ -e "/sys/class/power_supply/battery/capacity" ]] && batt_pctg=$(cat /sys/class/power_supply/battery/capacity) || cmdavail dumpsys && batt_pctg=$(dumpsys battery 2>/dev/null | awk '/level/{print $2}')
 
 # Battery health
-batt_hth=$(dumpsys battery | awk '/health/{print $2}')
-[[ -e "/sys/class/power_supply/battery/health" ]] && batt_hth=$(cat /sys/class/power_supply/battery/health)
+[[ -e "/sys/class/power_supply/battery/health" ]] && batt_hth=$(cat /sys/class/power_supply/battery/health) || cmdavail dumpsys && batt_hth=$(dumpsys battery | awk '/health/{print $2}')
 case "$batt_hth" in
 	1) batt_hth="Unknown" ;;
 	2) batt_hth="Good" ;;
@@ -46,8 +57,7 @@ case "$batt_hth" in
 esac
 
 # Battery status
-batt_sts=$(dumpsys battery | awk '/status/{print $2}')
-[[ -e "/sys/class/power_supply/battery/status" ]] && batt_sts=$(cat /sys/class/power_supply/battery/status)
+[[ -e "/sys/class/power_supply/battery/status" ]] && batt_sts=$(cat /sys/class/power_supply/battery/status) || cmdavail dumpsys && batt_sts=$(dumpsys battery | awk '/status/{print $2}')
 case "$batt_sts" in
 	1) batt_sts="Unknown" ;;
 	2) batt_sts="Charging" ;;
@@ -57,27 +67,15 @@ case "$batt_sts" in
 esac
 
 # Battery total capacity
-[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
+[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || cmdavail dumpsys && batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
 
 ## End of variables
-
-# cmdavail <command> ## if available > return 0 & log; else return 1 & log
-cmdavail() {
-	PR_PREFIX="cmdavail"
-	if command -v "$1" >/dev/null; then
-		printn -l "$1: available"
-		return 0
-	else
-		printn -lf "$1: unavailable"
-		return 1
-	fi
-}
 
 # infogrbn <directory> <value>
 infogrbn() { grep "$2" "$1" | awk '{ print $2 }';}
 
 # infogrblongn <directory> <value>
-infogrblongn() { grep "$2" "$1" | awk '{ print $3,$4,$5,$6 }';}
+infogrblongn() { grep "$2" "$1" | awk '{ print $4,$5,$6,$7,$8,$9 }' | head -n1 && return $?;}
 
 # setmoden <nitron mode>
 setmoden() { echo "$1" > "$NITRON_LOG_DIR"/nitron.mode.lock ;}
@@ -192,15 +190,17 @@ apin() {
 		echo "Kernel: $(uname -sr)"
 		echo "SU Provider: $(su --version)"
 		echo "Memory: $(( $(infogrbn "/proc/meminfo" "MemTotal") / 1024 / 1024))gb"
-		echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")"
+		[[ "$(infogrblongn "/proc/cpuinfo" "Hardware")" ]] && echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")" || echo "Hardware: $(infogrblongn "/proc/cpuinfo" "model name")"
 		echo "Machine: $(uname -m)"
 		echo "CPU Governor: $cpu_gov"
 		echo "CPU Cores: $nr_cores"
 		echo "CPU Usage: $cputotalusage%"
-		echo "Battery Percentage: $batt_pctg%"
-		echo "Battery Health: $batt_hth"
-		echo "Battery Status: $batt_sts"
-		echo "Battery Capacity: $batt_cpct"
+		[[ "$batt_pctg" != "" ]] && {
+			echo "Battery Percentage: $batt_pctg%"
+			echo "Battery Health: $batt_hth"
+			echo "Battery Status: $batt_sts"
+			echo "Battery Capacity: $batt_cpct"
+		}
 		[[ "$PLATFORM" == "Android" ]] && androiddevinfo
 		echo "Nitron Daemon Version: $(apin -dv)"
 		echo "Nitron Header Version: $(apin -hv)"
