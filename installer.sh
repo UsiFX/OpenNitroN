@@ -44,16 +44,16 @@ case $1 in
 		echo "installing nitrond..."
 		chmod 755 "${TARGET_REPO}"
 		chmod +x "${TARGET_REPO}/nitrond"
-		chmod +x "${TARGET_REPO}/nitron_headers.sh"
+		chmod +x "${TARGET_REPO}/nitronapi.sh"
 		sudo cp -f "${TARGET_REPO}/nitrond" "${BIN_DIR}/nitrond"
-		sudo cp -f "${TARGET_REPO}/nitron_headers.sh" "${INCLUDE_DIR}/nitron_headers.sh"
+		sudo cp -f "${TARGET_REPO}/nitronapi.sh" "${INCLUDE_DIR}/nitronapi.sh"
 		sudo chmod 755 "${BIN_DIR}/nitrond"
-		sudo chmod 755 "${INCLUDE_DIR}/nitron_headers.sh"
+		sudo chmod 755 "${INCLUDE_DIR}/nitronapi.sh"
 	;;
 	uninstall)
 		echo "uinstalling nitrond..."
 		sudo rm -f "$(which nitrond)"
-		sudo rm -f "$INCLUDE_DIR"/nitron_headers.sh
+		sudo rm -f "$INCLUDE_DIR"/nitronapi.sh
 		echo "finished uninstallation!"
 	;;
 	*)	echo "usage: installer.sh [install] [uninstall]" ;;
