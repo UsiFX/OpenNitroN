@@ -198,7 +198,7 @@ apin() {
 		echo "OS: $PLATFORM"
 		echo "Kernel: $(uname -sr)"
 		echo "SU Provider: $(su --version)"
-		echo "Memory: $(( $(infogrbn "/proc/meminfo" "MemTotal") / 1024 / 1024))gb"
+		echo "Memory: $(( $(infogrbn "/proc/meminfo" "MemTotal") / 1024 / 1024 + 1 ))GB"
 		[[ "$(infogrblongn "/proc/cpuinfo" "Hardware")" ]] && echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")" || echo "Hardware: $(infogrblongn "/proc/cpuinfo" "model name")"
 		echo "Machine: $(uname -m)"
 		echo "CPU Governor: $cpu_gov"
