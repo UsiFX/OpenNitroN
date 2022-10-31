@@ -514,19 +514,19 @@ console_legacy() {
 							case $mode_num in
 								1)
 									magicn -r
-									printn -i "Process complete!"
+									printn -n "Gaming Mode activated."
 									sleep 2
 									break
 									;;
 								2)
 									magicn -y
-									printn -i "Process complete!"
+									printn -n "Balance Mode activated."
 									sleep 2
 									break
 									;;
 								3)
 									magicn -g
-									printn -i "Process complete!"
+									printn -n "Battery Mode activated."
 									sleep 2
 									break
 									;;
