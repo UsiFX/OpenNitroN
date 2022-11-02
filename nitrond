@@ -375,7 +375,7 @@ magicn() {
 
 pingn() {
 	PR_PREFIX="pingn"
-	[[ "$(ping -c1 "8.8.8.8" >/dev/null && echo $?)" != "0" ]] && {
+	[[ "$(ping -c1 "8.8.8.8" >/dev/null 2>&1 && echo $?)" != "0" ]] && {
 		printn -lf "failed"
 		printn -e "nitrond: network: unreachable"
 		return 1
