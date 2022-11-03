@@ -337,7 +337,7 @@ com.activision.callofduty.shooter
 						fi
 					fi
 			}
-			while true; do
+			while [[ "$SOURCE" == "libauto" ]]; do
 				auto
 			done
 		;;

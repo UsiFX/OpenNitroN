@@ -541,19 +541,25 @@ else
 				( apin -ad &) &
 			;;
 			"-sg" | "--set-green")
-				magicn -g
-				printn -n "nitrond: current mode: $(apin -mc)"
-				apin -as
+				[[ "$SOURCE" != "libauto" ]] && {
+					magicn -g
+					printn -n "nitrond: current mode: $(apin -mc)"
+					apin -as
+				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
 			"-sr" | "--set-red")
-				magicn -r
-				printn -n "nitrond: current mode: $(apin -mc)"
-				apin -as
+				[[ "$SOURCE" != "libauto" ]] && {
+					magicn -r
+					printn -n "nitrond: current mode: $(apin -mc)"
+					apin -as
+				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
 			"-sy" | "--set-yellow")
-				magicn -y
-				printn -n "nitrond: current mode: $(apin -mc)"
-				apin -as
+				[[ "$SOURCE" != "libauto" ]] && {
+					magicn -y
+					printn -n "nitrond: current mode: $(apin -mc)"
+					apin -as
+				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
 			"-sdm" | "--show-default-mode")
 				printn -i "mode: $(apin -mc)"
