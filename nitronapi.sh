@@ -29,7 +29,7 @@ cmdavail() {
 }
 
 ## Variables
-
+vars() {
 # Resource variables
 cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
 
@@ -77,6 +77,9 @@ else
 		batt_hth=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "warning-level:"| awk '{print $2}')
 	fi
 fi
+}
+
+vars
 
 ## End of variables
 
@@ -307,6 +310,7 @@ com.activision.callofduty.shooter
 
 			auto()
 			{
+					vars # update variables each execution
 					SOURCE="libauto"
 					if [[ $(pidsavail) == 0 ]]; then
 						if [[ "$batt_pctg" -lt "25" ]]; then
