@@ -28,6 +28,8 @@ cmdavail() {
 	fi
 }
 
+trapper() { printn -e "shutdown signal recieved, closing..."; }
+
 ## Variables
 vars() {
 # Resource variables

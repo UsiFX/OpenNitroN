@@ -46,6 +46,8 @@ PR_PREFIX="nitron_broadcast"
 DAEMON_SOURCE=$(dirname "$0")
 PROMPT_COMMAND='sync'
 
+trap 'trap " " SIGINT SIGTERM SIGHUP; kill 0; wait; trapper' SIGINT SIGTERM SIGHUP
+
 printn() {
 	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
 
@@ -535,7 +537,7 @@ else
 				apin -rc >> "$NITRON_RELAX_DIR"/nitron.log
 				printn -ll "starting modifying modes up on Packages availability & Resource usage"
 				printn -i "nitrond will stay on background, it's safe to terminate the session."
-				printn -w "run 'killall -9 nitrond' to force stop the daemon"
+				printn -w "^C to force stop the daemon."
 				( apin -ad &) &
 			;;
 			"-sg" | "--set-green")
