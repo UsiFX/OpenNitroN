@@ -1,8 +1,8 @@
 # Maintainer: UsiFX <xprjkts@gmail.com>
 
 pkgname=NitronX
-pkgver=1.1.0.staging
-pkgrel=1
+pkgver=1.1.1.staging
+pkgrel=3
 pkgdesc="Extensive, Enhanced kernel tweaker daemon"
 arch=(any)
 url="https://github.com/UsiFX/OpenNitroN"
