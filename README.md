@@ -1,7 +1,6 @@
-<img src="https://hacktoberfest.com/_next/static/media/opengraph.da6e44c0.png">
+![OpenNitroN](https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/etc/banners/frame_17.png)
 
 # <div align=center> The NitroN: Open Edition Staging version </div>
-
 
 <a href="https://app.codiga.io/hub/project/34591/OpenNitroN/dashboard">
   <img src="https://api.codiga.io/project/34591/score/svg" alt="Codescore">
