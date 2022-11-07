@@ -117,7 +117,7 @@ apin -as
 magicn() {
 	PR_PREFIX="magicn"
 	set_battery_mode() {
-		[[ "$SOURCE" == "libauto" ]] && setmoden "Automatic green" || setmoden "Battery"
+		[[ "$SOURCE" == "api-auto" ]] && setmoden "Automatic green" || setmoden "Battery"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 2
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -193,7 +193,7 @@ magicn() {
 		writen /dev/stune/schedtune.prefer_idle 1
 	}
 	set_balanced_mode() {
-		[[ "$SOURCE" == "libauto" ]] && setmoden "Automatic yellow" || setmoden "Balanced"
+		[[ "$SOURCE" == "api-auto" ]] && setmoden "Automatic yellow" || setmoden "Balanced"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 5
 		writen /proc/sys/kernel/sched_autogroup_enabled 1
 		writen /proc/sys/kernel/sched_child_runs_first 1
@@ -263,7 +263,7 @@ magicn() {
 		writen /dev/stune/schedtune.boost 0
 	}
 	set_gaming_mode() {
-		[[ "$SOURCE" == "libauto" ]] && setmoden "Automatic red" || setmoden "Gaming"
+		[[ "$SOURCE" == "api-auto" ]] && setmoden "Automatic red" || setmoden "Gaming"
 		writen /proc/sys/kernel/perf_cpu_time_max_percent 20
 		writen /proc/sys/kernel/sched_autogroup_enabled 0
 		writen /proc/sys/kernel/sched_child_runs_first 0
@@ -529,8 +529,6 @@ else
 				apin -c
 			;;
 			"auto")
-				killall -9 libauto >/dev/null 2>&1
-				pkill -f libauto >/dev/null 2>&1
 				setmoden "Automatic"
 				apin -as
 				rm -rf "$NITRON_RELAX_DIR"/nitron.log
@@ -541,21 +539,21 @@ else
 				( apin -ad &) &
 			;;
 			"-sg" | "--set-green")
-				[[ "$SOURCE" != "libauto" ]] && {
+				[[ "$SOURCE" != "api-auto" ]] && {
 					magicn -g
 					printn -n "nitrond: current mode: $(apin -mc)"
 					apin -as
 				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
 			"-sr" | "--set-red")
-				[[ "$SOURCE" != "libauto" ]] && {
+				[[ "$SOURCE" != "api-auto" ]] && {
 					magicn -r
 					printn -n "nitrond: current mode: $(apin -mc)"
 					apin -as
 				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
 			"-sy" | "--set-yellow")
-				[[ "$SOURCE" != "libauto" ]] && {
+				[[ "$SOURCE" != "api-auto" ]] && {
 					magicn -y
 					printn -n "nitrond: current mode: $(apin -mc)"
 					apin -as

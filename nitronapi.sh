@@ -304,24 +304,19 @@ com.tencent.ig
 com.mojang.minecraftpe
 com.activision.callofduty.shooter
 			" >> "$NITRON_RELAX_DIR/nitron.auto.conf"
-
-			NITRON_LIBAUTO_VERSION='1.1.0'
-			pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
-			relax=$(pidof ${pkgs[@]} | tr ' ' '\n')
-			pidsavail() { ps -A -o PID | grep -q "$relax" && echo $?;}
-
+			trap 'trap " " SIGINT SIGTERM SIGHUP; kill 0; wait; trapper' SIGINT SIGTERM SIGHUP
+			export SOURCE="api-auto"
 			auto()
 			{
 					vars # update variables each execution
-					SOURCE="libauto"
-					if [[ $(pidsavail) == 0 ]]; then
+					if [[ $(pgrep -f -c $PIDS) -gt 0 ]]; then
 						if [[ "$batt_pctg" -lt "25" ]]; then
 							if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
 								magicn -g
 								printn -ll "battery is under %25, applied green mode"
 							fi
 						else
-							if (( cputotalusage >= "50" <= "64" )); then
+							if (( cputotalusage >= "50" && cputotalusage <= "64" )); then
 								if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
 									printn -ll "cpu usage is 50%+"
 									magicn -y
@@ -337,8 +332,13 @@ com.activision.callofduty.shooter
 						fi
 					fi
 			}
-			while [[ "$SOURCE" == "libauto" ]]; do
-				auto
+			while [[ "$SOURCE" == "api-auto" ]]; do
+				if [[ "$TRAPAUTO" == "true" ]]; then
+					exit
+				else
+					PIDS=$(cat /sdcard/nitron.auto.conf | tail -n +4)
+					auto
+				fi
 			done
 		;;
 		"-h" | "--help")
