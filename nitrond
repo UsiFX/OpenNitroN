@@ -46,8 +46,6 @@ PR_PREFIX="nitron_broadcast"
 DAEMON_SOURCE=$(dirname "$0")
 PROMPT_COMMAND='sync'
 
-trap 'trap " " SIGINT SIGTERM SIGHUP; kill 0; wait; trapper' SIGINT SIGTERM SIGHUP
-
 printn() {
 	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
 
@@ -75,6 +73,8 @@ if [[ ! -f $HEADER_SOURCE/nitronapi.sh ]]; then
 else
 	source "$HEADER_SOURCE"/nitronapi.sh
 fi
+
+trap 'trap " " SIGINT SIGTERM SIGHUP; trapper; wait' SIGINT SIGTERM SIGHUP
 
 writen() {
 	[[ ! -f "$1" ]] && {

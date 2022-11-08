@@ -304,7 +304,6 @@ com.tencent.ig
 com.mojang.minecraftpe
 com.activision.callofduty.shooter
 			" >> "$NITRON_RELAX_DIR/nitron.auto.conf"
-			trap 'kill $$ >/dev/null 2>&1; trapper' SIGINT SIGTERM SIGHUP INT
 			export SOURCE="api-auto"
 			auto()
 			{
