@@ -89,7 +89,7 @@ vars
 infogrbn() { grep "$2" "$1" | awk '{ print $2 }';}
 
 # infogrblongn <directory> <value>
-infogrblongn() { grep "$2" "$1" | awk '{ print $2,$3,$4,$5,$6,$7,$8,$9 }' | head -n1 && return $?;}
+infogrblongn() { grep "$2" "$1" | awk -F ": " '{ print $2,$3,$4,$5,$6,$7,$8,$9 }' | head -n1 && return $?;}
 
 # setmoden <nitron mode>
 setmoden() { echo "$1" > "$NITRON_LOG_DIR"/nitron.mode.lock ;}
