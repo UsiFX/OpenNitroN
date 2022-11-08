@@ -121,7 +121,7 @@ modelockn()
 			setmoden "Automatic yellow"
 		;;
 		"Automatic red")
-			setmoden "Automatic [red]"
+			setmoden "Automatic red"
 		;;
 	esac
 }
