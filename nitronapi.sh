@@ -322,7 +322,7 @@ com.activision.callofduty.shooter
 									magicn -y
 									printn -ll "heavy process(es) detected, applied balance mode."
 								fi
-							elif [[ "$cputotalusage" -gt "65" ]]; then
+							elif (( cputotalusage >= "65" )); then
 								if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
 										printn -ll "cpu usage is 65%+"
 										magicn -r
