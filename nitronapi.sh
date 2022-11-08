@@ -205,7 +205,7 @@ apin() {
 		echo "SU Provider: $(su --version)"
 		echo "Memory: $(( $(infogrbn "/proc/meminfo" "MemTotal") / 1024 / 1024 + 1 ))GB"
 		[[ "$(infogrblongn "/proc/cpuinfo" "Hardware")" ]] && echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")" || echo "Hardware: $(infogrblongn "/proc/cpuinfo" "model name")"
-		echo "Machine: $(uname -m)"
+		echo "Kernel Archticture: $(uname -m)"
 		echo "CPU Governor: $cpu_gov"
 		echo "CPU Cores: $nr_cores"
 		echo "CPU Usage: $cputotalusage%"
