@@ -537,6 +537,7 @@ else
 				printn -i "nitrond will stay on background, it's safe to terminate the session."
 				printn -w "^C to force stop the daemon."
 				( apin -ad &) &
+				while true; do true; done # keep it alive.
 			;;
 			"-sg" | "--set-green")
 				[[ "$SOURCE" != "api-auto" ]] && {

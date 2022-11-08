@@ -304,7 +304,7 @@ com.tencent.ig
 com.mojang.minecraftpe
 com.activision.callofduty.shooter
 			" >> "$NITRON_RELAX_DIR/nitron.auto.conf"
-			trap 'trap " " SIGINT SIGTERM SIGHUP; kill 0; wait; trapper' SIGINT SIGTERM SIGHUP
+			trap 'kill $$ >/dev/null 2>&1; trapper' SIGINT SIGTERM SIGHUP INT
 			export SOURCE="api-auto"
 			auto()
 			{
@@ -332,7 +332,7 @@ com.activision.callofduty.shooter
 						fi
 					fi
 			}
-			while [[ "$SOURCE" == "api-auto" ]]; do
+			while [[ "$SOURCE" == "api-auto" ]] && true; do
 				if [[ "$TRAPAUTO" == "true" ]]; then
 					exit
 				else
