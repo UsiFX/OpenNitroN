@@ -307,8 +307,7 @@ com.activision.callofduty.shooter
 			export SOURCE="api-auto"
 			auto()
 			{
-					vars # update variables each execution
-					if [[ $(pgrep -f -c $PIDS) -gt 0 ]]; then
+				autoalg() {
 						if [[ "$batt_pctg" -lt "25" ]]; then
 							if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
 								magicn -g
@@ -329,7 +328,14 @@ com.activision.callofduty.shooter
 								fi
 							fi
 						fi
-					fi
+				}
+
+				vars # update variables each execution
+				if [[ $(pgrep -f -c $PIDS) -gt 0 ]]; then
+					autoalg
+				elif [[ $PIDS == *"all"* ]]; then
+					autoalg
+				fi
 			}
 			while [[ "$SOURCE" == "api-auto" ]] && true; do
 				if [[ "$TRAPAUTO" == "true" ]]; then
