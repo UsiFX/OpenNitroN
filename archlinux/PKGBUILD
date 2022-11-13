@@ -7,13 +7,12 @@ pkgdesc="Extensive, Enhanced kernel tweaker daemon"
 arch=(any)
 url="https://github.com/UsiFX/OpenNitroN"
 license=('GPL3')
-source=("nitrond" "nitronapi.sh" "nitrond.1")
+source=("nitrond" "nitronapi.sh" "nitrond.1.gz")
 
 package() {
 	mkdir -p "${pkgdir}/usr/bin"
 	mkdir -p "${pkgdir}/usr/include"
 	mkdir -p "${pkgdir}/usr/share/man/man1"
-	gzip nitrond.1
 	cp -f nitrond.1.gz ${pkgdir}/usr/share/man/man1
 	cp -f nitrond ${pkgdir}/usr/bin/nitrond
 	cp -f nitronapi.sh ${pkgdir}/usr/include/nitronapi.sh
