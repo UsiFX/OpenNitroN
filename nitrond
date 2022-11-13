@@ -504,8 +504,7 @@ updaten() {
 	init()
 	{
 		printn -n "checking connectivity..."
-		printn -l "pinging 8.8.8.8 ..."
-		pingn && PR_PREFIX="updaten"; updatealg
+		pingn & spin "pinging 8.8.8.8 ..." && PR_PREFIX="updaten"; updatealg
 	}
 
 	case $* in
