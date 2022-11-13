@@ -30,6 +30,21 @@ cmdavail() {
 
 trapper() { printn -e "shutdown signal recieved, closing..."; }
 
+# usage: cmd & spin "text"
+spin() {
+  set +x
+  PID=$!
+  speed=0; anim='-\|/';
+        while [ -d /proc/$PID ]; do
+                sleep 0.02
+                speed=$(((speed + 1) % 4))
+                printf "\r[${anim:speed:1}] ${@}"
+                if [[ ! -d /proc/$PID ]]; then
+                        printf "\r[${GREEN}OK${STOCK}] ${@}\n"
+                fi
+        done
+}
+
 ## Variables
 vars() {
 # Resource variables
