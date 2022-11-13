@@ -559,6 +559,7 @@ Advanced:
 if [[ $# -eq "0" ]]; then
 	tty -s
 	__nitron_help
+	return 1
 else
 	for arg in "$@"
 	do
@@ -603,6 +604,7 @@ else
 			;;
 			"-sdm" | "--show-default-mode")
 				printn -i "mode: $(apin -mc)"
+				return 0
 			;;
 			"-v" | "--version")
 				echo -e "NitronD $(apin -dv), API: $(apin -hv)
