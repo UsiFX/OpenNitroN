@@ -7,7 +7,7 @@ pkgdesc="Extensive, Enhanced kernel tweaker daemon"
 arch=(any)
 url="https://github.com/UsiFX/OpenNitroN"
 license=('GPL3')
-source=("nitrond" "nitronapi.sh")
+source=("nitrond" "nitronapi.sh" "nitrond.1")
 
 package() {
 	mkdir -p "${pkgdir}/usr/bin"
