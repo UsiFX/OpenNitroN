@@ -8,8 +8,6 @@ arch=(any)
 url="https://github.com/UsiFX/OpenNitroN"
 license=('GPL3')
 source=("nitrond" "nitronapi.sh")
-sha512sums=('a9c1d4ec9cf7df8a56973e6e9af55c49f530a3506ff38432a9537022ab31c435336aa5fa8674454f4586f509d01882d50de2b22eaa80f948ab39874ad87efebe'
-            '979500e471e469a5708d4533bc2289aaceaefe52225fdafe953efdecf3b6f2c104e2ebacfdc4f94387d62e0e4c2d3558f8308907b8707193f784e6e3f763eb08')
 
 package() {
 	mkdir -p "${pkgdir}/usr/bin"

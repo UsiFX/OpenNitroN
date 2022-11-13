@@ -66,7 +66,7 @@ aurcompile()
 	cp -afr "archlinux/." "$OUT/archlinux/product"
 	cp -af "${OBJECTS[@]}" "$OUT/archlinux/product"
 	cd "$OUT/archlinux/product" || exit
-	makepkg --config ../../../makepkg.conf -f "$OUT/archlinux/product" && 	echo " MKPKG  $OUT/target/$FILENAME.pkg.tar.xz"
+	makepkg --skipchecksums --sign --config ../../../makepkg.conf -f "$OUT/archlinux/product" && 	echo " MKPKG  $OUT/target/$FILENAME.pkg.tar.xz"
 	cd ../../..
 	return 0
 }
