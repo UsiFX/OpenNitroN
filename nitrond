@@ -59,7 +59,7 @@ printn() {
 
 	[[ "$1" == "-w" ]] && printf "[${YELLOW}!${STOCK}] $2\n"
 
-	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2 \n"
+	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2\n"
 
 	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[0]: $2" >>"$NITRON_LOG_DIR"/nitron.log
 
@@ -422,7 +422,7 @@ pingn() {
 	[[ "$(ping -c1 "8.8.8.8" >/dev/null 2>&1 && echo $?)" != "0" ]] && {
 		printn -lf "failed"
 		printn -e "nitrond: network: unreachable"
-		return 1
+		exit 1
 	} || {
 		printn -n "nitrond: network: ok"
 		printn -l "connectivity is stable"
@@ -504,7 +504,8 @@ updaten() {
 	init()
 	{
 		printn -n "checking connectivity..."
-		pingn & spin "pinging 8.8.8.8 ..." && PR_PREFIX="updaten"; updatealg
+		printn -l "pinging 8.8.8.8 ..."
+		pingn && PR_PREFIX="updaten"; updatealg
 	}
 
 	case $* in
@@ -525,7 +526,7 @@ updaten() {
 
 # Bail out if we aren't running as SU
 [[ "$(id -u)" -ne "0" ]] && {
-	printn -e "Please run the script as SU"
+	printn -e "please run this tool as SU"
 	exit 1
 }
 
