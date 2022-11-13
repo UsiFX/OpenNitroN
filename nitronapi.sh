@@ -32,17 +32,21 @@ trapper() { printn -e "shutdown signal recieved, closing..."; }
 
 # usage: cmd & spin "text"
 spin() {
-  set +x
-  PID=$!
-  speed=0; anim='-\|/';
-        while [ -d /proc/$PID ]; do
-                sleep 0.02
-                speed=$(((speed + 1) % 4))
-                printf "\r[${anim:speed:1}] ${@}"
-                if [[ ! -d /proc/$PID ]]; then
-                        printf "\r[${GREEN}OK${STOCK}] ${@}\n"
+	set +x
+	PID=$!
+	speed=0; anim='-\|/';
+	while [ -d /proc/$PID ]; do
+		sleep 0.02
+		speed=$(((speed + 1) % 4))
+		printf "\r[${anim:speed:1}] ${@}"
+		if [[ ! -d /proc/$PID ]]; then
+			if [[ "$?" == "0" ]]; then
+	                        printf "\r[${GREEN}OK${STOCK}] ${@}\n"
+			else
+				printf "\r[${RED}FAIL${STOCK}] ${@}\n"
+			fi
                 fi
-        done
+	done
 }
 
 ## Variables
