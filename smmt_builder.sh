@@ -14,9 +14,9 @@
 
 TIMESTAMP=$(date +%Y%m%d)
 VERSION='1.1.5-staging'
-OBJECTS=("nitrond" "nitronapi.sh")
+OBJECTS=("nitrond" "nitronapi.sh" "nitrond.1")
 MMT_OBJECTS=("magisk/META-INF/com/google/android/update-binary" "magisk/setup.sh" "magisk/common/functions.sh" "magisk/uninstall.sh" "magisk/system.prop")
-PLACEHOLDERS=("debian/usr/placeholder" "debian/usr/bin/placeholder" "debian/usr/include/placeholder")
+PLACEHOLDERS=("debian/usr/placeholder" "debian/usr/bin/placeholder" "debian/usr/include/placeholder" "debain/usr/share/man/man1/placeholder")
 FILENAME="NitronX-$VERSION-$RANDOM-$TIMESTAMP"
 
 if [[ -z "$object_directory" ]]; then
@@ -50,6 +50,8 @@ debcompile()
 	cp -afr "debian/." "$OUT/debian/product"
 	cp -af "${OBJECTS[@]}" "$OUT/debian/product"
 	cd "$OUT/debian/product" || exit
+	gzip "$OUT/debian/product/nitrond.1"
+	mv -f "$OUT/debian/product/nitrond.1.gz" "$OUT/debian/product/usr/share/man/man1"
 	mv -f "$OUT/debian/product/nitrond" "$OUT/debian/product/usr/bin"
 	mv -f "$OUT/debian/product/nitronapi.sh" "$OUT/debian/product/usr/include"
 	dpkg-deb --build --root-owner-group "$OUT/debian/product" "$OUT/target/$FILENAME.deb" && echo " DPKG  $OUT/target/$FILENAME.deb"
