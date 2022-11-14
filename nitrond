@@ -628,9 +628,9 @@ There is NO WARRANTY, to the extent permitted by law.."
 			*"?"* | "h"* | "-h" | "--help") __nitron_help ;;
 			"-u" | "--update") updaten -a; return 0 ;;
 			"-d" | "--debug")
-				set -x 2>"$NITRON_LOG_DIR"/nitron.verbose.log
 				printn -w "execution under debug, please provide arguments to debug"
 				printn -w "verbose is saved at: $NITRON_LOG_DIR/nitron.verbose.log"
+				set -x 2>"$NITRON_LOG_DIR"/nitron.verbose.log >/dev/null
 			;;
 			"-dd" | "--downgrade") updaten -d ;;
 			*) printn -e "unknown option $*, check 'nitrond --help'." ;;
