@@ -30,6 +30,8 @@ cmdavail() {
 
 trapper() { printn -e "shutdown signal recieved, closing..."; }
 
+printcrnr() { printf "\r%-$(( ( 1 + ( ${#1} + ${#2} ) / COLUMNS ) * COLUMNS - ${#2} ))s%s\n" "$1" "$2"; }
+
 # usage: cmd & spin "text"
 spin() {
 	set +x
@@ -41,9 +43,9 @@ spin() {
 		printf "\r[${anim:speed:1}] ${@}"
 		if [[ ! -d /proc/$PID ]]; then
 			if [[ "$?" == "0" ]]; then
-	                        printf "\r[${GREEN}OK${STOCK}] ${@}\n"
+				printcrnr "[~] ${@}" "[  OK  ]"
 			else
-				printf "\r[${RED}FAIL${STOCK}] ${@}\n"
+				printcrnr "[!] ${@}" "[ FAIL ]"
 			fi
                 fi
 	done
