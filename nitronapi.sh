@@ -155,7 +155,7 @@ oschk()
 	case "$OSCHK" in
 		"GNU/Linux")
 			PLATFORM="GNU/Linux"
-			if [[ -z ${WSL_DISTRO_NAME} ]]; then
+			if [[ -n "$WSL_DISTRO_NAME" ]]; then
 					PLATFORM="GNU/Linux (WSL)"
 					printn -e "Seems we are running under WSL environment, it's unusable at all with this tool."
 			fi
