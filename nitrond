@@ -419,12 +419,13 @@ magicn() {
 
 pingn() {
 	PR_PREFIX="pingn"
+#	if ! ping -c1 "8.8.8.8" >/dev/null 2>&1; then
 	[[ "$(ping -c1 "8.8.8.8" >/dev/null 2>&1 && echo $?)" != "0" ]] && {
 		printn -lf "failed"
-		printn -e "nitrond: network: unreachable"
+		printcrnr "[!] nitrond: network:" "[ FAIL ]"
 		exit 1
 	} || {
-		printn -n "nitrond: network: ok"
+		printcrnr "[*] nitrond: network:" "[  OK  ]"
 		printn -l "connectivity is stable"
 		return 0
 	}
@@ -447,34 +448,33 @@ updaten() {
 
 	updatealg()
 	{
-		printn -i "looking for update..."
-		cmdavail curl && {
-			curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
-			curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitronapi.sh" 2>/dev/null
-			chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
-		} || printn -e "curl is not available in the system, cannot update."
-		PR_PREFIX="updaten"
-		printn -w "backing up..."
-		cp "$0" "$NITRON_LOG_DIR/nitrond_current" >/dev/null
-		cp "$HEADER_SOURCE/nitronapi.sh" "$NITRON_LOG_DIR/nitronh_current" >/dev/null
-		[[ "$PLATFORM" == "Android" ]] && {
-			printn -w "modifying downloaded update interepter..."
-			sed -i '1c\#!/system/bin/sh' "$NITRON_LOG_DIR/nitrond_src_cache"
-		}
-		if [[ "$(diff "$NITRON_LOG_DIR/nitrond_src_cache" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
-			printn -i "updating..."
-			cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0"
-		else
-			printn -i "Daemon is up to date, $(apin -dv)"
-		fi
-		if [[ "$(diff "$NITRON_LOG_DIR/nitronh_src_cache" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
-			printn -i "attempting to update API..."
-			cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitronapi.sh"
-		else
-			printn -i "API is up to date, $(apin -hv)"
-		fi
-		printn -l "update process(es) finished"
-		return 0
+		(
+			cmdavail curl && {
+				curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
+				curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitronapi.sh" 2>/dev/null
+				chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
+			} || printn -e "curl is not available in the system, cannot update."
+			PR_PREFIX="updaten"
+			(
+				cp "$0" "$NITRON_LOG_DIR/nitrond_current" >/dev/null
+				cp "$HEADER_SOURCE/nitronapi.sh" "$NITRON_LOG_DIR/nitronh_current" >/dev/null
+			) & spin "backing up..."
+			[[ "$PLATFORM" == "Android" ]] && {
+				sed -i '1c\#!/system/bin/sh' "$NITRON_LOG_DIR/nitrond_src_cache" & spin "modifying update file interepter..."
+			}
+			if [[ "$(diff "$NITRON_LOG_DIR/nitrond_src_cache" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
+				cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0" & spin "updating daemon..."
+			else
+				printcrnr "[*] daemon is up to date, $(apin -dv)" "[ FAIL ]"
+			fi
+			if [[ "$(diff "$NITRON_LOG_DIR/nitronh_src_cache" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
+				cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitronapi.sh" & spin "attempting to update API..."
+			else
+				printcrnr "[*] API is up to date, $(apin -hv)" "[ FAIL ]"
+			fi
+			printn -l "update process(es) finished"
+			return 0
+		) & spin "update processing..."
 	}
 
 	rollbackalg()
@@ -503,9 +503,9 @@ updaten() {
 
 	init()
 	{
-		printn -n "checking connectivity..."
 		printn -l "pinging 8.8.8.8 ..."
-		pingn && PR_PREFIX="updaten"; updatealg
+		pingn & spin "checking connectivity..."
+		PR_PREFIX="updaten"; updatealg
 	}
 
 	case $* in
