@@ -48,6 +48,7 @@ fi
 PR_PREFIX="nitron_broadcast"
 DAEMON_SOURCE=$(dirname "$0")
 PROMPT_COMMAND='sync'
+LOCKFILE="${NITRON_LOG_DIR}/nitrond-frontend.lock"
 
 printn() {
 	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
@@ -77,7 +78,14 @@ else
 	source "$HEADER_SOURCE"/nitronapi.sh
 fi
 
-trap 'trap " " SIGINT SIGTERM SIGHUP; trapper; wait' SIGINT SIGTERM SIGHUP
+# Check locker
+[[ -f $LOCKFILE ]] && {
+	printn -e "nitrond_broadcast(): tool is held by a process and it is still running, cannot continue this instance."
+} || {
+	echo 200 > $LOCKFILE
+}
+
+trap 'trap " " SIGINT SIGTERM SIGHUP KILL; rm -f $LOCKFILE; trapper; wait' SIGINT SIGTERM SIGHUP KILL INT TERM EXIT
 
 writen() {
 	[[ ! -f "$1" ]] && {
