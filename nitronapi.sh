@@ -30,7 +30,19 @@ cmdavail() {
 
 trapper() { printn -e "shutdown signal recieved, closing..."; }
 
-printcrnr() { printf "\r%-$(( ( 1 + ( ${#1} + ${#2} ) / COLUMNS ) * COLUMNS - ${#2} ))s%s\n" "$1" "$2"; }
+prompt_right() { echo -e "\r[${GREEN}$(echo "*")${STOCK}] ${@}";}
+
+prompt_left() {
+	case $* in
+		"-t") echo -e "[  ${GREEN}$(echo " OK ")${STOCK}  ]" ;;
+		"-f") echo -e "[  ${RED}$(echo "FAIL")${STOCK}  ]"
+		      exit 1
+		;;
+		*) echo -e "[  ${PURPLE}$(echo "DONE")${STOCK}  ]" ;;
+	esac
+}
+
+printcrnr() { compensate=13; printf "\r%*s\r%s\n" "$((${COLUMNS}+${compensate}))" "$1" "$(prompt_right $2)" ; }
 
 # usage: cmd & spin "text"
 spin() {
@@ -41,13 +53,7 @@ spin() {
 		sleep 0.02
 		speed=$(((speed + 1) % 4))
 		printf "\r[${anim:speed:1}] ${@}"
-		if [[ ! -d /proc/$PID ]]; then
-			if [[ "$?" == "0" ]]; then
-				printcrnr "[~] ${@}" "[  OK  ]"
-			else
-				printcrnr "[!] ${@}" "[ FAIL ]"
-			fi
-                fi
+		[[ ! -d /proc/$PID ]] && printcrnr "$(prompt_left)" "${@}"
 	done
 }
 

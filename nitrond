@@ -430,10 +430,9 @@ pingn() {
 	PR_PREFIX="pingn"
 	[[ "$(ping -c1 "8.8.8.8" >/dev/null 2>&1 && echo $?)" != "0" ]] && {
 		printn -lf "failed"
-		printn -e "nitrond: network: unreachable"
-		exit 1
+		printcrnr "$(prompt_left -f)" "nitrond: network: unreachable"; exit 1
 	} || {
-		printcrnr "[*] nitrond: network:" "[  OK  ]"
+		printcrnr "$(prompt_left -t)" "nitrond: network:"
 		printn -l "connectivity is stable"
 		return 0
 	}
@@ -461,7 +460,7 @@ updaten() {
 				curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
 				curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitronapi.sh" 2>/dev/null
 				chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
-			} || printn -e "curl is not available in the system, cannot update."
+			} || printcrnr "$(prompt_left -f)" "curl is not available in the system, cannot update."; exit 1
 			PR_PREFIX="updaten"
 			(
 				cp "$0" "$NITRON_LOG_DIR/nitrond_current" >/dev/null
@@ -473,12 +472,12 @@ updaten() {
 			if [[ "$(diff "$NITRON_LOG_DIR/nitrond_src_cache" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
 				cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0" & spin "updating daemon..."
 			else
-				printcrnr "[*] daemon is up to date, $(apin -dv)" "[ FAIL ]"
+				printcrnr  "$(prompt_left -f)" "daemon is up to date, $(apin -dv)"
 			fi
 			if [[ "$(diff "$NITRON_LOG_DIR/nitronh_src_cache" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
 				cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitronapi.sh" & spin "attempting to update API..."
 			else
-				printcrnr "[*] API is up to date, $(apin -hv)" "[ FAIL ]"
+				printcrnr "$(prompt_left -f)" "API is up to date, $(apin -hv)"
 			fi
 			printn -l "update process(es) finished"
 			return 0
@@ -512,7 +511,7 @@ updaten() {
 	init()
 	{
 		printn -l "pinging 8.8.8.8 ..."
-		pingn & spin "checking connectivity..."
+		printn -i "checking connectivity..."; pingn
 		PR_PREFIX="updaten"; updatealg
 	}
 
