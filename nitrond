@@ -85,8 +85,8 @@ fi
 	echo 200 > $LOCKFILE
 }
 
-trap 'rm -f $LOCKFILE' EXIT KILL TERM
-trap 'trap " " SIGINT SIGTERM SIGHUP KILL; rm -f $LOCKFILE; trapper; wait' SIGINT SIGTERM SIGHUP KILL INT TERM
+trap 'rm -f $LOCKFILE' EXIT TERM
+trap 'trap " " SIGINT SIGTERM SIGHUP ; rm -f $LOCKFILE; trapper; wait' SIGINT SIGTERM SIGHUP INT TERM
 
 writen() {
 	[[ ! -f "$1" ]] && {
