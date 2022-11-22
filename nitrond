@@ -36,7 +36,7 @@ STOCK='\e[1;0m'
 set +o monitor
 
 export NITRON_FORCECHECK_UPDATE
-export NITRON_VERSION='1.1.7-staging'
+export NITRON_VERSION='1.1.8-staging'
 grep -q "androidboot" /proc/cmdline && HEADER_SOURCE="/system/etc" || HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
 if grep -q "androidboot" /proc/cmdline; then
 	NITRON_RELAX_DIR='/sdcard'
