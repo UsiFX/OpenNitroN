@@ -7,6 +7,11 @@
 # shellcheck disable=SC2154
 # shellcheck disable=SC2009
 # shellcheck disable=SC2068
+# shellcheck disable=SC2116
+# shellcheck disable=SC2120
+# shellcheck disable=SC2116
+# shellcheck disable=SC2086
+# shellcheck disable=SC1001
 #
 # nitronD API Manager.
 #
@@ -42,7 +47,7 @@ prompt_left() {
 	esac
 }
 
-printcrnr() { compensate=13; printf "\r%*s\r%s\n" "$((${COLUMNS}+${compensate}))" "$1" "$(prompt_right $2)" ; }
+printcrnr() { compensate=13; printf "\r%*s\r%s\n" "$((COLUMNS+compensate))" "$1" "$(prompt_right "$2")" ; }
 
 # usage: cmd & spin "text"
 spin() {
@@ -341,20 +346,20 @@ com.activision.callofduty.shooter
 				autoalg() {
 						if [[ "$batt_pctg" -lt "25" ]]; then
 							if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
-								magicn -g 2>&1 >/dev/null
+								magicn -g 2>&1 >/dev/null 2>&1
 								printn -ll "battery is under %25, applied green mode"
 							fi
 						else
 							if (( cputotalusage >= "50" && cputotalusage <= "64" )); then
 								if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
 									printn -ll "cpu usage is 50%+"
-									magicn -y 2>&1 >/dev/null
+									magicn -y 2>&1 >/dev/null 2>&1
 									printn -ll "heavy process(es) detected, applied balance mode."
 								fi
 							elif (( cputotalusage >= "65" )); then
 								if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
 										printn -ll "cpu usage is 65%+"
-										magicn -r 2>&1 >/dev/null
+										magicn -r 2>&1 >/dev/null 2>&1
 										printn -ll "cpu is under load applied Red mode, consuming battery."
 								fi
 							fi
