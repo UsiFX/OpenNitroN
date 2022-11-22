@@ -594,7 +594,7 @@ else
 			"-sg" | "--set-green")
 				[[ "$SOURCE" != "api-auto" ]] && {
 					magicn -g
-					printn -n "nitrond: current mode: \e[1;42m$(apin -mc)${STOCK}"
+					printn -n "nitrond: current mode: \e[2;42m$(apin -mc)${STOCK}"
 					apin -as
 				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
@@ -608,7 +608,7 @@ else
 			"-sy" | "--set-yellow")
 				[[ "$SOURCE" != "api-auto" ]] && {
 					magicn -y
-					printn -n "nitrond: current mode: \e[1;43m$(apin -mc)${STOCK}"
+					printn -n "nitrond: current mode: \e[2;43m$(apin -mc)${STOCK}"
 					apin -as
 				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
