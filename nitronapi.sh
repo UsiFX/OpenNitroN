@@ -111,6 +111,20 @@ else
 		batt_hth=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "warning-level:"| awk '{print $2}')
 	fi
 fi
+
+# Lowmemorykiller info
+[[ -e "/sys/module/lowmemorykiller/parameters/minfree" ]] && {
+	lmkmodminfree=$(cat /sys/module/lowmemorykiller/parameters/minfree)
+	case "$lmkmodminfree" in
+		"6400,7680,11520,25600,35840,38400") lmksts="Aggressive" ;;
+		"2560,5120,7680,8960,10240,12800")   lmksts="Light"  ;;
+		"512,1024,1280,2048,3072,4096")      lmksts="Lighty" ;;
+		"1024,2048,4096,8192,12288,16384")   lmksts="Medium" ;;
+		"2560,5120,11520,25600,35840,38400") lmksts="Extreme" ;;
+		*)				     lmksts="Default" ;;
+	esac
+} || lmkmodminfree="Kernel Module not found."
+
 }
 
 vars
@@ -245,6 +259,7 @@ apin() {
 		echo "CPU Governor: $cpu_gov"
 		echo "CPU Cores: $nr_cores"
 		echo "CPU Usage: $cputotalusage%"
+		echo "LMK Status: $lmksts"
 		[[ "$batt_pctg" != "" ]] && {
 			echo "Battery Percentage: $batt_pctg%"
 			echo "Battery Health: $batt_hth"
