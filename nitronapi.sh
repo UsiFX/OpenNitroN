@@ -350,15 +350,15 @@ com.activision.callofduty.shooter
 								printn -ll "battery is under %25, applied green mode"
 							fi
 						else
-							if (( cputotalusage >= "50" && cputotalusage <= "64" )); then
+							if (( cputotalusage >= "55" && cputotalusage <= "74" )); then
 								if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
-									printn -ll "cpu usage is 50%+"
+									printn -ll "cpu usage is 55%+"
 									magicn -y 2>&1 >/dev/null 2>&1
 									printn -ll "heavy process(es) detected, applied balance mode."
 								fi
-							elif (( cputotalusage >= "65" )); then
+							elif (( cputotalusage >= "75" )); then
 								if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
-										printn -ll "cpu usage is 65%+"
+										printn -ll "cpu usage is 75%+"
 										magicn -r 2>&1 >/dev/null 2>&1
 										printn -ll "cpu is under load applied Red mode, consuming battery."
 								fi
