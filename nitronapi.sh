@@ -65,7 +65,7 @@ spin() {
 ## Variables
 vars() {
 # Resource variables
-cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
+[[ -e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor" ]] && cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor") || printn -w "cannot grab CPU Governor, are we running on Container/CHRoot?"
 
 # Number of CPU cores
 nr_cores=$(awk -F "-" '{print $2}' "/sys/devices/system/cpu/possible")
