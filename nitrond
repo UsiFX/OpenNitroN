@@ -569,7 +569,6 @@ Advanced:
 if [[ $# -eq "0" ]]; then
 	tty -s
 	__nitron_help
-	return 1
 else
 	for arg in "$@"
 	do
@@ -635,7 +634,7 @@ There is NO WARRANTY, to the extent permitted by law.."
 				fi
 			;;
 			*"?"* | "h"* | "-h" | "--help") __nitron_help ;;
-			"-u" | "--update") updaten -a; return 0 ;;
+			"-u" | "--update") updaten -a ;;
 			"-d" | "--debug")
 				printn -w "execution under debug, please provide arguments to debug"
 				printn -w "verbose is saved at: $NITRON_LOG_DIR/nitron.verbose.log"
