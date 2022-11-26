@@ -55,7 +55,7 @@ spin() {
 	PID=$!
 	speed=0; anim='-\|/';
 	while [ -d /proc/$PID ]; do
-		sleep 0.02
+		sleep 0.09
 		speed=$(((speed + 1) % 4))
 		printf "\r[${anim:speed:1}] ${@}"
 		[[ ! -d /proc/$PID ]] && printcrnr "$(prompt_left)" "${@}"
