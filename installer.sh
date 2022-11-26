@@ -31,6 +31,7 @@ shopt -u dirspell progcomp_alias
 # Required variables
 REPO="https://github.com/UsiFX/OpenNitroN.git"
 TARGET_REPO="${HOME}/OpenNitroN-temp"
+BRANCH="nitrond-staging"
 BIN_DIR="${PREFIX/\/usr}/usr/bin"
 INCLUDE_DIR="${PREFIX/\/usr}/usr/include"
 REQUIRED_DEPS=(git dialog)
@@ -40,7 +41,7 @@ which "${REQUIRED_DEPS[@]}" >/dev/null || echo "please download following packag
 case $1 in
 	install)
 		echo "downloading nitrond..."
-		git clone --depth=1 "$REPO" "$TARGET_REPO"
+		git clone --depth=1 "$REPO" "$TARGET_REPO" -b "$BRANCH"
 		echo "installing nitrond..."
 		chmod 755 "${TARGET_REPO}"
 		chmod +x "${TARGET_REPO}/nitrond"
