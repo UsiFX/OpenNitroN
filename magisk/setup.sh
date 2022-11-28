@@ -51,6 +51,22 @@ main()
 		set_perm_recursive "$MODPATH/system/xbin" 0 0 0755 0644
 		set_perm_recursive "$MODPATH/system/bin" 0 0 0755 0755
 	}
+	sleep 1
+	ui_print ""
+	ui_print "[~] Trimming up Partitions..."
+	fstrim /cache
+	sleep 0.2
+	fstrim /data
+	sleep 0.2
+	fstrim /product
+	sleep 0.2
+	fstrim /system
+	sleep 0.2
+	fstrim /vendor
+	ui_print "[~] Trimmed up Partitions"
+	ui_print ""
+	sleep 1
+	ui_print ""
 	ui_print "[*] Installing Daemon..."
 	sleep 0.5
 	cp -af "$MODPATH/nitrond" "$MODPATH/system/bin"
