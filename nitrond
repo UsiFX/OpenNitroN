@@ -586,7 +586,7 @@ else
 				apin -rc >> "$NITRON_RELAX_DIR"/nitron.log
 				printn -ll "starting modifying modes up on Packages availability & Resource usage"
 				printn -w "nitrond will stay on background, it may be not safe to terminate the session."
-				printn -i "^C to force stop the daemon."
+				printn -i "^C to force stop the daemon, use 'kill $(pgrep nitrond)' incase if console shell terminated."
 				( apin -ad &) &
 				while true; do true; done # keep it alive.
 			;;
