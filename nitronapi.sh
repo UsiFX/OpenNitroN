@@ -57,7 +57,11 @@ spin() {
 	while [ -d /proc/$PID ]; do
 		sleep 0.09
 		speed=$(((speed + 1) % 4))
-		printf "\r[${anim:speed:1}] ${@}"
+		if [[ "PLATFORM" == "Android" ]]; then
+			[[ "$BUSYBOX" == "true" ]] && busybox printf "\r[${anim:speed:1}] ${@}"
+		else
+			printf "\r[${anim:speed:1}] ${@}"
+		fi
 		[[ ! -d /proc/$PID ]] && printcrnr "$(prompt_left)" "${@}"
 	done
 }
@@ -247,6 +251,7 @@ apin() {
 		if [[ "$(su --version)" == *"MAGISK"* ]]; then
 			if [[ -d "/data/adb/modules/nitrond.magisk" ]]; then
 				INSTALLATION="Magisk Module"
+				[[ -d "/data/adb/modules/BuiltIn-BusyBox" ]] && BUSYBOX=true || echo "BuiltIn-BusyBox Module not found, cannot continue instance."
 			fi
 		else
 			INSTALLATION="Custom"
