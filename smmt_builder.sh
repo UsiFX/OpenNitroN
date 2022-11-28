@@ -13,10 +13,10 @@
 #
 
 TIMESTAMP=$(date +%Y%m%d)
-VERSION='1.1.0'
-OBJECTS=("nitrond" "nitronapi.sh")
+VERSION='1.2.0'
+OBJECTS=("nitrond" "nitronapi.sh" "nitrond.1")
 MMT_OBJECTS=("magisk/META-INF/com/google/android/update-binary" "magisk/setup.sh" "magisk/common/functions.sh" "magisk/uninstall.sh" "magisk/system.prop")
-PLACEHOLDERS=("debian/usr/placeholder" "debian/usr/bin/placeholder" "debian/usr/include/placeholder")
+PLACEHOLDERS=("debian/usr/placeholder" "debian/usr/bin/placeholder" "debian/usr/include/placeholder" "debain/usr/share/man/man1/placeholder")
 FILENAME="NitronX-$VERSION-$RANDOM-$TIMESTAMP"
 
 if [[ -z "$object_directory" ]]; then
@@ -36,10 +36,9 @@ compile()
 	cp -afr "magisk/." "$OUT/product"
 	cp -af "${OBJECTS[@]}" "$OUT/product"
 	cd "$OUT/product" || exit
-	zip -0 -r9 -ll "$OUT/target/$FILENAME.zip" . -x "$FILENAME" >/dev/null
-	echo " ZIP  $OUT/target/$FILENAME.zip"
+	zip -0 -r9 -ll "$OUT/target/$FILENAME.zip" . -x "$FILENAME" >/dev/null && echo " ZIP  $OUT/target/$FILENAME.zip"
 	cd ../..
-	return $?
+	return 0
 }
 
 
@@ -51,12 +50,13 @@ debcompile()
 	cp -afr "debian/." "$OUT/debian/product"
 	cp -af "${OBJECTS[@]}" "$OUT/debian/product"
 	cd "$OUT/debian/product" || exit
+	gzip "$OUT/debian/product/nitrond.1"
+	mv -f "$OUT/debian/product/nitrond.1.gz" "$OUT/debian/product/usr/share/man/man1"
 	mv -f "$OUT/debian/product/nitrond" "$OUT/debian/product/usr/bin"
 	mv -f "$OUT/debian/product/nitronapi.sh" "$OUT/debian/product/usr/include"
-	dpkg-deb --build --root-owner-group "$OUT/debian/product" "$OUT/target/$FILENAME.deb"
-	echo " DPKG  $OUT/target/$FILENAME.deb"
+	dpkg-deb --build --root-owner-group "$OUT/debian/product" "$OUT/target/$FILENAME.deb" && echo " DPKG  $OUT/target/$FILENAME.deb"
 	cd ../../..
-	return $?
+	return 0
 }
 
 aurcompile()
@@ -66,10 +66,10 @@ aurcompile()
 	cp -afr "archlinux/." "$OUT/archlinux/product"
 	cp -af "${OBJECTS[@]}" "$OUT/archlinux/product"
 	cd "$OUT/archlinux/product" || exit
-	makepkg --config ../../../makepkg.conf -f "$OUT/archlinux/product"
-	echo " MKPKG  $OUT/target/$FILENAME.zst"
+	gzip "$OUT/archlinux/product/nitrond.1"
+	makepkg --skipchecksums --sign --config ../../../makepkg.conf -f "$OUT/archlinux/product" && 	echo " MKPKG  $OUT/target/$FILENAME.pkg.tar.xz"
 	cd ../../..
-	return $?
+	return 0
 }
 
 help()

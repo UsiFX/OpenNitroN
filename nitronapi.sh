@@ -7,6 +7,11 @@
 # shellcheck disable=SC2154
 # shellcheck disable=SC2009
 # shellcheck disable=SC2068
+# shellcheck disable=SC2116
+# shellcheck disable=SC2120
+# shellcheck disable=SC2116
+# shellcheck disable=SC2086
+# shellcheck disable=SC1001
 #
 # nitronD API Manager.
 #
@@ -14,7 +19,7 @@
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
-export NITRON_HEADER_VERSION='2.3.1'
+export NITRON_HEADER_VERSION='2.7.0'
 
 # cmdavail <command> ## if available > return 0 & log; else return 1 & log
 cmdavail() {
@@ -28,10 +33,39 @@ cmdavail() {
 	fi
 }
 
-## Variables
+trapper() { printn -e "shutdown signal recieved, closing..."; }
 
+prompt_right() { echo -e "\r[${GREEN}$(echo "*")${STOCK}] ${@}";}
+
+prompt_left() {
+	case $* in
+		"-t") echo -e "[  ${GREEN}$(echo " OK ")${STOCK}  ]" ;;
+		"-f") echo -e "[  ${RED}$(echo "FAIL")${STOCK}  ]"
+		      exit 1
+		;;
+		*) echo -e "[  ${PURPLE}$(echo "DONE")${STOCK}  ]" ;;
+	esac
+}
+
+printcrnr() { compensate=13; printf "\r%*s\r%s\n" "$((COLUMNS+compensate))" "$1" "$(prompt_right "$2")" ; }
+
+# usage: cmd & spin "text"
+spin() {
+	set +x
+	PID=$!
+	speed=0; anim='-\|/';
+	while [ -d /proc/$PID ]; do
+		sleep 0.09
+		speed=$(((speed + 1) % 4))
+		printf "\r[${anim:speed:1}] ${@}"
+		[[ ! -d /proc/$PID ]] && printcrnr "$(prompt_left)" "${@}"
+	done
+}
+
+## Variables
+vars() {
 # Resource variables
-cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor")
+[[ -e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor" ]] && cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor") || printn -w "cannot grab CPU Governor, are we running on Container/CHRoot?"
 
 # Number of CPU cores
 nr_cores=$(awk -F "-" '{print $2}' "/sys/devices/system/cpu/possible")
@@ -39,6 +73,34 @@ nr_cores=$((nr_cores + 1))
 
 # CPU Usage
 cputotalusage=$(grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage ""}' | cut -f1 -d\.$cputotalusage)
+
+# Max CPU clock
+cpu_max_freq=$(cat /sys/devices/system/cpu/cpu7/cpufreq/cpuinfo_max_freq)
+cpu_max_freq2=$(cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_max_freq)
+cpu_max_freq3=$(cat /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_max_freq)
+cpu_max_freq1=$(cat /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq)
+cpu_max_freq1_2=$(cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq)
+cpu_max_freq1_3=$(cat /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq)
+
+[[ "$cpu_max_freq2" -gt "$cpu_max_freq" ]] && [[ "$cpu_max_freq2" -gt "$cpu_max_freq3" ]] && cpu_max_freq="$cpu_max_freq2"
+[[ "$cpu_max_freq3" -gt "$cpu_max_freq" ]] && [[ "$cpu_max_freq3" -gt "$cpu_max_freq2" ]] && cpu_max_freq="$cpu_max_freq3"
+[[ "$cpu_max_freq1_2" -gt "$cpu_max_freq1" ]] && [[ "$cpu_max_freq1_2" -gt "$cpu_max_freq1_3" ]] && cpu_max_freq1="$cpu_max_freq1_2"
+[[ "$cpu_max_freq1_3" -gt "$cpu_max_freq1" ]] && [[ "$cpu_max_freq1_3" -gt "$cpu_max_freq1_2" ]] && cpu_max_freq1="$cpu_max_freq1_3"
+[[ "$cpu_max_freq1" -gt "$cpu_max_freq" ]] && cpu_max_freq="$cpu_max_freq1"
+
+# Min CPU clock
+cpu_min_freq=$(cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq)
+cpu_min_freq2=$(cat /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_min_freq)
+cpu_min_freq1=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq)
+cpu_min_freq1_2=$(cat /sys/devices/system/cpu/cpu5/cpufreq/scaling_min_freq)
+
+[[ "$cpu_min_freq2" -lt "$cpu_min_freq" ]] && cpu_min_freq="$cpu_min_freq2"
+[[ "$cpu_min_freq1_2" -lt "$cpu_min_freq1" ]] && cpu_min_freq1="$cpu_min_freq1_2"
+[[ "$cpu_min_freq1" -lt "$cpu_min_freq" ]] && cpu_min_freq="$cpu_min_freq1"
+
+# HZ → MHz
+cpu_min_clk_mhz=$((cpu_min_freq / 1000))
+cpu_max_clk_mhz=$((cpu_max_freq / 1000))
 
 # Battery info
 # Current battery capacity available
@@ -67,8 +129,12 @@ if [[ "$batt_pctg" != "" ]]; then
 		5) batt_sts="Full" ;;
 	esac
 
+
 	# Battery total capacity
 	[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || cmdavail dumpsys && batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
+
+	# MA → MAh
+	[[ "$batt_cpct" -ge "1000000" ]] && batt_cpct=$((batt_cpct / 1000))
 else
 	if cmdavail upower; then
 		batt_pctg=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "percentage:"| awk '{print $2}' | cut -f1 -d\%)
@@ -78,13 +144,30 @@ else
 	fi
 fi
 
+# Lowmemorykiller info
+[[ -e "/sys/module/lowmemorykiller/parameters" ]] && {
+	lmkmodminfree=$(cat /sys/module/lowmemorykiller/parameters/minfree)
+	case "$lmkmodminfree" in
+		"6400,7680,11520,25600,35840,38400") lmksts="Aggressive" ;;
+		"2560,5120,7680,8960,10240,12800")   lmksts="Light"  ;;
+		"512,1024,1280,2048,3072,4096")      lmksts="Lighty" ;;
+		"1024,2048,4096,8192,12288,16384")   lmksts="Medium" ;;
+		"2560,5120,11520,25600,35840,38400") lmksts="Extreme" ;;
+		*)				     lmksts="Default" ;;
+	esac
+} || lmkmodminfree="Kernel Module not found."
+
+}
+
+vars
+
 ## End of variables
 
 # infogrbn <directory> <value>
 infogrbn() { grep "$2" "$1" | awk '{ print $2 }';}
 
 # infogrblongn <directory> <value>
-infogrblongn() { grep "$2" "$1" | awk '{ print $2,$3,$4,$5,$6,$7,$8,$9 }' | head -n1 && return $?;}
+infogrblongn() { grep "$2" "$1" | awk -F ": " '{ print $2,$3,$4,$5,$6,$7,$8,$9 }' | head -n1 && return $?;}
 
 # setmoden <nitron mode>
 setmoden() { echo "$1" > "$NITRON_LOG_DIR"/nitron.mode.lock ;}
@@ -116,7 +199,7 @@ modelockn()
 			setmoden "Automatic yellow"
 		;;
 		"Automatic red")
-			setmoden "Automatic [red]"
+			setmoden "Automatic red"
 		;;
 	esac
 }
@@ -129,6 +212,10 @@ oschk()
 	case "$OSCHK" in
 		"GNU/Linux")
 			PLATFORM="GNU/Linux"
+			if [[ -n "$WSL_DISTRO_NAME" ]]; then
+					PLATFORM="GNU/Linux (WSL)"
+					printn -e "Seems we are running under WSL environment, it's unusable at all with this tool."
+			fi
 			printn -l "OS: $PLATFORM"
 			return 0
 		;;
@@ -200,15 +287,17 @@ apin() {
 		echo "SU Provider: $(su --version)"
 		echo "Memory: $(( $(infogrbn "/proc/meminfo" "MemTotal") / 1024 / 1024 + 1 ))GB"
 		[[ "$(infogrblongn "/proc/cpuinfo" "Hardware")" ]] && echo "Hardware: $(infogrblongn "/proc/cpuinfo" "Hardware")" || echo "Hardware: $(infogrblongn "/proc/cpuinfo" "model name")"
-		echo "Machine: $(uname -m)"
+		echo "Kernel Archticture: $(uname -m)"
 		echo "CPU Governor: $cpu_gov"
 		echo "CPU Cores: $nr_cores"
+		echo "CPU Freq: MIN=$cpu_min_clk_mhz, MAX=$cpu_max_clk_mhz MHz"
 		echo "CPU Usage: $cputotalusage%"
+		echo "LMK Status: $lmksts"
 		[[ "$batt_pctg" != "" ]] && {
 			echo "Battery Percentage: $batt_pctg%"
 			echo "Battery Health: $batt_hth"
 			echo "Battery Status: $batt_sts"
-			echo "Battery Capacity: $batt_cpct"
+			echo "Battery Capacity: $batt_cpct MAh"
 		}
 		[[ "$PLATFORM" == "Android" ]] && androiddevinfo
 		echo "Nitron Daemon Version: $(apin -dv)"
@@ -299,40 +388,46 @@ com.tencent.ig
 com.mojang.minecraftpe
 com.activision.callofduty.shooter
 			" >> "$NITRON_RELAX_DIR/nitron.auto.conf"
-
-			NITRON_LIBAUTO_VERSION='1.1.0'
-			pkgs=$(cat "$NITRON_RELAX_DIR/nitron.auto.conf")
-			relax=$(pidof ${pkgs[@]} | tr ' ' '\n')
-			pidsavail() { ps -A -o PID | grep -q "$relax" && echo $?;}
-
+			export SOURCE="api-auto"
 			auto()
 			{
-					SOURCE="libauto"
-					if [[ $(pidsavail) == 0 ]]; then
+				autoalg() {
 						if [[ "$batt_pctg" -lt "25" ]]; then
 							if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
-								magicn -g
+								magicn -g 2>&1 >/dev/null 2>&1
 								printn -ll "battery is under %25, applied green mode"
 							fi
 						else
-							if (( cputotalusage >= "50" <= "64" )); then
+							if (( cputotalusage >= "55" && cputotalusage <= "74" )); then
 								if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
-									printn -ll "cpu usage is 50%+"
-									magicn -y
+									printn -ll "cpu usage is 55%+"
+									magicn -y 2>&1 >/dev/null 2>&1
 									printn -ll "heavy process(es) detected, applied balance mode."
 								fi
-							elif [[ "$cputotalusage" -gt "65" ]]; then
+							elif (( cputotalusage >= "75" )); then
 								if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
-										printn -ll "cpu usage is 65%+"
-										magicn -r
+										printn -ll "cpu usage is 75%+"
+										magicn -r 2>&1 >/dev/null 2>&1
 										printn -ll "cpu is under load applied Red mode, consuming battery."
 								fi
 							fi
 						fi
-					fi
+				}
+
+				vars # update variables each execution
+				if [[ $(pgrep -f -c $PIDS) -gt 0 ]]; then
+					autoalg
+				elif [[ $PIDS == *"all"* ]]; then
+					autoalg
+				fi
 			}
-			while true; do
-				auto
+			while [[ "$SOURCE" == "api-auto" ]] && true; do
+				if [[ "$TRAPAUTO" == "true" ]]; then
+					exit
+				else
+					PIDS=$(cat /sdcard/nitron.auto.conf | tail -n +4)
+					auto
+				fi
 			done
 		;;
 		"-h" | "--help")
@@ -514,19 +609,19 @@ console_legacy() {
 							case $mode_num in
 								1)
 									magicn -r
-									printn -i "Process complete!"
+									printn -n "Gaming Mode activated."
 									sleep 2
 									break
 									;;
 								2)
 									magicn -y
-									printn -i "Process complete!"
+									printn -n "Balance Mode activated."
 									sleep 2
 									break
 									;;
 								3)
 									magicn -g
-									printn -i "Process complete!"
+									printn -n "Battery Mode activated."
 									sleep 2
 									break
 									;;

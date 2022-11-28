@@ -69,23 +69,32 @@ bash smmt_builder.sh [OPTIONS]
 replace [OPTIONS] with compiler arguments such as `--clean` & `--shellcheck`
 
   - for users:
-go to release section and download latest official build.
+go to release section and download latest official build from [here](https://www.pling.com/p/1627867/).
 
 ## Options
 ```
 Usage: nitrond [OPTION] (e.g. nitrond --update)
 
+Commands:
+  deviceinfo                    ~ shows device resource information
+  clean                         ~ wipe stored nitron data
+  auto                          ~ automatically decide mode switchment up on Environment status
+
 Options:
--sg, --set-green              ~ apply Battery mode
--sr, --set-red                ~ apply Gaming mode
--sy, --set-yellow             ~ apply Balanced mode
--sdm, --show-default-mode     ~ prints current tweaking mode
--c, --console-mode            ~ enter User-Friendly user selections
--u, --update                  ~ force update to latest
--h, --help                    ~ shows this Help menu
--v, --version                 ~ shows tool version
--d, --debug    [DEV-ONLY]     ~ run any command under debug flag
--L, --License                 ~ shows Tool License
+  -sdm, --show-default-mode     ~ prints current tweaking mode
+  -sg, --set-green              ~ apply Battery mode
+  -sr, --set-red                ~ apply Gaming mode
+  -sy, --set-yellow             ~ apply Balanced mode
+  -c, --console-mode            ~ enter User-Friendly user selections
+
+Others:
+  -h, --help                    ~ shows this Help menu
+  -v, --version                 ~ shows tool version
+  -u, --update                  ~ update to latest
+
+Advanced:
+  -dd, --downgrade              ~ downgrade to previous upgrade
+  -d, --debug                   ~ run commands under debuggable verbose flags
 ```
 
 ## Reporting Issues
@@ -113,36 +122,3 @@ of this license document, but changing it is not allowed.
 PAYPAL: `xprjkts@gmail.com`
 
 KO-FI: `https://ko-fi.com/xprjkt`
-
-# Hacktoberfest
-
-## What is Hacktoberfest?
-
-A month-long celebration from October 1st - 31st sponsored by [Digital Ocean](https://hacktoberfest.digitalocean.com/) and [GitHub](https://github.com/blog/2433-celebrate-open-source-this-october-with-hacktoberfest) to get people involved in [Open Source](https://github.com/open-source). Create your very first pull request to any public repository on GitHub and contribute to the open source developer community.
-
-[https://hacktoberfest.digitalocean.com/](https://hacktoberfest.digitalocean.com/)
-
-## Getting started
-
-- Fork this repository (Click the Fork button in the top right of this page, click your Profile Image)
-- Clone your fork down to your local machine
-
-```markdown
-git clone https://github.com/your-username/python_codes.git
-```
-
-- Make your changes ( eg: Add Some python code )
-- Commit and push
-
-```markdown
-git add .
-git commit -m 'Commit message'
-git push origin branch-name
-```
-
-## How to Participate
-
-- Create a new pull request from your forked repository (Click the `New Pull Request` button located at the top of your repo)
-- Wait for your PR review and merge approval!
-- **Star this repository** 
-- Enjoy & Wait for your free swags!

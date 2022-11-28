@@ -1,14 +1,19 @@
-
 # Maintainer: UsiFX <xprjkts@gmail.com>
+
 pkgname=NitronX
-pkgver=1.1.0
-pkgrel=1
+pkgver=1.2.0
+pkgrel=9
 pkgdesc="Extensive, Enhanced kernel tweaker daemon"
 arch=(any)
 url="https://github.com/UsiFX/OpenNitroN"
 license=('GPL3')
+source=("nitrond" "nitronapi.sh" "nitrond.1.gz")
 
 package() {
-        cp -f ../nitrond ${PREFIX/\/usr}/usr/bin/nitrond
-        cp -f ../nitron_headers.sh ${PREFIX/\/usr}/usr/include/nitron_headers.sh
+	mkdir -p "${pkgdir}/usr/bin"
+	mkdir -p "${pkgdir}/usr/include"
+	mkdir -p "${pkgdir}/usr/share/man/man1"
+	cp -f nitrond.1.gz ${pkgdir}/usr/share/man/man1
+	cp -f nitrond ${pkgdir}/usr/bin/nitrond
+	cp -f nitronapi.sh ${pkgdir}/usr/include/nitronapi.sh
 }

@@ -1,0 +1,74 @@
+.\" Manpage for nitrond.
+.\" Contact xprjkts@gmail.com to correct errors or typos.
+.TH man 8 "21 Nov 2022" "1.1" "nitrond man page"
+.SH NAME
+nitrond \- Linux Kernel Enhancer
+.SH SYNOPSIS
+nitrond [OPTIONS]
+.SH DESCRIPTION
+nitrond is a two-way modular Universal kernel optimizer written in bash which is extensive What it means to be Universal two-way is that it is an argument-based script and a menu-based script for Android and/or Linux platforms.
+.SH OPTIONS
+nitrond have so many options and arguments here is the list of them and there usage.
+
+* auto:
+  used to make the tool decide by itself the Mode changing up on CPU Usage, Battery Usage & Configuration file
+  the configuration file is located at: /etc/nitron.auto.conf
+  you had the ability to put the packages names to make the auto works up on them
+  you can also just fill it with "all" and it will work as live time.
+
+* deviceinfo:
+  used to to gather and grab the Device Resource & Operation System Information
+  such as Kernel's ARCH, Battery Life, CPU Governor etc.
+
+* clean:
+  used to clean the files which have been made by the tool
+  like the detailed log (/tmp/nitron.log) AND/OR verbose log  (/tmp/nitron.verbose.log).
+
+.SH ARGUMENTS
+nitrond also have alot of arguements and here is thr list of them and there usage
+
+** nitrond help | nitrond h **
+
+: shows list of available commands
+
+** nitrond -sdm | nitrond --show-default-mode **
+
+: prints the last executed/performed mode, keep in mind it will be Reset by clean option.
+
+** nitrond -sg | nitrond --set-green **
+
+: switch/perform change to Green/Battery mode
+
+** nitrond -sy | nitrond --set-yellow **
+
+: switch/perform change to Yellow/Balanced mode
+
+** nitrond -sr | nitrond --set-red **
+
+: switch/perform change to Red/Gaming mode
+
+** nitrond -c | nitrond --console-mode **
+
+: arranges all of these options into simple shell dialog/menu with user input reading
+
+** nitrond -v | nitrond --version **
+
+: prints tool/API version with the license version and type
+
+** nitrond -u | nitrond --update **
+
+: performs full upgrade to the tool and the API (requires internet connection)
+
+** nitrond --downgrade |  nitrond --downgrade **
+
+: performs full downgrade to the tool and the API (won't work if clean command were performed after and update before)
+
+** nitrond -d OPTION/ARG | nitrond --debug OPTION/ARG **
+
+: perform any of the supplied and registered command under debug then save it to file (/tmp/nitron.verbose.log)
+
+.SH BUGS
+* there is no known bugs.
+
+.SH AUTHOR
+UsiFX <xprjkts@gmail.com>
