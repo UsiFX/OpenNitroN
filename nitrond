@@ -457,8 +457,8 @@ updaten() {
 	{
 		(
 			cmdavail curl && {
-				curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitrond" 2>/dev/null
-				curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/nitronapi.sh" 2>/dev/null
+				curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
+				curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitronapi.sh" 2>/dev/null
 				chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
 			} || {
 				printcrnr "$(prompt_left -f)" "curl is not available in the system, cannot update." 
