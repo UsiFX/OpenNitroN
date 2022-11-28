@@ -129,8 +129,12 @@ if [[ "$batt_pctg" != "" ]]; then
 		5) batt_sts="Full" ;;
 	esac
 
+
 	# Battery total capacity
 	[[ -e "/sys/class/power_supply/battery/charge_full_design" ]] && batt_cpct=$(cat /sys/class/power_supply/battery/charge_full_design) || cmdavail dumpsys && batt_cpct=$(dumpsys batterystats | awk '/Capacity:/{print $2}' | cut -d "," -f 1)
+
+	# MA → MAh
+	[[ "$batt_cpct" -ge "1000000" ]] && batt_cpct=$((batt_cpct / 1000))
 else
 	if cmdavail upower; then
 		batt_pctg=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "percentage:"| awk '{print $2}' | cut -f1 -d\%)
@@ -141,7 +145,7 @@ else
 fi
 
 # Lowmemorykiller info
-[[ -e "/sys/module/lowmemorykiller/parameters/minfree" ]] && {
+[[ -e "/sys/module/lowmemorykiller/parameters" ]] && {
 	lmkmodminfree=$(cat /sys/module/lowmemorykiller/parameters/minfree)
 	case "$lmkmodminfree" in
 		"6400,7680,11520,25600,35840,38400") lmksts="Aggressive" ;;
@@ -286,13 +290,14 @@ apin() {
 		echo "Kernel Archticture: $(uname -m)"
 		echo "CPU Governor: $cpu_gov"
 		echo "CPU Cores: $nr_cores"
+		echo "CPU Freq: MIN=$cpu_min_clk_mhz, MAX=$cpu_max_clk_mhz MHz"
 		echo "CPU Usage: $cputotalusage%"
 		echo "LMK Status: $lmksts"
 		[[ "$batt_pctg" != "" ]] && {
 			echo "Battery Percentage: $batt_pctg%"
 			echo "Battery Health: $batt_hth"
 			echo "Battery Status: $batt_sts"
-			echo "Battery Capacity: $batt_cpct"
+			echo "Battery Capacity: $batt_cpct MAh"
 		}
 		[[ "$PLATFORM" == "Android" ]] && androiddevinfo
 		echo "Nitron Daemon Version: $(apin -dv)"
