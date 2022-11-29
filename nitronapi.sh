@@ -251,7 +251,7 @@ apin() {
 		if [[ "$(su --version)" == *"MAGISK"* ]]; then
 			if [[ -d "/data/adb/modules/nitrond.magisk" ]]; then
 				INSTALLATION="Magisk Module"
-				[[ -d "/data/adb/modules/BuiltIn-BusyBox" ]] && BUSYBOX=true || echo "BuiltIn-BusyBox Module not found, cannot continue instance."
+				cmdavail busybox && BUSYBOX=true || echo "BusyBox is required and it's not found on this system, cannot continue instance."
 			fi
 		else
 			INSTALLATION="Custom"
