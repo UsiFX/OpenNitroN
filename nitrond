@@ -37,14 +37,22 @@ set +o monitor
 
 export NITRON_FORCECHECK_UPDATE
 export NITRON_VERSION='1.2.0'
-grep -q "androidboot" /proc/cmdline && HEADER_SOURCE="/system/etc" || HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
 if grep -q "androidboot" /proc/cmdline; then
+	HEADER_SOURCE="/system/etc"
 	NITRON_RELAX_DIR='/sdcard'
 	NITRON_LOG_DIR='/cache'
 else
-	NITRON_RELAX_DIR='/etc'
-	NITRON_LOG_DIR='/tmp'
+	if command -v "resetprop" >/dev/null; then
+		HEADER_SOURCE="/system/etc"
+		NITRON_RELAX_DIR='/sdcard'
+		NITRON_LOG_DIR='/cache'
+	else
+		HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
+		NITRON_RELAX_DIR='/etc'
+		NITRON_LOG_DIR='/tmp'
+	fi
 fi
+
 PR_PREFIX="nitron_broadcast"
 DAEMON_SOURCE=$(dirname "$0")
 PROMPT_COMMAND='sync'
