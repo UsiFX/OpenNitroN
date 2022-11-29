@@ -88,21 +88,16 @@ fi
 trap 'rm -f $LOCKFILE' EXIT TERM
 trap 'rm -f $LOCKFILE; trapper; wait' SIGINT SIGTERM SIGHUP INT TERM KILL
 
+
 writen() {
-	[[ ! -f "$1" ]] && {
-		echo "[$(date +%I:%M:%S)] nitrond: $1: not found, skipping..." >> "$NITRON_LOG_DIR"/nitron.log
-		return 1
-	}
+        [[ ! -f "$1" ]] && echo "[$(date +%I:%M:%S)] $1: not found, skipping..." >> "$NITRON_LOG_DIR"/nitron.log
 
-	# Make file writable
-	chmod +w "$1" 2>/dev/null
+        # Make file writable
+        chmod +w "$1" 2>/dev/null
 
-	# Write new value, bail out if it fail
-	if ! echo "$2" > "$1" >/dev/null; then
-		echo "[$(date +%I:%M:%S)] nitrond: $1: failed to change node" >> "$NITRON_LOG_DIR"/nitron.log
-	else
-		echo "[$(date +%I:%M:%S)] nitrond: $1: changed node[$2]" >> "$NITRON_LOG_DIR"/nitron.log
-	fi
+        # Write new value, bail out if it fail
+        (echo $2 >> $1) 2>/dev/null  && echo "[$(date +%I:%M:%S)] $1: changed node[$2]" >> "$NITRON_LOG_DIR"/nitron.log || echo "[$(date +%I:%M:%S)] $1: failed to change node" >> "$NITRON_LOG_DIR"/nitron.log
+
 }
 
 __magicn_help() {
