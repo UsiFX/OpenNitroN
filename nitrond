@@ -87,15 +87,10 @@ else
 fi
 
 # Check locker
-[[ -f $LOCKFILE ]] && {
-	printn -e "nitrond_broadcast(): tool is held by a process and it is still running, cannot continue this instance."
-} || {
-	echo 200 > $LOCKFILE
-}
+[[ -f $LOCKFILE ]] && printn -e "nitrond_broadcast(): tool is held by a process and it is still running, cannot continue this instance." || echo $$ > $LOCKFILE
 
-trap 'rm -f $LOCKFILE' EXIT TERM
+trap 'rm -f $LOCKFILE' EXIT TERM INT
 trap 'rm -f $LOCKFILE; trapper; wait' SIGINT SIGTERM SIGHUP INT TERM KILL
-
 
 writen() {
         [[ ! -f "$1" ]] && echo "[$(date +%I:%M:%S)] $1: not found, skipping..." >> "$NITRON_LOG_DIR"/nitron.log
