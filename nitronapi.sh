@@ -225,7 +225,7 @@ oschk()
 		;;
 		"Linux")
 			if grep -q "androidboot" /proc/cmdline; then
-				PLATFORM="Android"
+				cmdavail resetprop && PLATFORM="Android"
 			else
 				PLATFORM="Linux"
 			fi
@@ -236,9 +236,11 @@ oschk()
 			if grep -q "androidboot" /proc/cmdline; then
 				PLATFORM="Android"
 			else
-				PLATFORM="Unknown"
-				printn -lf "OS: $PLATFORM"
-				printn -e "Unknown Operating System, cannot start."
+				cmdavail resetprop && PLATFORM="Android" || { 
+					PLATFORM="Unknown"
+					printn -lf "OS: $PLATFORM"
+					printn -e "Unknown Operating System, cannot start."
+				}
 			fi
 		;;
 	esac
