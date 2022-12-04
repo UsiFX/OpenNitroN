@@ -286,7 +286,7 @@ apin() {
 		echo "CPU Freq: MIN=$cpu_min_clk_mhz, MAX=$cpu_max_clk_mhz MHz"
 		echo "CPU Usage: $cputotalusage%"
 		echo "LMK Status: $lmksts"
-		[[ "$batt_pctg" != "" ]] && {
+		[[ "$batt_pctg" != "" ]] && [[ "$batt_pctg" != "unknown" ]] && {
 			echo "Battery Percentage: $batt_pctg%"
 			echo "Battery Health: $batt_hth"
 			echo "Battery Status: $batt_sts"
