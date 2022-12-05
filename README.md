@@ -1,6 +1,6 @@
 ![OpenNitroN](https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/etc/banners/frame_17.png)
 
-# <div align=center> The NitroN: Open Edition Staging version </div>
+# <div align=center> The NitroN: Open Edition </div>
 
 <a href="https://app.codiga.io/hub/project/34591/OpenNitroN/dashboard">
   <img src="https://api.codiga.io/project/34591/score/svg" alt="Codescore">
@@ -43,6 +43,20 @@ an argument-based script and a menu-based script for Android and/or Linux platfo
 ## Installation
 
 **for linux:**
+
+ - Debain-based (alternatives):
+Download from Github Releases the __.deb__ file then install it via,
+``` bash
+$ sudo dpkg -i <file_directory>/<filename>.deb
+```
+
+ - Archlinux-based (alternatives):
+NitronX is already in AUR Packages and you can install it via `yay`, via:
+``` bash
+$ yay -S nitronx
+```
+
+ - other:
 The installer (`installer.sh`) simply clones this repository
 in your home's Directory (`/home`) and creates copy of the executables
 in `/usr/bin` for the daemon itself, and/or `/usr/include` for the header file
