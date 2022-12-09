@@ -135,7 +135,7 @@ else
 fi
 
 # Lowmemorykiller info
-[[ -d "/sys/module/lowmemorykiller" ]] && {
+if [[ -d "/sys/module/lowmemorykiller" ]]; then
 	lmkmodminfree=$(cat /sys/module/lowmemorykiller/parameters/minfree)
 	case "$lmkmodminfree" in
 		"6400,7680,11520,25600,35840,38400") lmksts="Aggressive" ;;
@@ -145,8 +145,9 @@ fi
 		"2560,5120,11520,25600,35840,38400") lmksts="Extreme" ;;
 		*)				     lmksts="Default" ;;
 	esac
-} || lmkmodminfree="Kernel Module not found."
-
+else
+    lmksts="Kernel Module not found."
+fi
 }
 
 vars
