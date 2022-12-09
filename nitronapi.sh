@@ -135,7 +135,7 @@ else
 fi
 
 # Lowmemorykiller info
-[[ -e "/sys/module/lowmemorykiller/parameters" ]] && {
+[[ -d "/sys/module/lowmemorykiller" ]] && {
 	lmkmodminfree=$(cat /sys/module/lowmemorykiller/parameters/minfree)
 	case "$lmkmodminfree" in
 		"6400,7680,11520,25600,35840,38400") lmksts="Aggressive" ;;
