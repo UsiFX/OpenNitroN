@@ -36,7 +36,7 @@ STOCK='\e[1;0m'
 set +o monitor
 
 export NITRON_FORCECHECK_UPDATE
-export NITRON_VERSION='1.2.0'
+export NITRON_VERSION='1.2.2'
 if grep -q "androidboot" /proc/cmdline; then
 	HEADER_SOURCE="/system/etc"
 	NITRON_RELAX_DIR='/sdcard'

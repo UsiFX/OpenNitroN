@@ -1,7 +1,7 @@
 # Maintainer: UsiFX <xprjkts@gmail.com>
 
 pkgname=NitronX
-pkgver=1.2.0
+pkgver=1.2.2
 pkgrel=9
 pkgdesc="Extensive, Enhanced kernel tweaker daemon"
 arch=(any)
