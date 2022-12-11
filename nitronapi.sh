@@ -375,54 +375,34 @@ Options:
 			rm -rf "$NITRON_LOG_DIR"/nitron.log
 		;;
 		"-ad" | "--auto-daemon")
-			[[ ! -f "$NITRON_RELAX_DIR/nitron.auto.conf" ]] && echo "# The nitrond Config File
-# Optimise packages up on resource usage and load
-# List all package/app names according to your needs
-com.tencent.ig
-com.mojang.minecraftpe
-com.activision.callofduty.shooter
-			" >> "$NITRON_RELAX_DIR/nitron.auto.conf"
 			export SOURCE="api-auto"
-			auto()
-			{
-				autoalg() {
-						if [[ "$batt_pctg" -lt "25" ]]; then
-							if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
-								magicn -g 2>&1 >/dev/null 2>&1
-								printn -ll "battery is under %25, applied green mode"
-							fi
-						else
-							if (( cputotalusage >= "55" && cputotalusage <= "74" )); then
-								if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
-									printn -ll "cpu usage is 55%+"
-									magicn -y 2>&1 >/dev/null 2>&1
-									printn -ll "heavy process(es) detected, applied balance mode."
-								fi
-							elif (( cputotalusage >= "75" )); then
-								if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
-										printn -ll "cpu usage is 75%+"
-										magicn -r 2>&1 >/dev/null 2>&1
-										printn -ll "cpu is under load applied Red mode, consuming battery."
-								fi
-							fi
-						fi
-				}
-
+			autoalg() {
 				vars # update variables each execution
-				if [[ $(pgrep -f -c $PIDS) -gt 0 ]]; then
-					autoalg
-				elif [[ $PIDS == *"all"* ]]; then
-					autoalg
+				if [[ "$batt_pctg" -lt "25" ]]; then
+					if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
+						magicn -g 2>&1 >/dev/null 2>&1
+						printn -ll "battery is under %25, applied green mode"
+					fi
+				else
+					if (( cputotalusage >= "55" && cputotalusage <= "74" )); then
+						if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
+							printn -ll "cpu usage is 55%+"
+							magicn -y 2>&1 >/dev/null 2>&1
+							printn -ll "heavy process(es) detected, applied balance mode."
+						fi
+					elif (( cputotalusage >= "75" )); then
+						if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
+							printn -ll "cpu usage is 75%+"
+							magicn -r 2>&1 >/dev/null 2>&1
+							printn -ll "cpu is under load applied Red mode, consuming battery."
+						fi
+					fi
 				fi
 			}
-			while [[ "$SOURCE" == "api-auto" ]] && true; do
-				if [[ "$TRAPAUTO" == "true" ]]; then
-					exit
-				else
-					PIDS=$(cat "$NITRON_RELAX_DIR"/nitron.auto.conf | tail -n +4)
-					auto
-				fi
-			done
+#			while [[ "$SOURCE" == "api-auto" ]]; do
+			autoalg
+			sleep 15
+#			done
 		;;
 		"-h" | "--help")
 			__api_help

@@ -582,11 +582,10 @@ else
 				apin -as
 				rm -rf "$NITRON_RELAX_DIR"/nitron.log
 				apin -rc >> "$NITRON_RELAX_DIR"/nitron.log
-				printn -ll "starting modifying modes up on Packages availability & Resource usage"
-				printn -w "nitrond will stay on background, it may be not safe to terminate the session."
-				printn -i "^C to force stop the daemon, use 'kill $(pgrep nitrond)' incase if console shell terminated."
-				( apin -ad &) &
-				while true; do true; done # keep it alive.
+				printn -ll "started modifying modes up on resource usage"
+				printn -w "nitrond: auto session started"
+				printn -i "^C to force stop the daemon, death of this process means end of this auto session."
+				while true; do apin -ad; done
 			;;
 			"-sg" | "--set-green")
 				[[ "$SOURCE" != "api-auto" ]] && {
