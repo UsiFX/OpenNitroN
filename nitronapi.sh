@@ -57,7 +57,7 @@ spin() {
 	while [ -d /proc/$PID ]; do
 		sleep 0.09
 		speed=$(((speed + 1) % 4))
-		if [[ "PLATFORM" == "Android" ]]; then
+		if [[ "$PLATFORM" == "Android" ]]; then
 			[[ "$BUSYBOX" == "true" ]] && busybox printf "\r[${anim:speed:1}] ${@}"
 		else
 			printf "\r[${anim:speed:1}] ${@}"
