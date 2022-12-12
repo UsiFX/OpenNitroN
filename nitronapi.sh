@@ -51,17 +51,12 @@ printcrnr() { compensate=13; printf "\r%*s\r%s\n" "$((COLUMNS+compensate))" "$1"
 
 # usage: cmd & spin "text"
 spin() {
-	set +x
 	PID=$!
-	speed=0; anim='-\|/';
 	while [ -d /proc/$PID ]; do
-		sleep 0.09
-		speed=$(((speed + 1) % 4))
-		if [[ "$PLATFORM" == "Android" ]]; then
-			[[ "$BUSYBOX" == "true" ]] && busybox printf "\r[${anim:speed:1}] ${@}"
-		else
-			printf "\r[${anim:speed:1}] ${@}"
-		fi
+		for anim in / - \\ \|; do
+			printf "\r[$anim] ${@}"
+			sleep 0.1
+		done
 		[[ ! -d /proc/$PID ]] && printcrnr "$(prompt_left)" "${@}"
 	done
 }
