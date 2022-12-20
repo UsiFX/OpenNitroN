@@ -543,91 +543,101 @@ console_dialog() {
 		esac
 }
 
-print_banner() {
-	echo "
- _   _ _ _             _   _
-| \ | (_) |_ _ __ ___ | \ | |
-|  \| | | __| '__/ _ \|  \| |
-| |\  | | |_| | | (_) | |\  |
-|_| \_|_|\__|_|  \___/|_| \_|
-"
-}
-
 console_legacy() {
 	PR_PREFIX="console_legacy"
-	while :
-	do
-	clear
-	print_banner
-	COLUMNS=150
-	OPTIONS=("Switch Mode" "Show device state" "Update" "Show help menu" "Exit")
-	PS3="?): "
-		select CHOICE in "${OPTIONS[@]}"; do
-			num=$REPLY
-			case $num in
-				1)
-					while :; do
-						clear
-						print_banner
-						COLUMNS=150
-						MODE_OPTIONS=("Gaming" "Balance" "Battery" "Back to main menu" "Exit")
-						PS3="?): "
-						select MODE_CHOICE in "${MODE_OPTIONS[@]}"; do
-							mode_num=$REPLY
-							case $mode_num in
-								1)
-									magicn -r
-									printn -n "Gaming Mode activated."
-									sleep 2
-									break
-									;;
-								2)
-									magicn -y
-									printn -n "Balance Mode activated."
-									sleep 2
-									break
-									;;
-								3)
-									magicn -g
-									printn -n "Battery Mode activated."
-									sleep 2
-									break
-									;;
-								4)
-									break 3
-									;;
-								5)
-									exit 0
-									;;
-								*)
-									printn -e "[$mode_num] unknown option"
-									sleep 2
-									break
-									;;
-							esac
-						done
-					done
-					;;
-				2)
-					apin -rc
-					;;
-				3)
-					updaten
-					break
-					;;
-				4)
-					__nitron_help
-					;;
-				5)
-					break 2
-					;;
-				*)
-					printn -w "[$num] unknown option"
-					sleep 2
-					break
-					;;
-			esac
-		done
-	done
-}
+	__head_motd() {
+		echo -e "Welcome to nitron CLI!"
+		echo -e ""
+		echo -e "${WHITE}*${STOCK} Support group     : https://t.me/TiTANDiscussion"
+		echo -e "${WHITE}*${STOCK} Updates channel   : https://t.me/TiTANProjects"
+		echo -e "${WHITE}*${STOCK} Developer channel : https://t.me/xprjkts_chat"
+		echo -e ""
+		echo -e "Build Information:"
+		echo -e ""
+		echo -e " ${WHITE}-${STOCK} Current Profile  : ${YELLOW}$(apin -mc)${STOCK}"
+		echo -e " ${WHITE}-${STOCK} Daemon Version   : ${YELLOW}$(apin -dv)${STOCK}"
+		echo -e " ${WHITE}-${STOCK} API Version      : ${YELLOW}$(apin -hv)${STOCK}"
+		echo -e ""
+		echo -e "Report issues at https://github.com/UsiFX/OpenNitroN/issues ${STOCK}"
+	}
 
+	__section_center() {
+		printf '-%.0s' $(seq 1 ${COLUMNS})
+		echo -e "[*] $1"
+		printf '-%.0s' $(seq 1 ${COLUMNS}) | sed 's/^ //'
+	}
+
+	__profile_options() {
+		echo -e "\n"
+		echo -e "${GREEN}[1] Battery: Focused on saving battery as much as possible"
+		echo -e ""
+		echo -e "${YELLOW}[2] Balance: Focused on leaving the system in balance"
+		echo -e ""
+		echo -e "${RED}[3] Gaming: Focused on maximize overall system performance ${STOCK}"
+		echo -e ""
+	}
+
+	__others_options() {
+		echo -e "\n"
+		echo -e "${YELLOW}[4] Device Information ${CYAN}(grabs entire and recognised system info)"
+		echo -e ""
+		if [[ "$PLATFORM" == "Android" ]]; then
+			echo -e "${YELLOW}[5] FStrim partitions ${CYAN}(fstrim some recognised partitions)"
+			echo -e ""
+		fi
+		echo -e "${WHITE}[0] Exit${STOCK}"
+		echo -e ""
+	}
+
+	main()
+	{
+		clear
+		__head_motd
+		echo -e "${CYAN}"
+		__section_center "Profile selector"
+		__profile_options
+		echo -e "${CYAN}"
+		__section_center "Miscellaneous"
+		__others_options
+		echo -e "${BLUE}[?] Type desired option: \c${STOCK}"
+		read -r OPTS
+		case "$OPTS" in
+			0) echo -e "${BLUE}[*] Thanks for using the cli menu, see you later!${STOCK}"; exit 0 ;;
+			1)
+				clear
+				__head_motd
+				echo -e "${GREEN}"
+				__section_center "Applying Battery mode..."
+				echo -e "${STOCK}\n"
+				magicn -g
+				echo "[*] Done!"
+				sleep 2
+				main
+			;;
+			2)
+				clear
+				__head_motd
+				echo -e "${YELLOW}"
+				__section_center "Applying Balance mode..."
+				echo -e "${STOCK}\n"
+				magicn -y
+				echo "[*] Done!"
+				sleep 2
+				main
+			;;
+			3)
+				clear
+				__head_motd
+				echo -e "${RED}"
+				__section_center "Applying Gaming mode..."
+				echo -e "${STOCK}\n"
+				magicn -r
+				echo "[*] Done!"
+				sleep 2
+				main
+			;;
+			*) echo "${RED}[!] Bad option, refreshing..."; sleep 2; main ;;
+		esac
+	}
+	main
+}
