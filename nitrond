@@ -545,13 +545,13 @@ Commands:
   deviceinfo			~ shows device resource information
   clean				~ wipe stored nitron data
   auto				~ automatically decide mode switchment up on Environment status
+  cli                           ~ sort options into friendly user like
 
 Options:
   -sdm, --show-default-mode     ~ prints current tweaking mode
   -sg, --set-green              ~ apply Battery mode
   -sr, --set-red                ~ apply Gaming mode
   -sy, --set-yellow             ~ apply Balanced mode
-  -c, --console-mode            ~ enter User-Friendly user selections
 
 Others:
   -h, --help                    ~ shows this Help menu
@@ -587,6 +587,15 @@ else
 				printn -i "^C to force stop the daemon, death of this process means end of this auto session."
 				while true; do apin -ad; done
 			;;
+			"cli")
+				if cmdavail dialog; then
+					console_dialog
+					printn -l "--- started"
+				else
+					printn -lf "dialog not found, switch: console_legacy()"
+					console_legacy
+				fi
+			;;
 			"-sg" | "--set-green")
 				[[ "$SOURCE" != "api-auto" ]] && {
 					magicn -g
@@ -620,15 +629,6 @@ Copyright (C) 2022-2023 Kartik728 <titanupdates728@gmail.com>
 License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.."
-			;;
-			"-c" | "--console-mode")
-				if cmdavail dialog; then
-					console_dialog
-					printn -l "--- started"
-				else
-					printn -lf "dialog not found, switch: console_legacy()"
-					console_legacy
-				fi
 			;;
 			*"?"* | "h"* | "-h" | "--help") __nitron_help ;;
 			"-u" | "--update") updaten -a ;;
