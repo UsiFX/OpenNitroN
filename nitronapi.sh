@@ -33,6 +33,39 @@ cmdavail() {
 	fi
 }
 
+# printn <argument> text
+printn() {
+	[[ "$1" == "-n" ]] && printf "[${BLUE}*${STOCK}] $2\n"
+
+	[[ "$1" == "-e" ]] && {
+		printf "[${RED}×${STOCK}] $2\n"
+		exit 1
+	}
+
+	[[ "$1" == "-w" ]] && printf "[${YELLOW}!${STOCK}] $2\n"
+
+	[[ "$1" == "-i" ]] && printf "[${CYAN}i${STOCK}] $2\n"
+
+	[[ "$1" == "-l" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[0]: $2" >>"$NITRON_LOG_DIR"/nitron.log
+
+	[[ "$1" == "-lf" ]] && echo "[$(date +%I:%M:%S)] nitrond: $PR_PREFIX[1]: $2" >>"$NITRON_LOG_DIR"/nitron.log
+
+	[[ "$1" == "-ll" ]] && echo "[$(date +%I:%M:%S)] nitrond: $2" >>"$NITRON_RELAX_DIR"/nitron.log
+
+}
+
+# writen <file> <value>
+writen() {
+        [[ ! -f "$1" ]] && echo "[$(date +%I:%M:%S)] $1: not found, skipping..." >> "$NITRON_LOG_DIR"/nitron.log
+
+        # Make file writable
+        chmod +w "$1" 2>/dev/null
+
+        # Write new value, bail out if it fail
+        (echo $2 >> $1) 2>/dev/null  && echo "[$(date +%I:%M:%S)] $1: changed node[$2]" >> "$NITRON_LOG_DIR"/nitron.log || echo "[$(date +%I:%M:%S)] $1: failed to change node" >> "$NITRON_LOG_DIR"/nitron.log
+}
+
+
 trapper() { printn -e "shutdown signal recieved, closing..."; }
 
 prompt_right() { echo -e "\r[${GREEN}$(echo "*")${STOCK}] ${@}";}
