@@ -437,20 +437,7 @@ pingn() {
 }
 
 updaten() {
-	cmdavail setprop && {
-		if [[ "$(getprop ro.nitron.forcecheckupdate)" == "no" ]]; then
-			printn -lf "ro.nitron.forcecheckupdate == $(getprop ro.nitron.forcecheckupdate)"
-			printn -e "aborted from system variable"
-		fi
-	} || {
-		if [[ "$NITRON_FORCECHECK_UPDATE" == "false" ]]; then
-			printn -lf "NITRON_FORCECHECK_UPDATE == ${NITRON_FORCECHECK_UPDATE}"
-			printn -e "aborted from system variable"
-		fi
-	}
-
 	PR_PREFIX="updaten"
-
 	updatealg()
 	{
 		(
@@ -485,48 +472,15 @@ updaten() {
 		) & spin "update processing..."
 	}
 
-	rollbackalg()
-	{
-		if [[ ! -f "$NITRON_LOG_DIR"/nitrond_current ]]; then
-			printn -e "previous daemon update cache is unavailable"
-		fi
-		if [[ ! -f "$NITRON_LOG_DIR"/nitronh_current ]]; then
-			printn -e "previous header update cache is unavailable"
-		fi
-		if [[ "$(diff "$0" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
-			printn -n "downgrading..."
-			cat "$NITRON_LOG_DIR/nitrond_current" > "$0"
-		else
-			printn -i "there is no difference between current daemon update(s) and previous one(s)."
-		fi
-		if [[ "$(diff "$HEADER_SOURCE/nitron_headers.sh" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
-			printn -n "attempting to downgrade headers..."
-			cat "$NITRON_LOG_DIR/nitronh_current" > "$HEADER_SOURCE/nitron_headers.sh"
-		else
-			printn -i "there is no difference between current header update(s) and previous one(s)."
-		fi
-		printn -l "downgrade process(es) finished"
-		return 0
-	}
-
-	init()
-	{
-		printn -l "pinging 8.8.8.8 ..."
-		printn -i "checking connectivity..."; pingn && PR_PREFIX="updaten"; updatealg
-	}
 
 	case $* in
 		"-a" | "--apply")
 			printn -l "--- triggered"
-			init
+			printn -l "pinging 8.8.8.8 ..."
+			printn -i "checking connectivity..."
+			pingn && PR_PREFIX="updaten"; updatealg
 			printn -l "--- finished"
 
-		;;
-		"-d" | "--downgrade")
-			printn -l "--- triggered"
-			printn -l "attempting to downgrade!"
-			rollbackalg
-			printn -l "--- finished"
 		;;
 	esac
 }
@@ -559,7 +513,6 @@ Others:
   -u, --update                  ~ update to latest
 
 Advanced:
-  -dd, --downgrade		~ downgrade to previous upgrade
   -d, --debug                   ~ run commands under debuggable verbose flags
 "
 }
@@ -637,7 +590,6 @@ There is NO WARRANTY, to the extent permitted by law.."
 				printn -w "verbose is saved at: $NITRON_LOG_DIR/nitron.verbose.log"
 				set -x 2>"$NITRON_LOG_DIR"/nitron.verbose.log >/dev/null
 			;;
-			"-dd" | "--downgrade") updaten -d ;;
 			*) printn -e "unknown option $*, check 'nitrond --help'." ;;
 		esac
 	done
