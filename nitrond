@@ -34,7 +34,6 @@ STOCK='\e[1;0m'
 
 NITRON_VERSION='1.2.2'
 PROMPT_COMMAND='sync'
-LOCKFILE="${NITRON_LOG_DIR}/nitrond-frontend.lock"
 
 # Disable Shell's Monitor Mode
 set +o monitor
@@ -62,6 +61,7 @@ if [[ ! -f $HEADER_SOURCE/nitronapi.sh ]]; then
 	exit 1
 else
 	source "$HEADER_SOURCE"/nitronapi.sh
+	LOCKFILE="${NITRON_LOG_DIR}/nitrond-frontend.lock"
 fi
 
 # Initialise OS Compatibility check

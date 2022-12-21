@@ -438,7 +438,7 @@ Options:
 		;;
 	esac
 }
-l
+
 console_dialog() {
 	mainmenu() {
 		PR_PREFIX="console_dialog"
