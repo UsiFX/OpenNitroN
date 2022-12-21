@@ -15,14 +15,12 @@ until [[ "$(getprop sys.boot_completed)" -eq "1" ]] || [[ "$(getprop dev.bootcom
 done
 
 # work on clean
-nitrond clean >/dev/null
-
-sleep 100
+nitrond clean
 
 # update on every boot
-nitrond --update >/dev/null
+nitrond --update
+
+sleep 30
 
 # dump information
 nitrond deviceinfo >> "/sdcard/nitron.boot.log"
-
-nitrond &
