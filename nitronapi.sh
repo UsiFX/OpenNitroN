@@ -393,10 +393,8 @@ Options:
 					fi
 				fi
 			}
-#			while [[ "$SOURCE" == "api-auto" ]]; do
 			autoalg
 			sleep 15
-#			done
 		;;
 		"-h" | "--help")
 			__api_help
@@ -407,7 +405,7 @@ Options:
 		;;
 	esac
 }
-
+l
 console_dialog() {
 	mainmenu() {
 		PR_PREFIX="console_dialog"
