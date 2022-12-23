@@ -32,7 +32,7 @@ WHITE='\e[1;37m'
 YELLOW='\e[01;33m'
 STOCK='\e[1;0m'
 
-NITRON_VERSION='1.2.2'
+NITRON_VERSION='1.2.4'
 PROMPT_COMMAND='sync'
 
 # Disable Shell's Monitor Mode
