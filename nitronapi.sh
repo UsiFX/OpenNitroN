@@ -178,8 +178,6 @@ else
 fi
 }
 
-vars
-
 ## End of variables
 
 # infogrbn <directory> <value>
@@ -351,6 +349,7 @@ Options:
 
 	case $* in
 		"-rc" | "--resource-check")
+			vars
 			resrchk
 		;;
 		"-dv" | "--daemon-version")
