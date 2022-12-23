@@ -375,66 +375,6 @@ magicn() {
 	esac
 }
 
-pingn() {
-	PR_PREFIX="pingn"
-	[[ "$(ping -c1 "8.8.8.8" >/dev/null 2>&1 && echo $?)" != "0" ]] && {
-		printn -lf "failed"
-		printcrnr "$(prompt_left -f)" "nitrond: network: unreachable"; exit 1
-	} || {
-		printcrnr "$(prompt_left -t)" "nitrond: network:"
-		printn -l "connectivity is stable"
-		return 0
-	}
-}
-
-updaten() {
-	PR_PREFIX="updaten"
-	updatealg()
-	{
-		(
-			cmdavail curl && {
-				curl -o "$NITRON_LOG_DIR/nitrond_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitrond" 2>/dev/null
-				curl -o "$NITRON_LOG_DIR/nitronh_src_cache" "https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/nitronapi.sh" 2>/dev/null
-				chmod +x "$NITRON_LOG_DIR/nitrond_src_cache"
-			} || {
-				printcrnr "$(prompt_left -f)" "curl is not available in the system, cannot update." 
-				exit 1
-			}
-			PR_PREFIX="updaten"
-			(
-				cp "$0" "$NITRON_LOG_DIR/nitrond_current" >/dev/null
-				cp "$HEADER_SOURCE/nitronapi.sh" "$NITRON_LOG_DIR/nitronh_current" >/dev/null
-			) & spin "backing up..."
-			[[ "$PLATFORM" == "Android" ]] && {
-				sed -i '1c\#!/system/bin/sh' "$NITRON_LOG_DIR/nitrond_src_cache" & spin "modifying update file interepter..."
-			}
-			if [[ "$(diff "$NITRON_LOG_DIR/nitrond_src_cache" "$NITRON_LOG_DIR/nitrond_current")" ]]; then
-				cat "$NITRON_LOG_DIR/nitrond_src_cache" > "$0" & spin "updating daemon..."
-			else
-				printcrnr  "$(prompt_left -f)" "daemon is up to date, $(apin -dv)"
-			fi
-			if [[ "$(diff "$NITRON_LOG_DIR/nitronh_src_cache" "$NITRON_LOG_DIR/nitronh_current")" ]]; then
-				cat "$NITRON_LOG_DIR/nitronh_src_cache" > "$HEADER_SOURCE/nitronapi.sh" & spin "attempting to update API..."
-			else
-				printcrnr "$(prompt_left -f)" "API is up to date, $(apin -hv)"
-			fi
-			printn -l "update process(es) finished"
-			return 0
-		) & spin "update processing..."
-	}
-
-
-	case $* in
-		"-a" | "--apply")
-			printn -l "--- triggered"
-			printn -l "pinging 8.8.8.8 ..."
-			printn -i "checking connectivity..."
-			pingn && PR_PREFIX="updaten"; updatealg
-			printn -l "--- finished"
-
-		;;
-	esac
-}
 
 # Bail out if we aren't running as SU
 [[ "$(id -u)" -ne "0" ]] && {
@@ -458,7 +398,6 @@ Options:
  -sy, --set-yellow      applies balance scenario
  -v, --version          prints license and version
  -h, --help             shows this help menu
- -u, --update           fetches latest update
  -m, --mode             prints current mode
  -d, --debug            saves shell debug instructions
 "
@@ -526,7 +465,6 @@ This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.."
 			;;
 			*"?"* | "h"* | "-h" | "--help") __nitron_help ;;
-			"-u" | "--update") updaten -a ;;
 			"-d" | "--debug")
 				printn -w "execution under debug, please provide arguments to debug"
 				printn -w "verbose is saved at: $NITRON_LOG_DIR/nitron.verbose.log"
