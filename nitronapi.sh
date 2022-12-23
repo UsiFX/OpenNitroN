@@ -442,17 +442,16 @@ Options:
 console_legacy() {
 	PR_PREFIX="console_legacy"
 	__head_motd() {
-		echo -e "Welcome to nitron CLI!"
 		echo -e ""
-		echo -e "${WHITE}*${STOCK} Support group     : https://t.me/TiTANDiscussion"
-		echo -e "${WHITE}*${STOCK} Updates channel   : https://t.me/TiTANProjects"
-		echo -e "${WHITE}*${STOCK} Developer channel : https://t.me/xprjkts_chat"
-		echo -e ""
-		echo -e "Build Information:"
+		echo -e "${CYAN}    _   ___ __________  ____  _   __${STOCK}"
+		echo -e "${BLUE}   / | / (_)_  __/ __ \/ __ \/ | / /${STOCK}"
+		echo -e "${YELLOW}  /  |/ / / / / / /_/ / / / /  |/ / ${STOCK}"
+		echo -e "${YELLOW} / /|  / / / / / _, _/ /_/ / /|  /  ${STOCK}"
+		echo -e "${CYAN}/_/ |_/_/ /_/ /_/ |_|\____/_/ |_/   ${STOCK}"
 		echo -e ""
 		echo -e " ${WHITE}-${STOCK} Current Profile  : ${YELLOW}$(apin -mc)${STOCK}"
-		echo -e " ${WHITE}-${STOCK} Daemon Version   : ${YELLOW}$(apin -dv)${STOCK}"
-		echo -e " ${WHITE}-${STOCK} API Version      : ${YELLOW}$(apin -hv)${STOCK}"
+		echo -e " ${WHITE}-${STOCK} Daemon Version   : ${BLUE}$(apin -dv)${STOCK}"
+		echo -e " ${WHITE}-${STOCK} API Version      : ${GREEN}$(apin -hv)${STOCK}"
 		echo -e ""
 		echo -e "Report issues at https://github.com/UsiFX/OpenNitroN/issues ${STOCK}"
 	}
@@ -478,7 +477,7 @@ console_legacy() {
 		echo -e "${YELLOW}[4] Device Information ${CYAN}(grabs entire and recognised system info)"
 		echo -e ""
 		if [[ "$PLATFORM" == "Android" ]]; then
-			echo -e "${YELLOW}[5] FStrim partitions ${CYAN}(fstrim some recognised partitions)"
+			echo -e "${YELLOW}[5] optimize app packages ${CYAN}(repackage and/or recompile apps)"
 			echo -e ""
 		fi
 		echo -e "${WHITE}[0] Exit${STOCK}"
@@ -487,6 +486,7 @@ console_legacy() {
 
 	main()
 	{
+		printn -lt "console triggered"
 		clear
 		__head_motd
 		echo -e "${CYAN}"
@@ -495,7 +495,7 @@ console_legacy() {
 		echo -e "${CYAN}"
 		__section_center "Miscellaneous"
 		__others_options
-		echo -e "${BLUE}[?] Type desired option: \c${STOCK}"
+		echo -e "${WHITE}[?] Type desired option: \c${STOCK}"
 		read -r OPTS
 		case "$OPTS" in
 			0) echo -e "${BLUE}[*] Thanks for using the cli menu, see you later!${STOCK}"; exit 0 ;;
@@ -532,7 +532,39 @@ console_legacy() {
 				sleep 2
 				main
 			;;
-			*) echo "${RED}[!] Bad option, refreshing..."; sleep 2; main ;;
+			4)
+				clear
+				__head_motd
+				echo -e "${CYAN}"
+				__section_center "Device Information"
+				echo -e "${STOCK}\n"
+				apin -rc
+				printn -n "press enter to continue or 0 to exit: \c"
+				read -r SUBOPT
+				if [ "$SUBOPT" == "0" ]; then
+					echo -e "${BLUE}[*] Thanks for using the cli menu, see you later!${STOCK}"
+					exit 0
+				else
+					main
+				fi
+			;;
+			5)
+				if [[ "$PLATFORM" == "Android" ]]; then
+					clear
+					__head_motd
+					echo -e "${CYAN}"
+					__section_center "Repackaging apps... (please wait)"
+					echo -e "${STOCK}\n"
+					(pm compile -a -f --compile-layouts | grep -e "Failure" >"$NITRON_LOG_DIR"/nitron.log)& spin "compiling layout resources..."
+					cmd package bg-dexopt-job & spin "running background optimizer... "
+					echo "[*] Done!"
+					sleep 2
+					main
+				else
+					printn -e "illegal instruction, bad platform"
+				fi
+			;;
+			*) echo "${RED}[!] Bad option, refreshing...${STOCK}"; sleep 2; main ;;
 		esac
 	}
 	main
