@@ -19,7 +19,7 @@
 # Copyright (C) 2022~2023 UsiFX <xprjkts@gmail.com>
 #
 
-export NITRON_HEADER_VERSION='2.9.0'
+export NITRON_HEADER_VERSION='3.0.0'
 
 # cmdavail <command> ## if available > return 0 & log; else return 1 & log
 cmdavail() {
