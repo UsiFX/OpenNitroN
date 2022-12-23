@@ -488,13 +488,8 @@ else
 				while true; do apin -ad; done
 			;;
 			"cli")
-				if cmdavail dialog; then
-					console_dialog
-					printn -l "--- started"
-				else
-					printn -lf "dialog not found, switch: console_legacy()"
-					console_legacy
-				fi
+				printn -l "starting console_legacy()..."
+				console_legacy
 			;;
 			"-sg" | "--set-green")
 				[[ "$SOURCE" != "api-auto" ]] && {
