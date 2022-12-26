@@ -553,6 +553,7 @@ console_legacy() {
 				__section_center "Device Information"
 				echo -e "${STOCK}\n"
 				apin -rc
+				__pcs_mgr
 			;;
 			5)
 				if [[ "$PLATFORM" == "Android" ]]; then
