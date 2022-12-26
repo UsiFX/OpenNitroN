@@ -62,11 +62,11 @@ in your home's Directory (`/home`) and creates copy of the executables
 in `/usr/bin` for the daemon itself, and/or `/usr/include` for the header file
 by simply run:
 ``` bash
- wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/installer.sh && bash installer.sh install
+ wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh && bash installer.sh install
 ```
 it should output you the following:
 ``` bash
-$ wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/nitrond-staging/installer.sh && bash installer.sh install
+$ wget https://raw.githubusercontent.com/UsiFX/OpenNitroN/main/installer.sh && bash installer.sh install
 usage: installer.sh [install] [uninstall]
 ```
 use the script according to your opinion.
@@ -90,25 +90,19 @@ go to release section and download latest official build from [here](https://www
 Usage: nitrond [OPTION] (e.g. nitrond --update)
 
 Commands:
-  deviceinfo                    ~ shows device resource information
-  clean                         ~ wipe stored nitron data
-  auto                          ~ automatically decide mode switchment up on Environment status
+ auto         automatically change mode up on some scenarios
+ cli          sort options into friendly-like TUI
+ deviceinfo   shows device resource information
+ clean        wipe stored nitron data
 
 Options:
-  -sdm, --show-default-mode     ~ prints current tweaking mode
-  -sg, --set-green              ~ apply Battery mode
-  -sr, --set-red                ~ apply Gaming mode
-  -sy, --set-yellow             ~ apply Balanced mode
-  -c, --console-mode            ~ enter User-Friendly user selections
-
-Others:
-  -h, --help                    ~ shows this Help menu
-  -v, --version                 ~ shows tool version
-  -u, --update                  ~ update to latest
-
-Advanced:
-  -dd, --downgrade              ~ downgrade to previous upgrade
-  -d, --debug                   ~ run commands under debuggable verbose flags
+ -sg, --set-green       applies ultra power saving scenario
+ -sr, --set-red         applies performance scenario
+ -sy, --set-yellow      applies balance scenario
+ -v, --version          prints license and version
+ -h, --help             shows this help menu
+ -m, --mode             prints current mode
+ -d, --debug            saves shell debug instructions
 ```
 
 ## Reporting Issues
@@ -120,7 +114,7 @@ If don't, just open a [new clear and descriptive issue](https://github.com/UsiFX
 ## License
 
 ```
-nitronD v1.1.0 (An Extensive Kernel tweaker)
+nitronD (An Extensive Kernel tweaker)
 Copyright (c) 2022-2023 UsiFX <xprjkts@gmail.com>
 
                        GNU GENERAL PUBLIC LICENSE
