@@ -554,7 +554,7 @@ console_legacy() {
 					echo -e "${CYAN}"
 					__section_center "Repackaging apps... (please wait)"
 					echo -e "${STOCK}\n"
-					(pm compile -a -f --compile-layouts | grep -e "Failure" >"$NITRON_LOG_DIR"/nitron.log)& spin "compiling layout resources..."
+					(pm compile -a -f --compile-layouts | grep -e "Failure" >>"$NITRON_LOG_DIR"/nitron.log)& spin "compiling layout resources..."
 					cmd package bg-dexopt-job & spin "running background optimizer... "
 					echo "[*] Done!"
 					sleep 2
