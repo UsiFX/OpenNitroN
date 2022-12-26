@@ -13,7 +13,7 @@
 #
 
 TIMESTAMP=$(date +%Y%m%d)
-VERSION='1.2.4'
+VERSION='1.2.5'
 OBJECTS=("nitrond" "nitronapi.sh" "nitrond.1")
 MMT_OBJECTS=("magisk/META-INF/com/google/android/update-binary" "magisk/setup.sh" "magisk/common/functions.sh" "magisk/uninstall.sh" "magisk/system.prop")
 PLACEHOLDERS=("debian/usr/placeholder" "debian/usr/bin/placeholder" "debian/usr/include/placeholder" "debain/usr/share/man/man1/placeholder")
