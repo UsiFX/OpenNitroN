@@ -24,6 +24,10 @@ nitrond have so many options and arguments here is the list of them and there us
   used to clean the files which have been made by the tool
   like the detailed log (/tmp/nitron.log) AND/OR verbose log  (/tmp/nitron.verbose.log).
 
+* cli:
+  used to arrange the options into a simple kiddie-like UI with some nasty coloring
+  so it will be easy to unfamiliar users to interact with.
+
 .SH ARGUMENTS
 nitrond also have alot of arguements and here is thr list of them and there usage
 
@@ -31,7 +35,7 @@ nitrond also have alot of arguements and here is thr list of them and there usag
 
 : shows list of available commands
 
-** nitrond -sdm | nitrond --show-default-mode **
+** nitrond -m | nitrond --mode **
 
 : prints the last executed/performed mode, keep in mind it will be Reset by clean option.
 
@@ -47,21 +51,9 @@ nitrond also have alot of arguements and here is thr list of them and there usag
 
 : switch/perform change to Red/Gaming mode
 
-** nitrond -c | nitrond --console-mode **
-
-: arranges all of these options into simple shell dialog/menu with user input reading
-
 ** nitrond -v | nitrond --version **
 
 : prints tool/API version with the license version and type
-
-** nitrond -u | nitrond --update **
-
-: performs full upgrade to the tool and the API (requires internet connection)
-
-** nitrond --downgrade |  nitrond --downgrade **
-
-: performs full downgrade to the tool and the API (won't work if clean command were performed after and update before)
 
 ** nitrond -d OPTION/ARG | nitrond --debug OPTION/ARG **
 
