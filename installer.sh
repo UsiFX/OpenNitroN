@@ -31,7 +31,7 @@ shopt -u dirspell progcomp_alias
 # Required variables
 REPO="https://github.com/UsiFX/OpenNitroN.git"
 TARGET_REPO="${HOME}/OpenNitroN-temp"
-BRANCH="nitrond-staging"
+BRANCH="main"
 BIN_DIR="${PREFIX/\/usr}/usr/bin"
 INCLUDE_DIR="${PREFIX/\/usr}/usr/include"
 REQUIRED_DEPS=(git dialog)
