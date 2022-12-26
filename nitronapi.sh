@@ -483,6 +483,19 @@ console_legacy() {
 		echo -e ""
 	}
 
+	__pcs_mgr() {
+		echo -e ""
+		printn -n "press enter to continue or 0 to exit: \c"
+		read -r SUBOPT
+		if [ "$SUBOPT" == "0" ]; then
+			echo -e "${BLUE}[*] Thanks for using the cli menu, see you later!${STOCK}"
+			exit 0
+		else
+			main
+		fi
+
+	}
+
 	main()
 	{
 		printn -lt "console triggered"
@@ -507,7 +520,7 @@ console_legacy() {
 				magicn -g
 				echo "[*] Done!"
 				sleep 2
-				main
+				__pcs_mgr
 			;;
 			2)
 				clear
@@ -518,7 +531,7 @@ console_legacy() {
 				magicn -y
 				echo "[*] Done!"
 				sleep 2
-				main
+				__pcs_mgr
 			;;
 			3)
 				clear
@@ -529,7 +542,7 @@ console_legacy() {
 				magicn -r
 				echo "[*] Done!"
 				sleep 2
-				main
+				__pcs_mgr
 			;;
 			4)
 				clear
@@ -538,14 +551,6 @@ console_legacy() {
 				__section_center "Device Information"
 				echo -e "${STOCK}\n"
 				apin -rc
-				printn -n "press enter to continue or 0 to exit: \c"
-				read -r SUBOPT
-				if [ "$SUBOPT" == "0" ]; then
-					echo -e "${BLUE}[*] Thanks for using the cli menu, see you later!${STOCK}"
-					exit 0
-				else
-					main
-				fi
 			;;
 			5)
 				if [[ "$PLATFORM" == "Android" ]]; then
@@ -558,7 +563,7 @@ console_legacy() {
 					cmd package bg-dexopt-job & spin "running background optimizer... "
 					echo "[*] Done!"
 					sleep 2
-					main
+					__pcs_mgr
 				else
 					printn -e "illegal instruction, bad platform"
 				fi
