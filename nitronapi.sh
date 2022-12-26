@@ -448,11 +448,13 @@ console_legacy() {
 		echo -e "${YELLOW} / /|  / / / / / _, _/ /_/ / /|  /  ${STOCK}"
 		echo -e "${CYAN}/_/ |_/_/ /_/ /_/ |_|\____/_/ |_/   ${STOCK}"
 		echo -e ""
-		echo -e " ${WHITE}-${STOCK} Current Profile  : ${YELLOW}$(apin -mc)${STOCK}"
-		echo -e " ${WHITE}-${STOCK} Daemon Version   : ${BLUE}$(apin -dv)${STOCK}"
-		echo -e " ${WHITE}-${STOCK} API Version      : ${GREEN}$(apin -hv)${STOCK}"
+		echo -e "${WHITE}Welcome to nitron CLI menu!"
 		echo -e ""
-		echo -e "Report issues at https://github.com/UsiFX/OpenNitroN/issues ${STOCK}"
+		echo -e "${WHITE}--${STOCK} Current Profile  : ${YELLOW}$(apin -mc)${STOCK}"
+		echo -e "${WHITE}--${STOCK} Daemon Version   : ${BLUE}$(apin -dv)${STOCK}"
+		echo -e "${WHITE}--${STOCK} API Version      : ${GREEN}$(apin -hv)${STOCK}"
+		echo -e ""
+		echo -e "Report issues at ${WHITE}https://github.com/UsiFX/OpenNitroN/issues ${STOCK}"
 	}
 
 	__section_center() {
