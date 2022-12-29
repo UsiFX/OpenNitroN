@@ -404,24 +404,17 @@ Options:
 			export SOURCE="api-auto"
 			autoalg() {
 				vars # update variables each execution
-				if [[ "$batt_pctg" -lt "25" ]]; then
-					if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
-						magicn -g 2>&1 >/dev/null 2>&1
-						printn -ll "battery is under %25, applied green mode"
+				if (( cputotalusage >= "75" )); then
+					if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
+						printn -ll "cpu usage is 75%+"
+						magicn -y 2>&1 >/dev/null 2>&1
+						printn -ll "heavy process(es) detected, applied balance mode."
 					fi
-				else
-					if (( cputotalusage >= "55" && cputotalusage <= "74" )); then
-						if [[ "$(apin -mc | awk '{print $2}')" != "yellow" ]]; then
-							printn -ll "cpu usage is 55%+"
-							magicn -y 2>&1 >/dev/null 2>&1
-							printn -ll "heavy process(es) detected, applied balance mode."
-						fi
-					elif (( cputotalusage >= "75" )); then
-						if [[ "$(apin -mc | awk '{print $2}')" != "red" ]]; then
-							printn -ll "cpu usage is 75%+"
-							magicn -r 2>&1 >/dev/null 2>&1
-							printn -ll "cpu is under load applied Red mode, consuming battery."
-						fi
+				elif (( cputotalusage <= "75" )); then
+					if [[ "$(apin -mc | awk '{print $2}')" != "green" ]]; then
+						printn -ll "cpu usage is 75%-"
+						magicn -g 2>&1 >/dev/null 2>&1
+						printn -ll "relaxing environment, applied battery mode."
 					fi
 				fi
 			}
