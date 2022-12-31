@@ -81,10 +81,6 @@ main()
 	sleep 0.5
 	ui_print "[*] Installed API."
 	ui_print ""
-	if ! command -v "curl" >/dev/null; then
-		ui_print "[!] cURL is not found on system,"
-		ui_print "    Universal Updater won't work!"
-	fi
 }
 
 main
