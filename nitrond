@@ -430,26 +430,35 @@ else
 				printn -l "starting console_legacy()..."
 				console_legacy
 			;;
-			"-sg" | "--set-green")
-				[[ "$SOURCE" != "api-auto" ]] && {
+			"-sg" | "--set-green") # Battery mode
+				  # Apply mode
 					magicn -g
+
+          # Display mode set
 					printn -n "nitrond: current mode: \e[2;42m$(apin -mc)${STOCK}"
+
+          # Reload magisk's module prop
 					apin -as
-				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
-			"-sr" | "--set-red")
-				[[ "$SOURCE" != "api-auto" ]] && {
+			"-sr" | "--set-red") # Extreme mode
+				  # Apply mode
 					magicn -r
+          
+          # Display mode set
 					printn -n "nitrond: current mode: \e[1;41m$(apin -mc)${STOCK}"
+
+          # Reloae magis's module prop
 					apin -as
-				} || printn -e "cannot change mode, auto is in background please kill and try again later."
 			;;
-			"-sy" | "--set-yellow")
-				[[ "$SOURCE" != "api-auto" ]] && {
-					magicn -y
+			"-sy" | "--set-yellow") # Balance mode
+          # Apply mode
+          magicn -y
+
+          # Display mode set
 					printn -n "nitrond: current mode: \e[2;43m$(apin -mc)${STOCK}"
-					apin -as
-				} || printn -e "cannot change mode, auto is in background please kill and try again later."
+					
+          # Reload magisk's module prop
+          apin -as
 			;;
 			"-m" | "--mode")
 				echo -e "nitrond: mode: $(apin -mc)"
