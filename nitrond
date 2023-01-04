@@ -431,34 +431,34 @@ else
 				console_legacy
 			;;
 			"-sg" | "--set-green") # Battery mode
-				  # Apply mode
-					magicn -g
+				# Apply mode
+				magicn -g
 
-          # Display mode set
-					printn -n "nitrond: current mode: \e[2;42m$(apin -mc)${STOCK}"
+				# Display mode set
+				printn -n "nitrond: current mode: \e[2;42m$(apin -mc)${STOCK}"
 
-          # Reload magisk's module prop
-					apin -as
+				# Reload magisk's module prop
+				apin -as
 			;;
 			"-sr" | "--set-red") # Extreme mode
-				  # Apply mode
-					magicn -r
-          
-          # Display mode set
-					printn -n "nitrond: current mode: \e[1;41m$(apin -mc)${STOCK}"
+				# Apply mode
+				magicn -r
 
-          # Reloae magis's module prop
-					apin -as
+				# Display mode set
+				printn -n "nitrond: current mode: \e[1;41m$(apin -mc)${STOCK}"
+
+				# Reloae magis's module prop
+				apin -as
 			;;
 			"-sy" | "--set-yellow") # Balance mode
-          # Apply mode
-          magicn -y
+				# Apply mode
+				magicn -y
 
-          # Display mode set
-					printn -n "nitrond: current mode: \e[2;43m$(apin -mc)${STOCK}"
-					
-          # Reload magisk's module prop
-          apin -as
+				# Display mode set
+				printn -n "nitrond: current mode: \e[2;43m$(apin -mc)${STOCK}"
+
+				# Reload magisk's module prop
+				apin -as
 			;;
 			"-m" | "--mode")
 				echo -e "nitrond: mode: $(apin -mc)"
