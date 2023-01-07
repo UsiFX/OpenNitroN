@@ -85,13 +85,14 @@ magicn() {
 	set_battery_mode() {
 		[[ "$SOURCE" == "api-auto" ]] && setmoden "Automatic green" || setmoden "Battery"
 		(
-			writen "/proc/sys/kernel/perf_cpu_time_max_percent" "0"
+			writen "/proc/sys/kernel/perf_cpu_time_max_percent" "2"
 			writen "/proc/sys/kernel/sched_autogroup_enabled" "1"
 			writen "/proc/sys/kernel/sched_child_runs_first" "0"
 			writen "/proc/sys/kernel/sched_tunable_scaling" "0"
 			writen "/proc/sys/kernel/sched_migration_cost_ns" "5000000"
 			writen "/proc/sys/kernel/sched_nr_migrate" "256"
 			writen "/proc/sys/kernel/sched_schedstats" "0"
+			writen "/proc/sys/kernel/sched_min_task_util_for_colocation" "0"
 			sleep 1.5
 		) & spin "applying scheduler tunables..."
 		writen "/proc/sys/kernel/printk_devkmsg" "off" & spin "disabling printk logging..."
@@ -132,7 +133,7 @@ magicn() {
 			writen "/dev/stune/top-app/schedtune.util.max" "1024"
 			writen "/dev/stune/top-app/schedtune.util.min" "0"
 			writen "/dev/stune/top-app/schedtune.boost" "0"
-			writen "/dev/stune/top-app/schedtune.prefer_idle" "1"
+			writen "/dev/stune/top-app/schedtune.prefer_idle" "0"
 			writen "/dev/stune/schedtune.util.min" "0"
 			writen "/dev/stune/schedtune.util.max" "512"
 			writen "/dev/stune/schedtune.util.max.effective" "512"
