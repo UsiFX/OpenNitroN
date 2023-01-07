@@ -165,6 +165,8 @@ magicn() {
 			writen "/dev/cpuset/system-background/cpus" "0-7"
 			writen "/dev/cpuset/top-app/cpus" "0-7"
 			writen "/dev/cpuset/restricted/cpus" "0"
+			writen "/sys/kernel/debug/sched_features" "NEXT_BUDDY"
+			writen "/sys/kernel/debug/sched_features" "NO_TTWU_QUEUE"
 			sleep 1.5
 		) & spin "applying misc changes..."
 	}
@@ -248,6 +250,8 @@ magicn() {
 			writen "/dev/cpuset/system-background/cpus" "0-4"
 			writen "/dev/cpuset/top-app/cpus" "0-7"
 			writen "/dev/cpuset/restricted/cpus" "0"
+			writen "/sys/kernel/debug/sched_features" "NEXT_BUDDY"
+                        writen "/sys/kernel/debug/sched_features" "NO_TTWU_QUEUE"
 			sleep 1.5
 		) & spin "applying misc changes..."
 	}
@@ -352,6 +356,8 @@ magicn() {
 			writen "/dev/cpuset/system-background/cpus" "0-7"
 			writen "/dev/cpuset/top-app/cpus" "0-7"
 			writen "/dev/cpuset/restricted/cpus" "0"
+			writen "/sys/kernel/debug/sched_features" "NEXT_BUDDY"
+                        writen "/sys/kernel/debug/sched_features" "NO_TTWU_QUEUE"
 			sleep 1.5
 		) & spin "applying misc changes..."
 	}
