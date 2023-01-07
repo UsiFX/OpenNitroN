@@ -254,7 +254,7 @@ magicn() {
 	set_gaming_mode() {
 		[[ "$SOURCE" == "api-auto" ]] && setmoden "Automatic red" || setmoden "Gaming"
 		(
-			writen "/proc/sys/kernel/perf_cpu_time_max_percent" "0"
+			writen "/proc/sys/kernel/perf_cpu_time_max_percent" "25"
 			writen "/proc/sys/kernel/sched_autogroup_enabled" "0"
 			writen "/proc/sys/kernel/sched_child_runs_first" "0"
 			writen "/proc/sys/kernel/sched_tunable_scaling" "0"
@@ -300,13 +300,13 @@ magicn() {
 			writen "/dev/stune/top-app/schedtune.util.min.effective" "0"
 			writen "/dev/stune/top-app/schedtune.util.max" "1024"
 			writen "/dev/stune/top-app/schedtune.util.min" "0"
-			writen "/dev/stune/top-app/schedtune.boost" "20"
+			writen "/dev/stune/top-app/schedtune.boost" "1"
 			writen "/dev/stune/top-app/schedtune.prefer_idle" "0"
 			writen "/dev/stune/schedtune.util.min" "1024"
 			writen "/dev/stune/schedtune.util.max" "1024"
 			writen "/dev/stune/schedtune.util.max.effective" "1024"
 			writen "/dev/stune/schedtune.util.min.effective" "0"
-			writen "/dev/stune/schedtune.boost" "2"
+			writen "/dev/stune/schedtune.boost" "1"
 			writen "/dev/stune/schedtune.prefer_idle" "0"
 			sleep 1.5
 		) & spin "enhancing SchedTune..."
