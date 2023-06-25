@@ -100,7 +100,7 @@ vars() {
 [[ -e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor" ]] && cpu_gov=$(cat "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor") || printn -w "cannot grab CPU Governor, are we running on Container/CHRoot?"
 
 # Number of CPU cores
-nr_cores=$(awk -F "-" '{print $2}' "/sys/devices/system/cpu/possible")
+nr_cores=$(awk -F "-" '{print $2}' "/sys/devices/system/cpu/present")
 nr_cores=$((nr_cores + 1))
 
 # CPU Usage
