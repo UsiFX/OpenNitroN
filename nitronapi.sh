@@ -435,9 +435,9 @@ console_legacy() {
 	}
 
 	__section_center() {
-		printf '-%.0s' $(seq 1 ${COLUMNS})
+		printf '%.0s-' $(seq 1 ${COLUMNS})
 		echo -e "[*] $1"
-		printf '-%.0s' $(seq 1 ${COLUMNS}) | sed 's/^ //'
+		printf '%.0s-' $(seq 1 ${COLUMNS})
 	}
 
 	__profile_options() {

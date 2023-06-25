@@ -49,7 +49,8 @@ else
 		NITRON_RELAX_DIR='/sdcard'
 		NITRON_LOG_DIR='/cache'
 	else
-		HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
+#		HEADER_SOURCE="${PREFIX/\/usr}/usr/include"
+    HEADER_SOURCE="$PWD"
 		NITRON_RELAX_DIR='/etc'
 		NITRON_LOG_DIR='/tmp'
 	fi
